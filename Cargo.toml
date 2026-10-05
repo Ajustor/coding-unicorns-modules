@@ -12,5 +12,6 @@ members = [
     "xml-lang",
     "html-lang",
     "csharp-lang",
+    "powershell-lang",
 ]
 resolver = "2"

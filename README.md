@@ -19,6 +19,7 @@ Each module compiles to a native dynamic library (`.so` / `.dll` / `.dylib`) loa
 | `xml-lang` | XML | `.xml`, `.svg` |
 | `html-lang` | HTML | `.html`, `.htm` |
 | `csharp-lang` | C# | `.cs` |
+| `powershell-lang` | PowerShell | `.ps1`, `.psm1`, `.psd1` |
 
 ## Installation in the IDE
 

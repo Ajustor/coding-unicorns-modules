@@ -1,0 +1,12 @@
+[extension]
+id = "unicorns.powershell-lang"
+name = "PowerShell"
+version = "0.1.0"
+description = "PowerShell language support — syntax highlighting, hover docs for functions, classes and enums"
+author = "Writing Unicorns"
+repository = ""
+
+[capabilities]
+languages = ["ps1", "psm1", "psd1"]
+
+[dependencies]
