@@ -1,0 +1,15 @@
+[package]
+name = "powershell-lang"
+version = "0.1.0"
+edition = "2021"
+description = "PowerShell language support module for Writing Unicorns IDE"
+
+[lib]
+crate-type = ["rlib", "cdylib"]
+
+[dependencies]
+tree-sitter = "0.25"
+tree-sitter-highlight = "0.25"
+tree-sitter-powershell = "0.26"
+
+[dev-dependencies]
