@@ -23,14 +23,20 @@ Each module compiles to a native dynamic library (`.so` / `.dll` / `.dylib`) loa
 
 ## Installation in the IDE
 
-Pre-built modules are available as GitHub releases for Linux, Windows, and macOS.
+**From the registry (recommended):** open the extension picker in the IDE, go to the
+**Registry** tab and click *Install* (or *Update*). The IDE reads the module index published
+on GitHub Pages:
 
-1. Go to the [Releases page](https://github.com/Ajustor/writing-unicorns-modules/releases)
-2. Download the archive matching your platform:
-   - `modules-linux.tar.gz`
-   - `modules-windows.tar.gz`
-   - `modules-macos.tar.gz`
-3. Extract the `.so` / `.dll` / `.dylib` files into the IDE's modules directory
+- Index: <https://ajustor.github.io/writing-unicorns-modules/registry.json>
+- Browsable list: <https://ajustor.github.io/writing-unicorns-modules/>
+
+Each entry gives the module's id, version, languages and LSP server, plus a download URL,
+SHA-256 and size per platform (`windows-x86_64`, `linux-x86_64`, `macos-aarch64`). The IDE
+verifies the checksum before installing.
+
+**Manually:** download `<module>.zip` from the
+[Releases page](https://github.com/Ajustor/writing-unicorns-modules/releases) and use
+*Install from ZIP* in the extension picker.
 
 Or build from source (see below).
 
@@ -60,12 +66,17 @@ cargo test -p typescript-lang     # just TypeScript
 
 The pipeline runs on every push and pull request:
 - Builds all modules for Linux, Windows, and macOS in parallel
-- On a `v*` tag push, creates a GitHub release with the three platform archives
+- On a `v*` tag push, creates a GitHub release with, for each module:
+  - `<module>.zip`: manifest + the libraries for all three platforms
+  - `<module>-<platform>.zip`: manifest + one platform's library (used by the registry)
+- Then regenerates the registry (`scripts/build_registry.py`) and publishes it to GitHub
+  Pages. Pre-release tags (`v1.2.3-rc.1`) create a release but don't update the registry.
 
-To cut a release:
+To cut a release (bump `version` in the changed modules' `manifest.toml` first, so the IDE
+offers the update):
 ```bash
-git tag v0.3.0
-git push origin v0.3.0
+git tag v0.4.0
+git push origin v0.4.0
 ```
 
 ## Adding a new language module

@@ -97,7 +97,7 @@ jobs:
 
       - name: Package per module
         run: |
-          mkdir -p release
+          mkdir -p release registry-zips
           for crate in ${{ steps.modules.outputs.list }}; do
             mkdir -p "release/${crate}"
             # Copy manifest.toml from any platform (identical across all)
@@ -114,13 +114,57 @@ jobs:
                 \( -name "*.so" -o -name "*.dll" -o -name "*.dylib" \) \
                 -exec cp {} "release/${crate}/" \; 2>/dev/null || true
             done
-            # Create zip
+            # Create zip (all platforms, kept for manual installs)
             (cd release && zip -r "../${crate}.zip" "${crate}/")
+
+            # Per-platform zips used by the IDE's registry: <crate>/manifest.toml + one library
+            for pair in linux:linux-x86_64 windows:windows-x86_64 macos:macos-aarch64; do
+              platform="${pair%%:*}"; key="${pair##*:}"
+              src="artifacts/modules-${platform}/${crate}"
+              [ -d "$src" ] || continue
+              stage="stage/${key}/${crate}"
+              mkdir -p "$stage"
+              cp "release/${crate}/manifest.toml" "$stage/"
+              find "$src" -maxdepth 1 -type f \( -name "*.so" -o -name "*.dll" -o -name "*.dylib" \) \
+                -exec cp {} "$stage/" \;
+              (cd "stage/${key}" && zip -r "../../registry-zips/${crate}-${key}.zip" "${crate}/")
+            done
           done
-          ls -la *.zip
+          ls -la *.zip registry-zips/
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          files: "*.zip"
+          files: |
+            *.zip
+            registry-zips/*.zip
           generate_release_notes: true
+
+      # registry.json lists every module with the download URL and sha256 of each
+      # per-platform zip; the IDE's extension picker reads it from GitHub Pages.
+      - name: Build registry site
+        run: |
+          python3 scripts/build_registry.py --zips registry-zips \
+            --tag "${{ github.ref_name }}" --repo "${{ github.repository }}" --out site
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: site
+
+  pages:
+    name: Publish registry to GitHub Pages
+    needs: release
+    # Pre-release tags (v1.2.3-rc.1) don't replace the published registry.
+    if: startsWith(github.ref, 'refs/tags/v') && !contains(github.ref_name, '-')
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deploy
+        uses: actions/deploy-pages@v4
