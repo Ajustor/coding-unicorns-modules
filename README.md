@@ -27,15 +27,15 @@ Each module compiles to a native dynamic library (`.so` / `.dll` / `.dylib`) loa
 **Registry** tab and click *Install* (or *Update*). The IDE reads the module index published
 on GitHub Pages:
 
-- Index: <https://ajustor.github.io/writing-unicorns-modules/registry.json>
-- Browsable list: <https://ajustor.github.io/writing-unicorns-modules/>
+- Index: <https://ajustor.github.io/coding-unicorns-modules/registry.json>
+- Browsable list: <https://ajustor.github.io/coding-unicorns-modules/>
 
 Each entry gives the module's id, version, languages and LSP server, plus a download URL,
 SHA-256 and size per platform (`windows-x86_64`, `linux-x86_64`, `macos-aarch64`). The IDE
 verifies the checksum before installing.
 
 **Manually:** download `<module>.zip` from the
-[Releases page](https://github.com/Ajustor/writing-unicorns-modules/releases) and use
+[Releases page](https://github.com/Ajustor/coding-unicorns-modules/releases) and use
 *Install from ZIP* in the extension picker.
 
 Or build from source (see below).

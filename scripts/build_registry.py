@@ -8,7 +8,7 @@ are the per-platform zips produced by the release job (`<crate>-<platform>.zip`)
 
 Usage:
     python scripts/build_registry.py --zips release-zips --tag v0.4.0 \
-        --repo Ajustor/writing-unicorns-modules --out site
+        --repo Ajustor/coding-unicorns-modules --out site
 """
 import argparse
 import datetime as dt
