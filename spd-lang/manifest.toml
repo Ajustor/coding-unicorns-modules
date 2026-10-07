@@ -1,0 +1,16 @@
+[extension]
+id = "unicorns.spd-lang"
+name = "speedster-js"
+version = "0.1.0"
+description = "speedster-js component support (.spd) — syntax highlighting, hover docs, speedster-language-server LSP"
+author = "Writing Unicorns"
+repository = "https://github.com/Ajustor/speedster-js"
+
+[capabilities]
+languages = ["spd"]
+# Published on GitHub Packages and run by Bun (`#!/usr/bin/env bun`), so it is not
+# listed under [dependencies]: `npm install -g` would fail without a scoped .npmrc.
+lsp_server = "speedster-language-server"
+lsp_args = ["--stdio"]
+
+[dependencies]
