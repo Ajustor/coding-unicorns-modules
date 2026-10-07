@@ -73,29 +73,62 @@ jobs:
           path: dist/
           retention-days: 7
 
+  # Every merge on master publishes a release and the registry, so the IDE always
+  # offers the latest modules. The tag is the last stable one with its patch bumped;
+  # pushing a v* tag by hand still works, to choose the version (minor, -rc, …).
   release:
     name: Create Release
     needs: build
     runs-on: ubuntu-latest
-    if: startsWith(github.ref, 'refs/tags/v')
+    if: github.event_name == 'push'
+    # Two merges in a row must not compute the same tag: the second waits for the
+    # first one's tag to exist.
+    concurrency:
+      group: release
+      cancel-in-progress: false
     permissions:
       contents: write
+    outputs:
+      tag: ${{ steps.tag.outputs.tag }}
 
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Resolve release tag
+        id: tag
+        run: |
+          if [ "${{ github.ref_type }}" = "tag" ]; then
+            tag="${{ github.ref_name }}"
+          elif [ -n "$(git tag --points-at HEAD -l 'v*')" ]; then
+            # A tag was pushed with this commit: its own run publishes it.
+            echo "HEAD is already tagged, nothing to release"
+            exit 0
+          else
+            last=$(git tag -l 'v*' --sort=-v:refname | grep -E '^v[0-9]+\.[0-9]+\.[0-9]+$' | head -1)
+            last=${last:-v0.0.0}
+            IFS=. read -r major minor patch <<< "${last#v}"
+            tag="v${major}.${minor}.$((patch + 1))"
+          fi
+          echo "tag=${tag}" >> "$GITHUB_OUTPUT"
+          echo "Release tag: ${tag}"
 
       - name: Download all artifacts
+        if: steps.tag.outputs.tag != ''
         uses: actions/download-artifact@v4
         with:
           path: artifacts/
 
       - name: Detect modules from workspace
+        if: steps.tag.outputs.tag != ''
         id: modules
         run: |
           modules=$(sed -n '/members/,/]/p' Cargo.toml | grep -o '"[^"]*"' | tr -d '"' | tr '\n' ' ')
           echo "list=${modules}" >> "$GITHUB_OUTPUT"
 
       - name: Package per module
+        if: steps.tag.outputs.tag != ''
         run: |
           mkdir -p release registry-zips
           for crate in ${{ steps.modules.outputs.list }}; do
@@ -133,8 +166,11 @@ jobs:
           ls -la *.zip registry-zips/
 
       - name: Create GitHub Release
+        if: steps.tag.outputs.tag != ''
         uses: softprops/action-gh-release@v2
         with:
+          tag_name: ${{ steps.tag.outputs.tag }}
+          target_commitish: ${{ github.sha }}
           files: |
             *.zip
             registry-zips/*.zip
@@ -143,11 +179,13 @@ jobs:
       # registry.json lists every module with the download URL and sha256 of each
       # per-platform zip; the IDE's extension picker reads it from GitHub Pages.
       - name: Build registry site
+        if: steps.tag.outputs.tag != ''
         run: |
           python3 scripts/build_registry.py --zips registry-zips \
-            --tag "${{ github.ref_name }}" --repo "${{ github.repository }}" --out site
+            --tag "${{ steps.tag.outputs.tag }}" --repo "${{ github.repository }}" --out site
 
       - name: Upload Pages artifact
+        if: steps.tag.outputs.tag != ''
         uses: actions/upload-pages-artifact@v4
         with:
           path: site
@@ -156,7 +194,7 @@ jobs:
     name: Publish registry to GitHub Pages
     needs: release
     # Pre-release tags (v1.2.3-rc.1) don't replace the published registry.
-    if: startsWith(github.ref, 'refs/tags/v') && !contains(github.ref_name, '-')
+    if: needs.release.outputs.tag != '' && !contains(needs.release.outputs.tag, '-')
     runs-on: ubuntu-latest
     permissions:
       pages: write
