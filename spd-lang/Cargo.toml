@@ -1,0 +1,12 @@
+[package]
+name = "spd-lang"
+version = "0.1.0"
+edition = "2021"
+description = "speedster-js (.spd) language support module for Writing Unicorns IDE"
+
+[lib]
+crate-type = ["rlib", "cdylib"]
+
+[dependencies]
+
+[dev-dependencies]

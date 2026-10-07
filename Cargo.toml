@@ -13,5 +13,6 @@ members = [
     "html-lang",
     "csharp-lang",
     "powershell-lang",
+    "spd-lang",
 ]
 resolver = "2"
