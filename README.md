@@ -67,18 +67,20 @@ cargo test -p typescript-lang     # just TypeScript
 
 The pipeline runs on every push and pull request:
 - Builds all modules for Linux, Windows, and macOS in parallel
-- On a `v*` tag push, creates a GitHub release with, for each module:
+- On every push to `master` (i.e. every merge), creates a GitHub release tagged with the
+  last stable tag's patch bumped (`v0.4.0` → `v0.4.1`), with, for each module:
   - `<module>.zip`: manifest + the libraries for all three platforms
   - `<module>-<platform>.zip`: manifest + one platform's library (used by the registry)
 - Then regenerates the registry (`scripts/build_registry.py`) and publishes it to GitHub
-  Pages. Pre-release tags (`v1.2.3-rc.1`) create a release but don't update the registry.
+  Pages, so the IDE always offers the modules as they are on `master`.
 
-To cut a release (bump `version` in the changed modules' `manifest.toml` first, so the IDE
-offers the update):
+Bump `version` in a changed module's `manifest.toml` in the same PR, so the IDE offers the
+update. To choose the release version instead (a minor bump, a pre-release), push a tag:
 ```bash
-git tag v0.4.0
-git push origin v0.4.0
+git tag v0.5.0
+git push origin v0.5.0
 ```
+Pre-release tags (`v1.2.3-rc.1`) create a release but don't update the registry.
 
 ## Adding a new language module
 
