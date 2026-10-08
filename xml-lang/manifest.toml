@@ -1,7 +1,7 @@
 [extension]
 id = "unicorns.xml-lang"
 name = "XML"
-version = "0.1.0"
+version = "0.2.0"
 description = "XML language support — syntax highlighting, lemminx LSP"
 author = "Writing Unicorns"
 repository = ""
@@ -11,5 +11,7 @@ documentation = "https://www.w3.org/XML/"
 languages = ["xml", "xsl", "xsd", "svg", "xhtml"]
 lsp_server = "lemminx"
 lsp_args = []
+# LSP languageId of extensions whose id differs from the extension.
+language_ids = { xsl = "xml", xsd = "xml", svg = "xml", xhtml = "xml" }
 
 [dependencies]

@@ -21,6 +21,7 @@ Each module compiles to a native dynamic library (`.so` / `.dll` / `.dylib`) loa
 | `csharp-lang` | C# | `.cs` | netcoredbg | [docs](https://learn.microsoft.com/dotnet/csharp/) |
 | `powershell-lang` | PowerShell | `.ps1`, `.psm1`, `.psd1` | PowerShell Editor Services | [docs](https://learn.microsoft.com/powershell/) |
 | `spd-lang` | speedster-js | `.spd` | — | [docs](https://ajustor.github.io/speedster-js/) |
+| `json-lang` | JSON / JSONC | `.json`, `.jsonc`, `.json5`, `.geojson`, `.webmanifest` | — | [docs](https://www.json.org/json-en.html) |
 
 ## Debuggers
 
@@ -36,7 +37,7 @@ with the dependencies). The IDE README (*Créer une extension*) documents every 
 Without a launch configuration, F5 debugs the current file for TypeScript, JavaScript,
 Python, PowerShell, Go (its package) and HTML (in Chrome). C#, Rust and the component
 frameworks (React, Vue, Svelte) need a `.vscode/launch.json` entry giving the program or
-dev server URL. TOML and XML are data formats, and speedster-js components run through Bun,
+dev server URL. TOML, XML and JSON are data formats, and speedster-js components run through Bun,
 whose debugger does not speak DAP: these modules have no debugger.
 
 ## Installation in the IDE

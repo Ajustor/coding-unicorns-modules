@@ -11,6 +11,8 @@ documentation = "https://react.dev/learn"
 languages = ["jsx", "tsx"]
 lsp_server = "typescript-language-server"
 lsp_args = ["--stdio"]
+# LSP languageId of extensions whose id differs from the extension.
+language_ids = { jsx = "javascriptreact", tsx = "typescriptreact" }
 
 [dependencies]
 npm = ["typescript-language-server", "typescript"]
