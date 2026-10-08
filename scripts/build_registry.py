@@ -53,6 +53,7 @@ def module_entry(root: Path, crate: str, zips: Path, tag: str, repo: str) -> dic
         "version": ext["version"],
         "description": ext.get("description", ""),
         "author": ext.get("author", ""),
+        "documentation": ext.get("documentation") or None,
         "languages": caps.get("languages", []),
         "lsp_server": caps.get("lsp_server") or None,
         "dependencies": {k: v for k, v in manifest.get("dependencies", {}).items() if v},
@@ -75,12 +76,17 @@ def render_html(registry: dict) -> str:
     for m in registry["modules"]:
         langs = ", ".join(f".{l}" for l in m["languages"])
         platforms = ", ".join(sorted(m["assets"])) or "—"
+        docs = (
+            f'<a href="{html.escape(m["documentation"])}">{html.escape(m["name"])} docs</a>'
+            if m["documentation"] else "—"
+        )
         rows.append(
             "<tr>"
             f"<td><strong>{html.escape(m['name'])}</strong><br><code>{html.escape(m['id'])}</code></td>"
             f"<td>{html.escape(m['version'])}</td>"
             f"<td>{html.escape(m['description'])}</td>"
             f"<td>{html.escape(langs)}</td>"
+            f"<td>{docs}</td>"
             f"<td>{html.escape(m['lsp_server'] or '—')}</td>"
             f"<td>{html.escape(platforms)}</td>"
             "</tr>"
@@ -99,7 +105,7 @@ def render_html(registry: dict) -> str:
 <h1>🦄 Coding Unicorns modules</h1>
 <p>Release <strong>{html.escape(registry['release'])}</strong>. Install them from the IDE's extension picker
 (Registry tab), or point it at <a href="registry.json">registry.json</a>.</p>
-<table><thead><tr><th>Module</th><th>Version</th><th>Description</th><th>Files</th><th>LSP</th><th>Platforms</th></tr></thead>
+<table><thead><tr><th>Module</th><th>Version</th><th>Description</th><th>Files</th><th>Documentation</th><th>LSP</th><th>Platforms</th></tr></thead>
 <tbody>{''.join(rows)}</tbody></table>
 </body></html>
 """

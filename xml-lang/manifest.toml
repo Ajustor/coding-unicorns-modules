@@ -5,6 +5,7 @@ version = "0.1.0"
 description = "XML language support — syntax highlighting, lemminx LSP"
 author = "Writing Unicorns"
 repository = ""
+documentation = "https://www.w3.org/XML/"
 
 [capabilities]
 languages = ["xml", "xsl", "xsd", "svg", "xhtml"]

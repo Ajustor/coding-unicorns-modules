@@ -5,6 +5,7 @@ version = "0.1.0"
 description = "Go language support — syntax highlighting, hover docs, gopls LSP"
 author = "Writing Unicorns"
 repository = ""
+documentation = "https://go.dev/doc/"
 
 [capabilities]
 languages = ["go"]

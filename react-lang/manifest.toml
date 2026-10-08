@@ -5,6 +5,7 @@ version = "0.1.0"
 description = "React (JSX/TSX) language support — syntax highlighting, React hooks, typescript-language-server LSP"
 author = "Writing Unicorns"
 repository = ""
+documentation = "https://react.dev/learn"
 
 [capabilities]
 languages = ["jsx", "tsx"]
