@@ -11,6 +11,8 @@ documentation = "https://doc.rust-lang.org/book/"
 languages = ["rs"]
 lsp_server = "rust-analyzer"
 lsp_args = []
+# LSP languageId of extensions whose id differs from the extension.
+language_ids = { rs = "rust" }
 
 [dependencies]
 

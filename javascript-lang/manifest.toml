@@ -11,6 +11,8 @@ documentation = "https://developer.mozilla.org/docs/Web/JavaScript"
 languages = ["js", "mjs"]
 lsp_server = "typescript-language-server"
 lsp_args = ["--stdio"]
+# LSP languageId of extensions whose id differs from the extension.
+language_ids = { mjs = "javascript" }
 
 [dependencies]
 npm = ["typescript-language-server", "typescript"]

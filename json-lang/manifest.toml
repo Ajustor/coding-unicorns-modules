@@ -1,0 +1,20 @@
+[extension]
+id = "unicorns.json-lang"
+name = "JSON"
+version = "0.1.0"
+description = "JSON / JSONC language support — syntax highlighting, hover docs for package.json and tsconfig.json, vscode-json-language-server LSP (validation, $schema, formatting)"
+author = "Writing Unicorns"
+repository = ""
+documentation = "https://www.json.org/json-en.html"
+
+[capabilities]
+languages = ["json", "jsonc", "json5", "geojson", "webmanifest"]
+lsp_server = "vscode-json-language-server"
+lsp_args = ["--stdio"]
+# The server only offers formatting when asked to.
+lsp_init_options = { provideFormatter = true }
+# LSP languageId of extensions whose id differs from the extension.
+language_ids = { geojson = "json", webmanifest = "json" }
+
+[dependencies]
+npm = ["vscode-langservers-extracted"]

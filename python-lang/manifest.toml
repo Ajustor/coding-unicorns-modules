@@ -11,6 +11,8 @@ documentation = "https://docs.python.org/3/"
 languages = ["py", "pyw"]
 lsp_server = "pylsp"
 lsp_args = []
+# LSP languageId of extensions whose id differs from the extension.
+language_ids = { py = "python", pyw = "python" }
 
 [dependencies]
 pip = ["python-lsp-server", "debugpy"]
