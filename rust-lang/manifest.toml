@@ -1,8 +1,8 @@
 [extension]
 id = "unicorns.rust-lang"
 name = "Rust"
-version = "0.2.0"
-description = "Rust language support — syntax highlighting, hover docs, rust-analyzer LSP"
+version = "0.3.0"
+description = "Rust language support — syntax highlighting, hover docs, rust-analyzer LSP, lldb-dap debugger"
 author = "Writing Unicorns"
 repository = ""
 documentation = "https://doc.rust-lang.org/book/"
@@ -13,3 +13,10 @@ lsp_server = "rust-analyzer"
 lsp_args = []
 
 [dependencies]
+
+# Debug adapter (DAP over stdio): lldb-dap from LLVM. Needs a launch
+# configuration giving the built program (e.g. target/debug/<name>).
+[debugger]
+types = ["lldb", "lldb-dap", "codelldb"]
+command = ["lldb-dap", "lldb-vscode"]
+install_hint = "install LLVM (it ships lldb-dap) and add it to PATH"

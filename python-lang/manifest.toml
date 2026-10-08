@@ -1,8 +1,8 @@
 [extension]
 id = "unicorns.python-lang"
 name = "Python"
-version = "0.2.0"
-description = "Python language support — syntax highlighting, decorators, hover docs, pylsp LSP"
+version = "0.3.0"
+description = "Python language support — syntax highlighting, decorators, hover docs, pylsp LSP, debugpy debugger"
 author = "Writing Unicorns"
 repository = ""
 documentation = "https://docs.python.org/3/"
@@ -13,4 +13,16 @@ lsp_server = "pylsp"
 lsp_args = []
 
 [dependencies]
-pip = ["python-lsp-server"]
+pip = ["python-lsp-server", "debugpy"]
+
+# Debug adapter (DAP over stdio): debugpy, installed with the dependencies.
+# Without a launch configuration, F5 debugs the current file.
+[debugger]
+types = ["python", "debugpy"]
+command = ["python", "python3"]
+args = ["-m", "debugpy.adapter"]
+install_hint = "install Python 3, then `pip install debugpy`"
+
+[debugger.default_launch]
+program = "${file}"
+console = "internalConsole"
