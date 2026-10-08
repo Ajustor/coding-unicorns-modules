@@ -5,6 +5,7 @@ version = "0.1.0"
 description = "TOML language support — syntax highlighting, taplo LSP"
 author = "Writing Unicorns"
 repository = ""
+documentation = "https://toml.io/en/latest"
 
 [capabilities]
 languages = ["toml"]
