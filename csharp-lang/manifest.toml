@@ -1,8 +1,8 @@
 [extension]
 id = "unicorns.csharp-lang"
 name = "C#"
-version = "0.2.0"
-description = "C# language support — syntax highlighting, hover docs, csharp-ls LSP"
+version = "0.3.0"
+description = "C# language support — syntax highlighting, hover docs, csharp-ls LSP, netcoredbg debugger"
 author = "Writing Unicorns"
 repository = ""
 documentation = "https://learn.microsoft.com/dotnet/csharp/"
@@ -11,8 +11,27 @@ documentation = "https://learn.microsoft.com/dotnet/csharp/"
 languages = ["cs", "csx"]
 lsp_server = "csharp-ls"
 lsp_args = []
+# LSP languageId of extensions whose id differs from the extension.
+language_ids = { cs = "csharp", csx = "csharp" }
 
 [dependencies]
 # Auto-installed on module install (requires the .NET SDK).
 # Version pinned: the latest csharp-ls package is currently broken on NuGet.
 dotnet = ["csharp-ls@0.16.0"]
+
+# Debug adapter (DAP over stdio) for `coreclr` launch configurations.
+# netcoredbg is downloaded into the module's folder on first debug session
+# when it is not on PATH.
+[debugger]
+types = ["coreclr"]
+command = "netcoredbg"
+args = ["--interpreter=vscode"]
+
+[debugger.download]
+binary = "netcoredbg/netcoredbg"
+
+[debugger.download.urls]
+windows-x86_64 = "https://github.com/Samsung/netcoredbg/releases/latest/download/netcoredbg-win64.zip"
+linux-x86_64 = "https://github.com/Samsung/netcoredbg/releases/latest/download/netcoredbg-linux-amd64.tar.gz"
+linux-aarch64 = "https://github.com/Samsung/netcoredbg/releases/latest/download/netcoredbg-linux-arm64.tar.gz"
+macos-aarch64 = "https://github.com/Samsung/netcoredbg/releases/latest/download/netcoredbg-osx-arm64.zip"

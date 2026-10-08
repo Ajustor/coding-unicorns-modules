@@ -5,22 +5,40 @@ Each module compiles to a native dynamic library (`.so` / `.dll` / `.dylib`) loa
 
 ## Modules
 
-| Module | Language | Extensions | Documentation |
-|--------|----------|------------|---------------|
-| `rust-lang` | Rust | `.rs` | [docs](https://doc.rust-lang.org/book/) |
-| `typescript-lang` | TypeScript | `.ts`, `.tsx` | [docs](https://www.typescriptlang.org/docs/) |
-| `javascript-lang` | JavaScript | `.js`, `.jsx`, `.mjs` | [docs](https://developer.mozilla.org/docs/Web/JavaScript) |
-| `python-lang` | Python | `.py`, `.pyw` | [docs](https://docs.python.org/3/) |
-| `go-lang` | Go | `.go` | [docs](https://go.dev/doc/) |
-| `vue-lang` | Vue | `.vue` | [docs](https://vuejs.org/guide/introduction.html) |
-| `react-lang` | React (JSX/TSX) | `.jsx`, `.tsx` | [docs](https://react.dev/learn) |
-| `svelte-lang` | Svelte | `.svelte` | [docs](https://svelte.dev/docs) |
-| `toml-lang` | TOML | `.toml` | [docs](https://toml.io/en/latest) |
-| `xml-lang` | XML | `.xml`, `.svg` | [docs](https://www.w3.org/XML/) |
-| `html-lang` | HTML | `.html`, `.htm` | [docs](https://developer.mozilla.org/docs/Web/HTML) |
-| `csharp-lang` | C# | `.cs` | [docs](https://learn.microsoft.com/dotnet/csharp/) |
-| `powershell-lang` | PowerShell | `.ps1`, `.psm1`, `.psd1` | [docs](https://learn.microsoft.com/powershell/) |
-| `spd-lang` | speedster-js | `.spd` | [docs](https://ajustor.github.io/speedster-js/) |
+| Module | Language | Extensions | Debugger | Documentation |
+|--------|----------|------------|----------|---------------|
+| `rust-lang` | Rust | `.rs` | lldb-dap | [docs](https://doc.rust-lang.org/book/) |
+| `typescript-lang` | TypeScript | `.ts`, `.tsx` | vscode-js-debug | [docs](https://www.typescriptlang.org/docs/) |
+| `javascript-lang` | JavaScript | `.js`, `.jsx`, `.mjs` | vscode-js-debug | [docs](https://developer.mozilla.org/docs/Web/JavaScript) |
+| `python-lang` | Python | `.py`, `.pyw` | debugpy | [docs](https://docs.python.org/3/) |
+| `go-lang` | Go | `.go` | Delve | [docs](https://go.dev/doc/) |
+| `vue-lang` | Vue | `.vue` | vscode-js-debug | [docs](https://vuejs.org/guide/introduction.html) |
+| `react-lang` | React (JSX/TSX) | `.jsx`, `.tsx` | vscode-js-debug | [docs](https://react.dev/learn) |
+| `svelte-lang` | Svelte | `.svelte` | vscode-js-debug | [docs](https://svelte.dev/docs) |
+| `toml-lang` | TOML | `.toml` | — | [docs](https://toml.io/en/latest) |
+| `xml-lang` | XML | `.xml`, `.svg` | — | [docs](https://www.w3.org/XML/) |
+| `html-lang` | HTML | `.html`, `.htm` | vscode-js-debug | [docs](https://developer.mozilla.org/docs/Web/HTML) |
+| `csharp-lang` | C# | `.cs` | netcoredbg | [docs](https://learn.microsoft.com/dotnet/csharp/) |
+| `powershell-lang` | PowerShell | `.ps1`, `.psm1`, `.psd1` | PowerShell Editor Services | [docs](https://learn.microsoft.com/powershell/) |
+| `spd-lang` | speedster-js | `.spd` | — | [docs](https://ajustor.github.io/speedster-js/) |
+| `json-lang` | JSON / JSONC | `.json`, `.jsonc`, `.json5`, `.geojson`, `.webmanifest` | — | [docs](https://www.json.org/json-en.html) |
+
+## Debuggers
+
+A module can ship its language's debug adapter (DAP over stdio) in a `[debugger]` section
+of its `manifest.toml`; the IDE has none of its own. It names the adapter command, the
+VS Code launch configuration `types` it serves, the transport (stdio, or TCP on
+`${port}`), optional default launch arguments and an optional archive per platform,
+unpacked into the module's folder (`${debuggerDir}`) on first use. Examples:
+`csharp-lang` (downloaded binary), `typescript-lang` (downloaded script run by Node, over
+TCP), `powershell-lang` (downloaded module run by `pwsh`), `go-lang` (TCP, tool installed
+with the dependencies). The IDE README (*Créer une extension*) documents every field.
+
+Without a launch configuration, F5 debugs the current file for TypeScript, JavaScript,
+Python, PowerShell, Go (its package) and HTML (in Chrome). C#, Rust and the component
+frameworks (React, Vue, Svelte) need a `.vscode/launch.json` entry giving the program or
+dev server URL. TOML, XML and JSON are data formats, and speedster-js components run through Bun,
+whose debugger does not speak DAP: these modules have no debugger.
 
 ## Installation in the IDE
 
@@ -96,7 +114,7 @@ Pre-release tags (`v1.2.3-rc.1`) create a release but don't update the registry.
 Each module exports:
 
 | Symbol | Signature | Description |
-|--------|-----------|-------------|
+|--------|----------|------------|----------|---------------|
 | `language_id` | `() -> *const c_char` | Language identifier |
 | `file_extensions` | `() -> *const c_char` | Comma-separated extensions |
 | `tokenize_line_ffi` | `(*const c_char) -> *mut c_char` | JSON token array for a line |
