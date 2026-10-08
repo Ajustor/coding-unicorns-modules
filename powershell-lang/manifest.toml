@@ -1,8 +1,8 @@
 [extension]
 id = "unicorns.powershell-lang"
 name = "PowerShell"
-version = "0.1.0"
-description = "PowerShell language support — syntax highlighting, hover docs for functions, classes and enums"
+version = "0.2.0"
+description = "PowerShell language support — syntax highlighting, hover docs for functions, classes and enums, PowerShell Editor Services debugger"
 author = "Writing Unicorns"
 repository = ""
 documentation = "https://learn.microsoft.com/powershell/"
@@ -11,3 +11,31 @@ documentation = "https://learn.microsoft.com/powershell/"
 languages = ["ps1", "psm1", "psd1"]
 
 [dependencies]
+
+# Debug adapter: PowerShell Editor Services in debug-only mode (DAP over
+# stdio), downloaded into the module's folder on first use; it runs on
+# PowerShell 7 (`pwsh`), or Windows PowerShell 5.1. F5 without a launch
+# configuration runs the current script. Write-Output / Write-Host output is
+# not shown (the service has no console in this mode); [Console]::WriteLine is.
+[debugger]
+types = ["PowerShell"]
+command = ["pwsh", "powershell"]
+args = [
+    "-NoLogo", "-NoProfile", "-NonInteractive", "-Command",
+    "& '${debuggerDir}/PowerShellEditorServices/Start-EditorServices.ps1' -HostName CodingUnicorns -HostProfileId CodingUnicorns -HostVersion 1.0.0 -BundledModulesPath '${debuggerDir}' -LogPath '${debuggerDir}/logs' -SessionDetailsPath '${debuggerDir}/logs/session.json' -LogLevel Warning -FeatureFlags @() -Stdio -DebugServiceOnly",
+]
+install_hint = "install PowerShell 7 (pwsh)"
+
+[debugger.default_launch]
+type = "PowerShell"
+script = "${file}"
+
+[debugger.download]
+binary = "PowerShellEditorServices/Start-EditorServices.ps1"
+
+[debugger.download.urls]
+windows-x86_64 = "https://github.com/PowerShell/PowerShellEditorServices/releases/download/v4.7.0/PowerShellEditorServices.zip"
+linux-x86_64 = "https://github.com/PowerShell/PowerShellEditorServices/releases/download/v4.7.0/PowerShellEditorServices.zip"
+linux-aarch64 = "https://github.com/PowerShell/PowerShellEditorServices/releases/download/v4.7.0/PowerShellEditorServices.zip"
+macos-aarch64 = "https://github.com/PowerShell/PowerShellEditorServices/releases/download/v4.7.0/PowerShellEditorServices.zip"
+macos-x86_64 = "https://github.com/PowerShell/PowerShellEditorServices/releases/download/v4.7.0/PowerShellEditorServices.zip"

@@ -44,7 +44,7 @@ checksum = "5baebc0774151f905a1a2cc41989300b1e6fbb29aff0ceffa1064fdd3088d582"
 
 [[package]]
 name = "go-lang"
-version = "0.1.0"
+version = "0.2.0"
 dependencies = [
  "tree-sitter",
  "tree-sitter-go",
@@ -59,7 +59,7 @@ checksum = "4f467dd6dccf739c208452f8014c75c18bb8301b050ad1cfb27153803edb0f51"
 
 [[package]]
 name = "html-lang"
-version = "0.1.0"
+version = "0.2.0"
 dependencies = [
  "tree-sitter",
  "tree-sitter-highlight",
@@ -84,7 +84,7 @@ checksum = "8f42a60cbdf9a97f5d2305f08a87dc4e09308d1276d28c869c684d7777685682"
 
 [[package]]
 name = "javascript-lang"
-version = "0.2.0"
+version = "0.3.0"
 dependencies = [
  "tree-sitter",
  "tree-sitter-highlight",
@@ -99,7 +99,7 @@ checksum = "f8ca58f447f06ed17d5fc4043ce1b10dd205e060fb3ce5b979b8ed8e59ff3f79"
 
 [[package]]
 name = "powershell-lang"
-version = "0.1.0"
+version = "0.2.0"
 dependencies = [
  "tree-sitter",
  "tree-sitter-highlight",
@@ -117,7 +117,7 @@ dependencies = [
 
 [[package]]
 name = "python-lang"
-version = "0.2.0"
+version = "0.3.0"
 dependencies = [
  "tree-sitter",
  "tree-sitter-highlight",
@@ -135,7 +135,7 @@ dependencies = [
 
 [[package]]
 name = "react-lang"
-version = "0.1.0"
+version = "0.2.0"
 dependencies = [
  "tree-sitter",
  "tree-sitter-highlight",
@@ -173,7 +173,7 @@ checksum = "dc897dd8d9e8bd1ed8cdad82b5966c3e0ecae09fb1907d58efaa013543185d0a"
 
 [[package]]
 name = "rust-lang"
-version = "0.2.0"
+version = "0.3.0"
 dependencies = [
  "tree-sitter",
  "tree-sitter-highlight",
@@ -241,7 +241,7 @@ checksum = "2b2231b7c3057d5e4ad0156fb3dc807d900806020c5ffa3ee6ff2c8c76fb8520"
 
 [[package]]
 name = "svelte-lang"
-version = "0.1.0"
+version = "0.2.0"
 
 [[package]]
 name = "syn"
@@ -407,7 +407,7 @@ dependencies = [
 
 [[package]]
 name = "typescript-lang"
-version = "0.2.0"
+version = "0.3.0"
 dependencies = [
  "tree-sitter",
  "tree-sitter-highlight",
@@ -422,7 +422,7 @@ checksum = "e6e4313cd5fcd3dad5cafa179702e2b244f760991f45397d14d4ebf38247da75"
 
 [[package]]
 name = "vue-lang"
-version = "0.2.0"
+version = "0.3.0"
 
 [[package]]
 name = "xml-lang"

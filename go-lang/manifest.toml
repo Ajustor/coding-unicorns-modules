@@ -1,8 +1,8 @@
 [extension]
 id = "unicorns.go-lang"
 name = "Go"
-version = "0.1.0"
-description = "Go language support — syntax highlighting, hover docs, gopls LSP"
+version = "0.2.0"
+description = "Go language support — syntax highlighting, hover docs, gopls LSP, Delve debugger"
 author = "Writing Unicorns"
 repository = ""
 documentation = "https://go.dev/doc/"
@@ -13,4 +13,18 @@ lsp_server = "gopls"
 lsp_args = []
 
 [dependencies]
-go = ["golang.org/x/tools/gopls@latest"]
+go = ["golang.org/x/tools/gopls@latest", "github.com/go-delve/delve/cmd/dlv@latest"]
+
+# Debug adapter: Delve (`dlv dap`, DAP over TCP), installed with the
+# dependencies. F5 without a launch configuration debugs the current file's
+# package.
+[debugger]
+types = ["go"]
+command = "dlv"
+args = ["dap", "--listen=127.0.0.1:${port}"]
+transport = "tcp"
+install_hint = "go install github.com/go-delve/delve/cmd/dlv@latest"
+
+[debugger.default_launch]
+mode = "debug"
+program = "${fileDirname}"

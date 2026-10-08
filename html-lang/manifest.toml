@@ -1,8 +1,8 @@
 [extension]
 id = "unicorns.html-lang"
 name = "HTML"
-version = "0.1.0"
-description = "HTML language support — syntax highlighting, hover docs, vscode-html-language-server LSP"
+version = "0.2.0"
+description = "HTML language support — syntax highlighting, hover docs, vscode-html-language-server LSP, js-debug debugger"
 author = "Writing Unicorns"
 repository = ""
 documentation = "https://developer.mozilla.org/docs/Web/HTML"
@@ -14,3 +14,30 @@ lsp_args = ["--stdio"]
 
 [dependencies]
 npm = ["vscode-langservers-extracted"]
+
+# F5 without a launch configuration opens the current page in Chrome and debugs its scripts.
+# Debug adapter: vscode-js-debug (DAP over TCP), downloaded into the module's
+# folder on first use; it runs on Node.js. Launch configuration types:
+# `pwa-node` for Node programs, `pwa-chrome` / `pwa-msedge` for browser pages
+# (VS Code's `node`, `chrome` and `msedge` names are accepted too).
+[debugger]
+types = ["pwa-chrome", "chrome", "pwa-msedge", "msedge"]
+command = "node"
+args = ["${debuggerDir}/js-debug/src/dapDebugServer.js", "${port}", "127.0.0.1"]
+transport = "tcp"
+install_hint = "install Node.js and add it to PATH"
+type_map = { node = "pwa-node", chrome = "pwa-chrome", msedge = "pwa-msedge" }
+
+[debugger.default_launch]
+type = "pwa-chrome"
+file = "${file}"
+
+[debugger.download]
+binary = "js-debug/src/dapDebugServer.js"
+
+[debugger.download.urls]
+windows-x86_64 = "https://github.com/microsoft/vscode-js-debug/releases/download/v1.140.0/js-debug-dap-v1.140.0.tar.gz"
+linux-x86_64 = "https://github.com/microsoft/vscode-js-debug/releases/download/v1.140.0/js-debug-dap-v1.140.0.tar.gz"
+linux-aarch64 = "https://github.com/microsoft/vscode-js-debug/releases/download/v1.140.0/js-debug-dap-v1.140.0.tar.gz"
+macos-aarch64 = "https://github.com/microsoft/vscode-js-debug/releases/download/v1.140.0/js-debug-dap-v1.140.0.tar.gz"
+macos-x86_64 = "https://github.com/microsoft/vscode-js-debug/releases/download/v1.140.0/js-debug-dap-v1.140.0.tar.gz"
