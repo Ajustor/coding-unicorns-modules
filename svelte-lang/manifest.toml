@@ -5,6 +5,7 @@ version = "0.1.0"
 description = "Svelte language support — syntax highlighting, runes, svelte-language-server LSP"
 author = "Writing Unicorns"
 repository = ""
+documentation = "https://svelte.dev/docs"
 
 [capabilities]
 languages = ["svelte"]

@@ -5,22 +5,22 @@ Each module compiles to a native dynamic library (`.so` / `.dll` / `.dylib`) loa
 
 ## Modules
 
-| Module | Language | Extensions |
-|--------|----------|------------|
-| `rust-lang` | Rust | `.rs` |
-| `typescript-lang` | TypeScript | `.ts`, `.tsx` |
-| `javascript-lang` | JavaScript | `.js`, `.jsx`, `.mjs` |
-| `python-lang` | Python | `.py`, `.pyw` |
-| `go-lang` | Go | `.go` |
-| `vue-lang` | Vue | `.vue` |
-| `react-lang` | React (JSX/TSX) | `.jsx`, `.tsx` |
-| `svelte-lang` | Svelte | `.svelte` |
-| `toml-lang` | TOML | `.toml` |
-| `xml-lang` | XML | `.xml`, `.svg` |
-| `html-lang` | HTML | `.html`, `.htm` |
-| `csharp-lang` | C# | `.cs` |
-| `powershell-lang` | PowerShell | `.ps1`, `.psm1`, `.psd1` |
-| `spd-lang` | speedster-js | `.spd` |
+| Module | Language | Extensions | Documentation |
+|--------|----------|------------|---------------|
+| `rust-lang` | Rust | `.rs` | [docs](https://doc.rust-lang.org/book/) |
+| `typescript-lang` | TypeScript | `.ts`, `.tsx` | [docs](https://www.typescriptlang.org/docs/) |
+| `javascript-lang` | JavaScript | `.js`, `.jsx`, `.mjs` | [docs](https://developer.mozilla.org/docs/Web/JavaScript) |
+| `python-lang` | Python | `.py`, `.pyw` | [docs](https://docs.python.org/3/) |
+| `go-lang` | Go | `.go` | [docs](https://go.dev/doc/) |
+| `vue-lang` | Vue | `.vue` | [docs](https://vuejs.org/guide/introduction.html) |
+| `react-lang` | React (JSX/TSX) | `.jsx`, `.tsx` | [docs](https://react.dev/learn) |
+| `svelte-lang` | Svelte | `.svelte` | [docs](https://svelte.dev/docs) |
+| `toml-lang` | TOML | `.toml` | [docs](https://toml.io/en/latest) |
+| `xml-lang` | XML | `.xml`, `.svg` | [docs](https://www.w3.org/XML/) |
+| `html-lang` | HTML | `.html`, `.htm` | [docs](https://developer.mozilla.org/docs/Web/HTML) |
+| `csharp-lang` | C# | `.cs` | [docs](https://learn.microsoft.com/dotnet/csharp/) |
+| `powershell-lang` | PowerShell | `.ps1`, `.psm1`, `.psd1` | [docs](https://learn.microsoft.com/powershell/) |
+| `spd-lang` | speedster-js | `.spd` | [docs](https://ajustor.github.io/speedster-js/) |
 
 ## Installation in the IDE
 
