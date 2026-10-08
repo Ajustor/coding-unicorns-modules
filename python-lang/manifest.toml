@@ -5,6 +5,7 @@ version = "0.2.0"
 description = "Python language support — syntax highlighting, decorators, hover docs, pylsp LSP"
 author = "Writing Unicorns"
 repository = ""
+documentation = "https://docs.python.org/3/"
 
 [capabilities]
 languages = ["py", "pyw"]

@@ -5,6 +5,7 @@ version = "0.1.0"
 description = "PowerShell language support — syntax highlighting, hover docs for functions, classes and enums"
 author = "Writing Unicorns"
 repository = ""
+documentation = "https://learn.microsoft.com/powershell/"
 
 [capabilities]
 languages = ["ps1", "psm1", "psd1"]

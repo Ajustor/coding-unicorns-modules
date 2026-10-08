@@ -5,6 +5,7 @@ version = "0.2.0"
 description = "Vue SFC language support — syntax highlighting, hover docs, volar LSP"
 author = "Writing Unicorns"
 repository = ""
+documentation = "https://vuejs.org/guide/introduction.html"
 
 [capabilities]
 languages = ["vue"]

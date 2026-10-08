@@ -5,6 +5,7 @@ version = "0.2.0"
 description = "JavaScript language support — syntax highlighting, hover docs, typescript-language-server LSP"
 author = "Writing Unicorns"
 repository = ""
+documentation = "https://developer.mozilla.org/docs/Web/JavaScript"
 
 [capabilities]
 languages = ["js", "mjs"]

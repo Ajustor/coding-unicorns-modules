@@ -5,6 +5,7 @@ version = "0.2.0"
 description = "TypeScript language support — syntax highlighting, hover docs, typescript-language-server LSP"
 author = "Writing Unicorns"
 repository = ""
+documentation = "https://www.typescriptlang.org/docs/"
 
 [capabilities]
 languages = ["ts"]

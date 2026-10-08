@@ -5,6 +5,7 @@ version = "0.2.0"
 description = "Rust language support — syntax highlighting, hover docs, rust-analyzer LSP"
 author = "Writing Unicorns"
 repository = ""
+documentation = "https://doc.rust-lang.org/book/"
 
 [capabilities]
 languages = ["rs"]
