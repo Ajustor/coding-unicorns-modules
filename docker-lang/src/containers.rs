@@ -428,7 +428,7 @@ fn logs_view(state: &State) -> Vec<Value> {
     if l.text.is_empty() && l.loading {
         children.push(json!({ "type": "spinner", "text": "Loading logs…" }));
     }
-    children.push(json!({ "type": "log", "text": l.text, "height": 520 }));
+    children.push(json!({ "type": "log", "text": l.text }));
     children
 }
 
