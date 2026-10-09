@@ -8,6 +8,7 @@
 use std::ffi::{c_char, CStr, CString};
 
 pub mod compose;
+pub mod containers;
 pub mod dockerfile;
 pub mod panel;
 
@@ -193,7 +194,8 @@ pub unsafe extern "C" fn hover_info_ffi(
 /// `panel_ptr` must be null or a valid NUL-terminated string.
 #[no_mangle]
 pub unsafe extern "C" fn ui_view_ffi(panel_ptr: *const c_char) -> *mut c_char {
-    opt_into_c(panel::view(unsafe { from_c(panel_ptr) }))
+    let panel = unsafe { from_c(panel_ptr) };
+    opt_into_c(panel::view(panel).or_else(|| containers::view(panel)))
 }
 
 /// Handle a panel event; returns the JSON actions for the IDE.
@@ -206,7 +208,7 @@ pub unsafe extern "C" fn ui_event_ffi(
     event_ptr: *const c_char,
 ) -> *mut c_char {
     let (panel, event) = unsafe { (from_c(panel_ptr), from_c(event_ptr)) };
-    opt_into_c(panel::event(panel, event))
+    opt_into_c(panel::event(panel, event).or_else(|| containers::event(panel, event)))
 }
 
 /// # Safety
