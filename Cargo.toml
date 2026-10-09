@@ -15,5 +15,7 @@ members = [
     "powershell-lang",
     "spd-lang",
     "json-lang",
+    "docker-lang",
+    "docker-compose-lang",
 ]
 resolver = "2"
