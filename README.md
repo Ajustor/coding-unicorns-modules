@@ -22,13 +22,17 @@ Each module compiles to a native dynamic library (`.so` / `.dll` / `.dylib`) loa
 | `powershell-lang` | PowerShell | `.ps1`, `.psm1`, `.psd1` | PowerShell Editor Services | [docs](https://learn.microsoft.com/powershell/) |
 | `spd-lang` | speedster-js | `.spd` | — | [docs](https://ajustor.github.io/speedster-js/) |
 | `json-lang` | JSON / JSONC | `.json`, `.jsonc`, `.json5`, `.geojson`, `.webmanifest` | — | [docs](https://www.json.org/json-en.html) |
-| `docker-lang` | Dockerfile | `Dockerfile`, `Containerfile`, `Dockerfile.*`, `.dockerfile` | — | [docs](https://docs.docker.com/reference/dockerfile/) |
-| `docker-compose-lang` | Docker Compose | `compose.yaml`, `docker-compose.yml`, `compose.*.yml`, `docker-compose.*.yml` | — | [docs](https://docs.docker.com/reference/compose-file/) |
+| `docker-lang` | Dockerfile, Docker Compose | `Dockerfile`, `Containerfile`, `Dockerfile.*`, `.dockerfile`, `compose.yaml`, `docker-compose.yml`, `compose.*.yml`, `docker-compose.*.yml` | — | [docs](https://docs.docker.com/reference/) |
 
-Dockerfiles and Compose files are recognised by their name: these modules list them in
-`file_names` (`*` wildcards, case-insensitive), which needs Coding Unicorns 0.10.6 or later.
-Compose files get their own `compose` language, so a future YAML module can own the other
-`.yml` files.
+Dockerfiles and Compose files are recognised by their name (`file_names`, Coding Unicorns
+0.10.6+). Compose files get their own `compose` language, with their own language server
+(`[capabilities.lsp_servers.compose]`) and tokenizer (the `*_lang_ffi` exports receive the
+language), so a future YAML module can own the other `.yml` files.
+
+`docker-lang` also adds a **Docker** panel to the activity bar (`[[panels]]`, Coding Unicorns
+0.10.7+): local images with *Pull*, *Run* (in a terminal), *Remove* and *Prune*, and a page with
+the full table. The module returns JSON views from `ui_view_ffi` and handles clicks in
+`ui_event_ffi`, running the `docker` CLI on its own threads (`docker-lang/src/panel.rs`).
 
 ## Debuggers
 
