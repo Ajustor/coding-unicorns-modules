@@ -22,6 +22,13 @@ Each module compiles to a native dynamic library (`.so` / `.dll` / `.dylib`) loa
 | `powershell-lang` | PowerShell | `.ps1`, `.psm1`, `.psd1` | PowerShell Editor Services | [docs](https://learn.microsoft.com/powershell/) |
 | `spd-lang` | speedster-js | `.spd` | — | [docs](https://ajustor.github.io/speedster-js/) |
 | `json-lang` | JSON / JSONC | `.json`, `.jsonc`, `.json5`, `.geojson`, `.webmanifest` | — | [docs](https://www.json.org/json-en.html) |
+| `docker-lang` | Dockerfile | `Dockerfile`, `Containerfile`, `Dockerfile.*`, `.dockerfile` | — | [docs](https://docs.docker.com/reference/dockerfile/) |
+| `docker-compose-lang` | Docker Compose | `compose.yaml`, `docker-compose.yml`, `compose.*.yml`, `docker-compose.*.yml` | — | [docs](https://docs.docker.com/reference/compose-file/) |
+
+Dockerfiles and Compose files are recognised by their name: these modules list them in
+`file_names` (`*` wildcards, case-insensitive), which needs Coding Unicorns 0.10.6 or later.
+Compose files get their own `compose` language, so a future YAML module can own the other
+`.yml` files.
 
 ## Debuggers
 
@@ -37,7 +44,7 @@ with the dependencies). The IDE README (*Créer une extension*) documents every 
 Without a launch configuration, F5 debugs the current file for TypeScript, JavaScript,
 Python, PowerShell, Go (its package) and HTML (in Chrome). C#, Rust and the component
 frameworks (React, Vue, Svelte) need a `.vscode/launch.json` entry giving the program or
-dev server URL. TOML, XML and JSON are data formats, and speedster-js components run through Bun,
+dev server URL. TOML, XML, JSON and Docker files are not programs, and speedster-js components run through Bun,
 whose debugger does not speak DAP: these modules have no debugger.
 
 ## Installation in the IDE
