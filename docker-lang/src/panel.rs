@@ -148,6 +148,10 @@ pub fn handle_event(state: &mut State, event: &Value) -> (Vec<Job>, Vec<Value>) 
             jobs.push(Job::Prune);
         }
         "open_page" => actions.push(json!({ "type": "open_panel", "panel": PAGE })),
+        "open_containers" => actions.push(json!({
+            "type": "open_panel",
+            "panel": crate::containers::CONTAINERS,
+        })),
         _ => {}
     }
     (jobs, actions)
@@ -231,6 +235,11 @@ pub fn build_view(state: &mut State, panel: &str) -> Value {
             json!({ "type": "button", "id": "open_page", "label": "Full view",
                           "icon": "external" }),
         );
+        children.insert(
+            0,
+            json!({ "type": "button", "id": "open_containers", "label": "Containers & logs",
+                    "icon": "container", "tooltip": "Start, stop and read the logs of containers" }),
+        );
     }
     if let Some(e) = &state.error {
         children.push(json!({ "type": "text", "text": e, "style": "error" }));
@@ -290,6 +299,12 @@ pub fn build_view(state: &mut State, panel: &str) -> Value {
 // ── Docker CLI ────────────────────────────────────────────────────────────────
 
 fn docker(args: &[&str]) -> Result<String, String> {
+    docker_output(args).map(|(out, _)| out)
+}
+
+/// Run the `docker` CLI: (stdout, stderr) on success, else the first line of
+/// stderr.
+pub(crate) fn docker_output(args: &[&str]) -> Result<(String, String), String> {
     let mut cmd = Command::new("docker");
     cmd.args(args);
     #[cfg(windows)]
@@ -306,7 +321,10 @@ fn docker(args: &[&str]) -> Result<String, String> {
         }
     })?;
     if out.status.success() {
-        Ok(String::from_utf8_lossy(&out.stdout).into_owned())
+        Ok((
+            String::from_utf8_lossy(&out.stdout).into_owned(),
+            String::from_utf8_lossy(&out.stderr).into_owned(),
+        ))
     } else {
         let err = String::from_utf8_lossy(&out.stderr);
         let line = err
@@ -437,6 +455,8 @@ not json
             .is_empty());
         let (_, actions) = handle_event(&mut s, &click("open_page", None, ""));
         assert_eq!(actions[0], json!({ "type": "open_panel", "panel": PAGE }));
+        let (_, actions) = handle_event(&mut s, &click("open_containers", None, ""));
+        assert_eq!(actions[0]["panel"], crate::containers::CONTAINERS);
         let (jobs, _) = handle_event(&mut s, &json!({ "type": "submit", "id": "image" }));
         assert!(jobs.is_empty(), "the submit's click does the pull");
     }
