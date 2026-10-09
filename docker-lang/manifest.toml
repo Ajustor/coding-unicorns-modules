@@ -1,0 +1,19 @@
+[extension]
+id = "unicorns.docker-lang"
+name = "Dockerfile"
+version = "0.1.0"
+description = "Dockerfile / Containerfile support — syntax highlighting (heredocs, variables, flags), hover docs for instructions, docker-langserver LSP (validation, completion, formatting)"
+author = "Writing Unicorns"
+repository = ""
+documentation = "https://docs.docker.com/reference/dockerfile/"
+
+[capabilities]
+languages = ["dockerfile", "containerfile"]
+lsp_server = "docker-langserver"
+lsp_args = ["--stdio"]
+language_ids = { containerfile = "dockerfile" }
+# Files without a meaningful extension (needs Coding Unicorns 0.10.6+).
+file_names = { "Dockerfile" = "dockerfile", "Dockerfile.*" = "dockerfile", "Containerfile" = "dockerfile", "Containerfile.*" = "dockerfile" }
+
+[dependencies]
+npm = ["dockerfile-language-server-nodejs"]

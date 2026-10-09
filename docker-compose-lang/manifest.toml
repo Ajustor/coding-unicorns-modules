@@ -1,0 +1,20 @@
+[extension]
+id = "unicorns.docker-compose-lang"
+name = "Docker Compose"
+version = "0.1.0"
+description = "Docker Compose support — YAML highlighting (anchors, block scalars, ${VAR} interpolation), hover docs for Compose keys, Microsoft compose-language-service LSP (validation, completion, hover)"
+author = "Writing Unicorns"
+repository = ""
+documentation = "https://docs.docker.com/reference/compose-file/"
+
+[capabilities]
+# Compose files are YAML known by their name (needs Coding Unicorns 0.10.6+);
+# they get the `compose` language, so a YAML module can own other .yml files.
+languages = ["compose"]
+lsp_server = "docker-compose-langserver"
+lsp_args = ["--stdio"]
+language_ids = { compose = "dockercompose" }
+file_names = { "compose.yaml" = "compose", "compose.yml" = "compose", "compose.*.yaml" = "compose", "compose.*.yml" = "compose", "docker-compose.yaml" = "compose", "docker-compose.yml" = "compose", "docker-compose.*.yaml" = "compose", "docker-compose.*.yml" = "compose" }
+
+[dependencies]
+npm = ["@microsoft/compose-language-service"]
