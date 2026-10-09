@@ -6,8 +6,6 @@
 //! anchors, aliases and merge keys as `macro`, tags as `type`, block scalar
 //! bodies (`|`, `>`) as `string` and comments as `comment`.
 
-use std::ffi::{c_char, CStr, CString};
-
 /// Token kinds understood by the IDE.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum Kind {
@@ -22,7 +20,7 @@ pub enum Kind {
 }
 
 impl Kind {
-    fn as_str(self) -> &'static str {
+    pub(crate) fn as_str(self) -> &'static str {
         match self {
             Kind::Property => "property",
             Kind::String => "string",
@@ -352,112 +350,6 @@ pub fn hover(word: &str, content: &str) -> Option<String> {
     is_key.then(|| format!("**`{key}`** — {doc}"))
 }
 
-// ── Serialization ─────────────────────────────────────────────────────────────
-
-fn json_escape(s: &str) -> String {
-    let mut out = String::with_capacity(s.len() + 2);
-    out.push('"');
-    for c in s.chars() {
-        match c {
-            '"' => out.push_str("\\\""),
-            '\\' => out.push_str("\\\\"),
-            '\n' => out.push_str("\\n"),
-            '\r' => out.push_str("\\r"),
-            '\t' => out.push_str("\\t"),
-            c if (c as u32) < 0x20 => out.push_str(&format!("\\u{:04x}", c as u32)),
-            c => out.push(c),
-        }
-    }
-    out.push('"');
-    out
-}
-
-fn line_to_json(tokens: &[(String, Kind)]) -> String {
-    let toks: Vec<String> = tokens
-        .iter()
-        .map(|(text, kind)| {
-            format!(
-                r#"{{"text":{},"kind":"{}"}}"#,
-                json_escape(text),
-                kind.as_str()
-            )
-        })
-        .collect();
-    format!("[{}]", toks.join(","))
-}
-
-fn document_to_json(source: &str) -> String {
-    let lines: Vec<String> = tokenize(source).iter().map(|l| line_to_json(l)).collect();
-    format!("[{}]", lines.join(","))
-}
-
-fn into_c(s: String) -> *mut c_char {
-    CString::new(s).unwrap_or_default().into_raw()
-}
-
-/// # Safety
-/// `ptr` must be null or a valid NUL-terminated string.
-unsafe fn from_c<'a>(ptr: *const c_char) -> &'a str {
-    if ptr.is_null() {
-        return "";
-    }
-    unsafe { CStr::from_ptr(ptr) }.to_str().unwrap_or("")
-}
-
-// ── FFI ───────────────────────────────────────────────────────────────────────
-
-#[no_mangle]
-pub extern "C" fn language_id() -> *const c_char {
-    c"compose".as_ptr()
-}
-
-#[no_mangle]
-pub extern "C" fn file_extensions() -> *const c_char {
-    c"compose".as_ptr()
-}
-
-#[no_mangle]
-pub extern "C" fn reset_tokenizer() {}
-
-/// # Safety
-/// `text_ptr` must be null or a valid NUL-terminated string.
-#[no_mangle]
-pub unsafe extern "C" fn tokenize_document_ffi(text_ptr: *const c_char) -> *mut c_char {
-    into_c(document_to_json(unsafe { from_c(text_ptr) }))
-}
-
-/// # Safety
-/// `line_ptr` must be null or a valid NUL-terminated string.
-#[no_mangle]
-pub unsafe extern "C" fn tokenize_line_ffi(line_ptr: *const c_char) -> *mut c_char {
-    let line = unsafe { from_c(line_ptr) };
-    let tokens = tokenize(line).into_iter().next().unwrap_or_default();
-    into_c(line_to_json(&tokens))
-}
-
-/// # Safety
-/// Both pointers must be null or valid NUL-terminated strings.
-#[no_mangle]
-pub unsafe extern "C" fn hover_info_ffi(
-    word_ptr: *const c_char,
-    file_content_ptr: *const c_char,
-) -> *mut c_char {
-    let (word, content) = unsafe { (from_c(word_ptr), from_c(file_content_ptr)) };
-    match hover(word, content) {
-        Some(doc) => into_c(doc),
-        None => std::ptr::null_mut(),
-    }
-}
-
-/// # Safety
-/// `ptr` must be null or a string returned by this module.
-#[no_mangle]
-pub unsafe extern "C" fn free_string(ptr: *mut c_char) {
-    if !ptr.is_null() {
-        unsafe { drop(CString::from_raw(ptr)) }
-    }
-}
-
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -606,17 +498,5 @@ mod tests {
             .starts_with("**`depends_on`**"));
         assert!(hover("image", doc).is_none());
         assert!(hover("db", doc).is_none());
-    }
-
-    #[test]
-    fn ffi_round_trip() {
-        let src = CString::new("services:\n  web: {}").unwrap();
-        let out = unsafe { tokenize_document_ffi(src.as_ptr()) };
-        let json = unsafe { CStr::from_ptr(out) }.to_str().unwrap().to_string();
-        unsafe { free_string(out) };
-        assert!(
-            json.starts_with(r#"[[{"text":"services","kind":"property"}"#),
-            "{json}"
-        );
     }
 }
