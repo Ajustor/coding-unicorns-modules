@@ -31,7 +31,9 @@ language), so a future YAML module can own the other `.yml` files.
 
 `docker-lang` also adds a **Docker** panel to the activity bar (`[[panels]]`, Coding Unicorns
 0.10.7+): local images with *Pull*, *Run* (in a terminal), *Remove* and *Prune*, and a page with
-the full table. The module returns JSON views from `ui_view_ffi` and handles clicks in
+the full table. *Containers & logs* opens a page listing the containers (*Start*, *Stop*,
+*Restart*, *Remove*, *Shell*) and a logs page following the chosen container
+(`docker-lang/src/containers.rs`; the `log` view element needs Coding Unicorns 0.10.8+). The module returns JSON views from `ui_view_ffi` and handles clicks in
 `ui_event_ffi`, running the `docker` CLI on its own threads (`docker-lang/src/panel.rs`).
 
 ## Debuggers
