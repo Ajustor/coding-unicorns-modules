@@ -1,8 +1,8 @@
 [extension]
 id = "unicorns.docker-lang"
 name = "Docker"
-version = "0.2.0"
-description = "Docker support — Dockerfile and Compose highlighting with hover docs, docker-langserver and compose-language-service LSPs, a Docker panel to pull, run, remove and prune images, and pages to start, stop and read the logs of containers"
+version = "0.3.0"
+description = "Docker support — Dockerfile and Compose highlighting with hover docs, docker-langserver and compose-language-service LSPs, a Docker panel to pull, run, remove and prune images and see the running containers, and pages to start, stop and read the logs of containers"
 author = "Writing Unicorns"
 repository = ""
 documentation = "https://docs.docker.com/reference/"

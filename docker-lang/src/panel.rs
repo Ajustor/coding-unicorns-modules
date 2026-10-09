@@ -374,7 +374,16 @@ pub fn view(panel: &str) -> Option<String> {
     if refresh {
         start(Job::List);
     }
-    Some(build_view(&mut state(), panel).to_string())
+    let mut view = build_view(&mut state(), panel);
+    if panel == SIDEBAR {
+        // Running containers right under the toolbar (button + 2 rows).
+        let section = crate::containers::sidebar_section();
+        if let Some(children) = view["children"].as_array_mut() {
+            let at = 3.min(children.len());
+            children.splice(at..at, section);
+        }
+    }
+    Some(view.to_string())
 }
 
 pub fn event(panel: &str, event: &str) -> Option<String> {
@@ -382,6 +391,13 @@ pub fn event(panel: &str, event: &str) -> Option<String> {
         return None;
     }
     let event: Value = serde_json::from_str(event).ok()?;
+    if event["id"]
+        .as_str()
+        .is_some_and(|id| id.starts_with("container_"))
+    {
+        let actions = crate::containers::sidebar_event(&event);
+        return Some(Value::Array(actions).to_string());
+    }
     let (jobs, actions) = handle_event(&mut state(), &event);
     for job in jobs {
         start(job);
@@ -533,6 +549,71 @@ not json
         assert!(!needs_refresh(&s));
         let s = loaded();
         assert!(!needs_refresh(&s));
+    }
+
+    /// Against the local Docker, with a running container named by
+    /// `CU_E2E_CONTAINER`: listed in the sidebar, its logs read, then stopped
+    /// from the sidebar's Stop button.
+    #[test]
+    #[ignore = "needs docker and a running container"]
+    fn sidebar_running_containers_e2e() {
+        let name = std::env::var("CU_E2E_CONTAINER").unwrap();
+        let wait = |cond: &dyn Fn(&str) -> bool| -> String {
+            for _ in 0..60 {
+                let v = view(SIDEBAR).unwrap();
+                if cond(&v) {
+                    return v;
+                }
+                std::thread::sleep(Duration::from_millis(250));
+            }
+            panic!("timeout");
+        };
+        let v = wait(&|v| v.contains(&format!("\"title\":\"{name}\"")));
+        println!("listed {name}");
+        let id = {
+            let v: Value = serde_json::from_str(&v).unwrap();
+            let list = v["children"]
+                .as_array()
+                .unwrap()
+                .iter()
+                .find(|c| c["type"] == "list" && c.to_string().contains("container_logs"))
+                .unwrap()
+                .clone();
+            list["items"]
+                .as_array()
+                .unwrap()
+                .iter()
+                .find(|i| i["title"] == name.as_str())
+                .unwrap()["id"]
+                .as_str()
+                .unwrap()
+                .to_string()
+        };
+        let click = |id_: &str| {
+            event(
+                SIDEBAR,
+                &json!({ "type": "click", "id": id_, "row": id }).to_string(),
+            )
+            .unwrap()
+        };
+        let actions = click("container_logs");
+        println!("logs click -> {actions}");
+        assert!(actions.contains("docker.logs"));
+        let logs = (0..40)
+            .find_map(|_| {
+                let v = crate::containers::view(crate::containers::LOGS).unwrap();
+                if v.contains("hello from e2e") {
+                    return Some(v);
+                }
+                std::thread::sleep(Duration::from_millis(250));
+                None
+            })
+            .expect("logs");
+        assert!(logs.contains("hello from e2e"));
+        println!("logs read");
+        click("container_stop");
+        wait(&|v| !v.contains(&format!("\"title\":\"{name}\"")));
+        println!("stopped and gone from the section");
     }
 
     #[test]
