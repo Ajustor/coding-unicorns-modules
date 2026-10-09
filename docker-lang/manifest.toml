@@ -1,19 +1,38 @@
 [extension]
 id = "unicorns.docker-lang"
-name = "Dockerfile"
+name = "Docker"
 version = "0.1.0"
-description = "Dockerfile / Containerfile support — syntax highlighting (heredocs, variables, flags), hover docs for instructions, docker-langserver LSP (validation, completion, formatting)"
+description = "Docker support — Dockerfile and Compose highlighting with hover docs, docker-langserver and compose-language-service LSPs, and a Docker panel to pull, run, remove and prune images"
 author = "Writing Unicorns"
 repository = ""
-documentation = "https://docs.docker.com/reference/dockerfile/"
+documentation = "https://docs.docker.com/reference/"
 
 [capabilities]
-languages = ["dockerfile", "containerfile"]
+# `compose` is the language of Compose files, recognised by name below.
+languages = ["dockerfile", "containerfile", "compose"]
 lsp_server = "docker-langserver"
 lsp_args = ["--stdio"]
-language_ids = { containerfile = "dockerfile" }
-# Files without a meaningful extension (needs Coding Unicorns 0.10.6+).
-file_names = { "Dockerfile" = "dockerfile", "Dockerfile.*" = "dockerfile", "Containerfile" = "dockerfile", "Containerfile.*" = "dockerfile" }
+language_ids = { containerfile = "dockerfile", compose = "dockercompose" }
+# Files known by their name (Coding Unicorns 0.10.6+).
+file_names = { "Dockerfile" = "dockerfile", "Dockerfile.*" = "dockerfile", "Containerfile" = "dockerfile", "Containerfile.*" = "dockerfile", "compose.yaml" = "compose", "compose.yml" = "compose", "compose.*.yaml" = "compose", "compose.*.yml" = "compose", "docker-compose.yaml" = "compose", "docker-compose.yml" = "compose", "docker-compose.*.yaml" = "compose", "docker-compose.*.yml" = "compose" }
+
+# Compose files have their own server (Coding Unicorns 0.10.7+).
+[capabilities.lsp_servers.compose]
+command = "docker-compose-langserver"
+args = ["--stdio"]
 
 [dependencies]
-npm = ["dockerfile-language-server-nodejs"]
+npm = ["dockerfile-language-server-nodejs", "@microsoft/compose-language-service"]
+
+# Interfaces (Coding Unicorns 0.10.7+): an activity bar entry listing the
+# local images, and a page with the full table. Both need the docker CLI.
+[[panels]]
+id = "docker.images"
+title = "Docker"
+icon = "container"
+
+[[panels]]
+id = "docker.images.page"
+title = "Docker images"
+icon = "container"
+location = "page"
