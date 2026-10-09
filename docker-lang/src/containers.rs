@@ -511,7 +511,66 @@ pub fn event(panel: &str, event: &str) -> Option<String> {
         return None;
     }
     let event: Value = serde_json::from_str(event).ok()?;
-    let (jobs, actions) = handle_event(&mut state(), &event);
+    Some(Value::Array(run_event(&event)).to_string())
+}
+
+/// Running containers, for the Docker sidebar panel (its buttons send
+/// `container_logs` / `container_stop` events, see [`sidebar_event`]).
+pub fn running_section(state: &State) -> Vec<Value> {
+    let mut section = vec![
+        json!({ "type": "separator" }),
+        json!({ "type": "heading", "text": "Running containers" }),
+    ];
+    if let Some(e) = &state.error {
+        section.push(json!({ "type": "text", "text": e, "style": "error" }));
+        return section;
+    }
+    if state.loaded.is_none() {
+        section.push(json!({ "type": "spinner", "text": "Loading containers…" }));
+        return section;
+    }
+    let items: Vec<Value> = state
+        .containers
+        .iter()
+        .filter(|c| c.is_running())
+        .map(|c| {
+            let busy = state.busy.iter().any(|(i, _)| *i == c.id);
+            let detail = if c.ports.is_empty() {
+                c.status.clone()
+            } else {
+                format!("{} · {}", c.status, c.ports)
+            };
+            json!({ "id": c.id, "title": c.name, "subtitle": c.image, "detail": detail,
+                    "actions": [
+                        { "id": "container_logs", "label": "Logs", "icon": "list" },
+                        { "id": "container_stop", "label": "Stop", "icon": "stop", "enabled": !busy },
+                    ] })
+        })
+        .collect();
+    section.push(json!({ "type": "list", "items": items, "empty": "No running containers." }));
+    section
+}
+
+/// The running-containers section of the sidebar, refreshing the list when
+/// due.
+pub fn sidebar_section() -> Vec<Value> {
+    for job in due_jobs(&mut state(), CONTAINERS) {
+        start(job);
+    }
+    running_section(&state())
+}
+
+/// A sidebar `container_*` event: handled like the containers page's.
+pub fn sidebar_event(event: &Value) -> Vec<Value> {
+    let mut event = event.clone();
+    let id = event["id"].as_str().unwrap_or("").to_string();
+    event["id"] = id.trim_start_matches("container_").into();
+    run_event(&event)
+}
+
+/// Apply `event`, start its jobs, and return the actions for the IDE.
+fn run_event(event: &Value) -> Vec<Value> {
+    let (jobs, actions) = handle_event(&mut state(), event);
     for job in jobs {
         if matches!(job, Job::List { .. }) {
             state().loading = true;
@@ -523,7 +582,7 @@ pub fn event(panel: &str, event: &str) -> Option<String> {
         }
         start(job);
     }
-    Some(Value::Array(actions).to_string())
+    actions
 }
 
 #[cfg(test)]
@@ -736,7 +795,11 @@ garbage
             std::thread::sleep(Duration::from_millis(250));
         }
         let first = state().containers.first().cloned().expect("a container");
-        println!("{} containers, first {}", state().containers.len(), first.name);
+        println!(
+            "{} containers, first {}",
+            state().containers.len(),
+            first.name
+        );
         let ev = json!({ "type": "click", "id": "logs", "row": first.id }).to_string();
         println!("actions {}", event(CONTAINERS, &ev).unwrap());
         view(LOGS);
@@ -748,8 +811,42 @@ garbage
         }
         let s = state();
         let l = s.logs.as_ref().unwrap();
-        println!("logs error {:?}, {} lines, last: {:?}", l.error, l.text.lines().count(), l.text.lines().last());
+        println!(
+            "logs error {:?}, {} lines, last: {:?}",
+            l.error,
+            l.text.lines().count(),
+            l.text.lines().last()
+        );
         assert!(l.loaded.is_some());
+    }
+
+    #[test]
+    fn running_section_lists_running_containers_only() {
+        let s = loaded();
+        let v = Value::Array(running_section(&s));
+        let list = v
+            .as_array()
+            .unwrap()
+            .iter()
+            .find(|c| c["type"] == "list")
+            .unwrap();
+        let items = list["items"].as_array().unwrap();
+        assert_eq!(items.len(), 1);
+        assert_eq!(items[0]["title"], "web");
+        assert_eq!(items[0]["detail"], "Up 2 hours · 0.0.0.0:80->80/tcp");
+        assert_eq!(items[0]["actions"][0]["id"], "container_logs");
+
+        let s = State {
+            error: Some("daemon down".into()),
+            ..Default::default()
+        };
+        assert!(Value::Array(running_section(&s))
+            .to_string()
+            .contains("daemon down"));
+        let s = State::default();
+        assert!(Value::Array(running_section(&s))
+            .to_string()
+            .contains("Loading containers"));
     }
 
     #[test]
