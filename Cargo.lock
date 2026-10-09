@@ -31,12 +31,11 @@ dependencies = [
 ]
 
 [[package]]
-name = "docker-compose-lang"
-version = "0.1.0"
-
-[[package]]
 name = "docker-lang"
 version = "0.1.0"
+dependencies = [
+ "serde_json",
+]
 
 [[package]]
 name = "equivalent"
