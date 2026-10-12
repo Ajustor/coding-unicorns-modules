@@ -17,5 +17,6 @@ members = [
     "json-lang",
     "docker-lang",
     "markdown-lang",
+    "java-lang",
 ]
 resolver = "2"

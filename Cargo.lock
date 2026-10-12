@@ -90,6 +90,15 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "8f42a60cbdf9a97f5d2305f08a87dc4e09308d1276d28c869c684d7777685682"
 
 [[package]]
+name = "java-lang"
+version = "0.1.0"
+dependencies = [
+ "tree-sitter",
+ "tree-sitter-highlight",
+ "tree-sitter-java",
+]
+
+[[package]]
 name = "javascript-lang"
 version = "0.3.0"
 dependencies = [
@@ -104,7 +113,7 @@ version = "0.1.0"
 
 [[package]]
 name = "markdown-lang"
-version = "0.1.0"
+version = "0.1.1"
 
 [[package]]
 name = "memchr"
@@ -188,7 +197,7 @@ checksum = "dc897dd8d9e8bd1ed8cdad82b5966c3e0ecae09fb1907d58efaa013543185d0a"
 
 [[package]]
 name = "rust-lang"
-version = "0.3.0"
+version = "0.3.1"
 dependencies = [
  "tree-sitter",
  "tree-sitter-highlight",
@@ -291,7 +300,7 @@ dependencies = [
 
 [[package]]
 name = "toml-lang"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "tree-sitter",
  "tree-sitter-highlight",
@@ -349,6 +358,16 @@ name = "tree-sitter-html"
 version = "0.23.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "261b708e5d92061ede329babaaa427b819329a9d427a1d710abb0f67bbef63ee"
+dependencies = [
+ "cc",
+ "tree-sitter-language",
+]
+
+[[package]]
+name = "tree-sitter-java"
+version = "0.23.5"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "0aa6cbcdc8c679b214e616fd3300da67da0e492e066df01bcf5a5921a71e90d6"
 dependencies = [
  "cc",
  "tree-sitter-language",
@@ -441,7 +460,7 @@ version = "0.3.0"
 
 [[package]]
 name = "xml-lang"
-version = "0.2.0"
+version = "0.2.1"
 
 [[package]]
 name = "zmij"
