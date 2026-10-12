@@ -24,7 +24,7 @@ Each module compiles to a native dynamic library (`.so` / `.dll` / `.dylib`) loa
 | `json-lang` | JSON / JSONC | `.json`, `.jsonc`, `.json5`, `.geojson`, `.webmanifest` | — | [docs](https://www.json.org/json-en.html) |
 | `docker-lang` | Dockerfile, Docker Compose | `Dockerfile`, `Containerfile`, `Dockerfile.*`, `.dockerfile`, `compose.yaml`, `docker-compose.yml`, `compose.*.yml`, `docker-compose.*.yml` | — | [docs](https://docs.docker.com/reference/) |
 | `markdown-lang` | Markdown (CommonMark, GFM) | `.md`, `.markdown`, `.mdown`, `.mkd`, `.mkdn`, `.mdwn` | — | [docs](https://commonmark.org/help/) |
-| `java-lang` | Java | `.java` | — (coming) | [docs](https://dev.java/learn/) |
+| `java-lang` | Java | `.java` | java-debug (in JDT LS) | [docs](https://dev.java/learn/) |
 
 Dockerfiles and Compose files are recognised by their name (`file_names`, Coding Unicorns
 0.10.6+). Compose files get their own `compose` language, with their own language server
@@ -53,6 +53,10 @@ hover. Its language server, [Eclipse JDT LS](https://github.com/eclipse-jdtls/ec
 the module's folder when the first `.java` file is opened (`[capabilities.lsp_download]`, Coding
 Unicorns 0.15.0+) and run by **Java 21 or later**, which must be the `java` on the `PATH`. Its data
 (project index) goes to a folder per workspace (`${dataDir}`), outside the project.
+Debugging (Coding Unicorns 0.16.0+) uses [java-debug](https://github.com/microsoft/java-debug), a
+plugin the server loads (downloaded with it): F5 asks the server for the open file's main class
+(or the launch configuration's `mainClass`), its classpath and the project's Java, then the server
+starts the session (`transport = "lsp"`, `[[debugger.lsp_resolve]]` in `java-lang/manifest.toml`).
 
 Language servers that are a single download are fetched into the module's folder when the
 first file of their languages is opened, if they are not on the `PATH` (`[capabilities.lsp_download]`,
@@ -71,7 +75,7 @@ TCP), `powershell-lang` (downloaded module run by `pwsh`), `go-lang` (TCP, tool 
 with the dependencies). The IDE README (*Créer une extension*) documents every field.
 
 Without a launch configuration, F5 debugs the current file for TypeScript, JavaScript,
-Python, PowerShell, Go (its package) and HTML (in Chrome). C#, Rust and the component
+Python, PowerShell, Go (its package), Java (the open file's main class) and HTML (in Chrome). C#, Rust and the component
 frameworks (React, Vue, Svelte) need a `.vscode/launch.json` entry giving the program or
 dev server URL. TOML, XML, JSON, Markdown and Docker files are not programs, and speedster-js components run through Bun,
 whose debugger does not speak DAP: these modules have no debugger.
