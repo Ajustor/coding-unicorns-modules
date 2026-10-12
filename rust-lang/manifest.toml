@@ -1,7 +1,7 @@
 [extension]
 id = "unicorns.rust-lang"
 name = "Rust"
-version = "0.3.0"
+version = "0.3.1"
 description = "Rust language support — syntax highlighting, hover docs, rust-analyzer LSP, lldb-dap debugger"
 author = "Writing Unicorns"
 repository = ""
@@ -9,10 +9,23 @@ documentation = "https://doc.rust-lang.org/book/"
 
 [capabilities]
 languages = ["rs"]
-lsp_server = "rust-analyzer"
+# rust-analyzer from its GitHub releases, always the module's own copy: the
+# `rust-analyzer` that rustup puts on the PATH fails until its component is
+# added (Coding Unicorns 0.15.0+).
+lsp_server = "${serverDir}/rust-analyzer"
 lsp_args = []
 # LSP languageId of extensions whose id differs from the extension.
 language_ids = { rs = "rust" }
+
+[capabilities.lsp_download]
+binary = "rust-analyzer"
+[capabilities.lsp_download.urls]
+windows-x86_64 = "https://github.com/rust-lang/rust-analyzer/releases/latest/download/rust-analyzer-x86_64-pc-windows-msvc.zip"
+windows-aarch64 = "https://github.com/rust-lang/rust-analyzer/releases/latest/download/rust-analyzer-aarch64-pc-windows-msvc.zip"
+linux-x86_64 = "https://github.com/rust-lang/rust-analyzer/releases/latest/download/rust-analyzer-x86_64-unknown-linux-gnu.gz"
+linux-aarch64 = "https://github.com/rust-lang/rust-analyzer/releases/latest/download/rust-analyzer-aarch64-unknown-linux-gnu.gz"
+macos-x86_64 = "https://github.com/rust-lang/rust-analyzer/releases/latest/download/rust-analyzer-x86_64-apple-darwin.gz"
+macos-aarch64 = "https://github.com/rust-lang/rust-analyzer/releases/latest/download/rust-analyzer-aarch64-apple-darwin.gz"
 
 [dependencies]
 

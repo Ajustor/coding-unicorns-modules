@@ -1,7 +1,7 @@
 [extension]
 id = "unicorns.toml-lang"
 name = "TOML"
-version = "0.1.0"
+version = "0.1.1"
 description = "TOML language support — syntax highlighting, taplo LSP"
 author = "Writing Unicorns"
 repository = ""
@@ -11,5 +11,17 @@ documentation = "https://toml.io/en/latest"
 languages = ["toml"]
 lsp_server = "taplo"
 lsp_args = ["lsp", "stdio"]
+
+# taplo from its GitHub releases, downloaded when it is not on the PATH
+# (Coding Unicorns 0.15.0+).
+[capabilities.lsp_download]
+binary = "taplo"
+[capabilities.lsp_download.urls]
+windows-x86_64 = "https://github.com/tamasfe/taplo/releases/latest/download/taplo-windows-x86_64.zip"
+windows-aarch64 = "https://github.com/tamasfe/taplo/releases/latest/download/taplo-windows-aarch64.zip"
+linux-x86_64 = "https://github.com/tamasfe/taplo/releases/latest/download/taplo-linux-x86_64.gz"
+linux-aarch64 = "https://github.com/tamasfe/taplo/releases/latest/download/taplo-linux-aarch64.gz"
+macos-x86_64 = "https://github.com/tamasfe/taplo/releases/latest/download/taplo-darwin-x86_64.gz"
+macos-aarch64 = "https://github.com/tamasfe/taplo/releases/latest/download/taplo-darwin-aarch64.gz"
 
 [dependencies]

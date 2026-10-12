@@ -43,9 +43,7 @@ the full table. The panel also lists the **running containers**, with *Logs* and
 code spans and blocks, links and images, reference definitions and footnotes, lists and task
 boxes, block quotes, tables, inline HTML and comments, and YAML/TOML front matter. Hovering a
 reference label shows its target URL, a footnote label its text. Its language server,
-[marksman](https://github.com/artempyanykh/marksman), is a single binary to put on the `PATH`
-(`winget install Artempyanykh.Marksman`, `brew install marksman`, `scoop install marksman` or
-the [releases](https://github.com/artempyanykh/marksman/releases)); it adds the outline, link
+[marksman](https://github.com/artempyanykh/marksman), downloaded on first use, adds the outline, link
 and heading completion, go to definition, broken link diagnostics and rename. The rendered
 preview is built into Coding Unicorns (Ctrl+Shift+V).
 
@@ -55,6 +53,11 @@ hover. Its language server, [Eclipse JDT LS](https://github.com/eclipse-jdtls/ec
 the module's folder when the first `.java` file is opened (`[capabilities.lsp_download]`, Coding
 Unicorns 0.15.0+) and run by **Java 21 or later**, which must be the `java` on the `PATH`. Its data
 (project index) goes to a folder per workspace (`${dataDir}`), outside the project.
+
+Language servers that are a single download are fetched into the module's folder when the
+first file of their languages is opened, if they are not on the `PATH` (`[capabilities.lsp_download]`,
+Coding Unicorns 0.15.0+): rust-analyzer (always the module's own copy, as rustup's
+`rust-analyzer` fails until its component is added), taplo, lemminx and marksman.
 
 ## Debuggers
 
