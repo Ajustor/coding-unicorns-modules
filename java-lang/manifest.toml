@@ -1,7 +1,7 @@
 [extension]
 id = "unicorns.java-lang"
 name = "Java"
-version = "0.1.0"
+version = "0.2.0"
 description = "Java language support — syntax highlighting, hover with Javadoc, Eclipse JDT LS (completion, diagnostics, navigation, refactoring, Maven and Gradle projects), downloaded on first use"
 author = "Writing Unicorns"
 repository = ""
@@ -35,8 +35,44 @@ lsp_args = [
     "${dataDir}",
 ]
 
+# java-debug, the debugger, is a plugin of the server (Coding Unicorns 0.16.0+).
+lsp_init_options = { bundles = ["${debuggerDir}/com.microsoft.java.debug.plugin.jar"] }
+
 [capabilities.lsp_download]
 binary = "bin/jdtls.py"
 urls = { "*" = "https://download.eclipse.org/jdtls/snapshots/jdt-language-server-latest.tar.gz" }
 
 [dependencies]
+
+# Debugger: java-debug runs inside the language server, which starts each
+# session and returns its port (`transport = "lsp"`). Before that, the main
+# class of the open file (or of `mainClass` in the launch configuration), its
+# classpath and the project's java executable are asked to the server.
+[debugger]
+types = ["java"]
+command = "vscode.java.startDebugSession"
+transport = "lsp"
+default_launch = { request = "launch", cwd = "${workspaceFolder}", console = "internalConsole" }
+
+[debugger.download]
+binary = "com.microsoft.java.debug.plugin.jar"
+urls = { "*" = "https://repo1.maven.org/maven2/com/microsoft/java/com.microsoft.java.debug.plugin/0.53.1/com.microsoft.java.debug.plugin-0.53.1.jar" }
+
+[[debugger.lsp_resolve]]
+command = "vscode.java.resolveMainClass"
+args = ["${workspaceFolderUri}"]
+unless = "mainClass"
+pick = "filePath"
+merge = ["mainClass", "projectName"]
+
+[[debugger.lsp_resolve]]
+command = "vscode.java.resolveClasspath"
+args = ["${launch:mainClass}", "${launch:projectName}"]
+unless = "classPaths"
+set = ["modulePaths", "classPaths"]
+
+[[debugger.lsp_resolve]]
+command = "vscode.java.resolveJavaExecutable"
+args = ["${launch:mainClass}", "${launch:projectName}"]
+unless = "javaExec"
+set = ["javaExec"]
