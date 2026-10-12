@@ -1,0 +1,42 @@
+[extension]
+id = "unicorns.java-lang"
+name = "Java"
+version = "0.1.0"
+description = "Java language support — syntax highlighting, hover with Javadoc, Eclipse JDT LS (completion, diagnostics, navigation, refactoring, Maven and Gradle projects), downloaded on first use"
+author = "Writing Unicorns"
+repository = ""
+documentation = "https://dev.java/learn/"
+
+[capabilities]
+languages = ["java"]
+# Eclipse JDT LS, run directly by Java 21+ (`java` on the PATH), as its own
+# `bin/jdtls` script does. Its files are downloaded into the module's folder
+# when the first .java file is opened (Coding Unicorns 0.15.0+).
+lsp_server = "java"
+lsp_args = [
+    "-Declipse.application=org.eclipse.jdt.ls.core.id1",
+    "-Dosgi.bundles.defaultStartLevel=4",
+    "-Declipse.product=org.eclipse.jdt.ls.core.product",
+    "-Dosgi.checkConfiguration=true",
+    "-Dosgi.sharedConfiguration.area=${serverDir}/config_${os}",
+    "-Dosgi.sharedConfiguration.area.readOnly=true",
+    "-Dosgi.configuration.cascaded=true",
+    "-Djdk.xml.maxGeneralEntitySizeLimit=0",
+    "-Djdk.xml.totalEntitySizeLimit=0",
+    "-Xms1G",
+    "--add-modules=ALL-SYSTEM",
+    "--add-opens",
+    "java.base/java.util=ALL-UNNAMED",
+    "--add-opens",
+    "java.base/java.lang=ALL-UNNAMED",
+    "-jar",
+    "${serverDir}/plugins/org.eclipse.equinox.launcher_*.jar",
+    "-data",
+    "${dataDir}",
+]
+
+[capabilities.lsp_download]
+binary = "bin/jdtls.py"
+urls = { "*" = "https://download.eclipse.org/jdtls/snapshots/jdt-language-server-latest.tar.gz" }
+
+[dependencies]

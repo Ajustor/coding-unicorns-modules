@@ -1,0 +1,15 @@
+[package]
+name = "java-lang"
+version = "0.1.0"
+edition = "2021"
+description = "Java language support module for Writing Unicorns IDE"
+
+[lib]
+crate-type = ["rlib", "cdylib"]
+
+[dependencies]
+tree-sitter = "0.25"
+tree-sitter-highlight = "0.25"
+tree-sitter-java = "0.23"
+
+[dev-dependencies]

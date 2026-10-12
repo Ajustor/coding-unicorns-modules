@@ -1,6 +1,6 @@
 [package]
 name = "markdown-lang"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2021"
 description = "Markdown language support module for Writing Unicorns IDE"
 

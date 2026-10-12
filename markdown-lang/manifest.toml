@@ -1,7 +1,7 @@
 [extension]
 id = "unicorns.markdown-lang"
 name = "Markdown"
-version = "0.1.0"
+version = "0.1.1"
 description = "Markdown (CommonMark + GFM) language support — syntax highlighting (headings, emphasis, code, links, lists, tables, front matter), hover on link references and footnotes, marksman LSP (outline, links and anchors completion, go to definition, broken link diagnostics, rename)"
 author = "Writing Unicorns"
 repository = ""
@@ -9,11 +9,20 @@ documentation = "https://commonmark.org/help/"
 
 [capabilities]
 languages = ["md", "markdown", "mdown", "mkd", "mkdn", "mdwn"]
-# marksman is a single binary: https://github.com/artempyanykh/marksman/releases
-# (winget install Artempyanykh.Marksman, brew install marksman, scoop install marksman).
+# marksman, a single binary from its GitHub releases, downloaded when it is not
+# on the PATH (Coding Unicorns 0.15.0+).
 lsp_server = "marksman"
 lsp_args = ["server"]
 # LSP languageId of every extension.
 language_ids = { md = "markdown", mdown = "markdown", mkd = "markdown", mkdn = "markdown", mdwn = "markdown" }
+
+[capabilities.lsp_download]
+binary = "marksman"
+[capabilities.lsp_download.urls]
+windows-x86_64 = "https://github.com/artempyanykh/marksman/releases/latest/download/marksman.exe"
+linux-x86_64 = "https://github.com/artempyanykh/marksman/releases/latest/download/marksman-linux-x64"
+linux-aarch64 = "https://github.com/artempyanykh/marksman/releases/latest/download/marksman-linux-arm64"
+macos-x86_64 = "https://github.com/artempyanykh/marksman/releases/latest/download/marksman-macos"
+macos-aarch64 = "https://github.com/artempyanykh/marksman/releases/latest/download/marksman-macos"
 
 [dependencies]

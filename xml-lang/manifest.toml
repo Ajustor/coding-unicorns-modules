@@ -1,7 +1,7 @@
 [extension]
 id = "unicorns.xml-lang"
 name = "XML"
-version = "0.2.0"
+version = "0.2.1"
 description = "XML language support — syntax highlighting, lemminx LSP"
 author = "Writing Unicorns"
 repository = ""
@@ -13,5 +13,16 @@ lsp_server = "lemminx"
 lsp_args = []
 # LSP languageId of extensions whose id differs from the extension.
 language_ids = { xsl = "xml", xsd = "xml", svg = "xml", xhtml = "xml" }
+
+# lemminx native binary (from the vscode-xml releases, named after the
+# platform), downloaded when lemminx is not on the PATH (Coding Unicorns 0.15.0+).
+[capabilities.lsp_download]
+binary = "lemminx-*"
+[capabilities.lsp_download.urls]
+windows-x86_64 = "https://github.com/redhat-developer/vscode-xml/releases/latest/download/lemminx-win32.zip"
+linux-x86_64 = "https://github.com/redhat-developer/vscode-xml/releases/latest/download/lemminx-linux-x86_64.zip"
+linux-aarch64 = "https://github.com/redhat-developer/vscode-xml/releases/latest/download/lemminx-linux-aarch_64.zip"
+macos-x86_64 = "https://github.com/redhat-developer/vscode-xml/releases/latest/download/lemminx-osx-x86_64.zip"
+macos-aarch64 = "https://github.com/redhat-developer/vscode-xml/releases/latest/download/lemminx-osx-aarch_64.zip"
 
 [dependencies]
