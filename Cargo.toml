@@ -16,5 +16,6 @@ members = [
     "spd-lang",
     "json-lang",
     "docker-lang",
+    "markdown-lang",
 ]
 resolver = "2"
