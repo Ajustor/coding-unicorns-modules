@@ -23,6 +23,7 @@ Each module compiles to a native dynamic library (`.so` / `.dll` / `.dylib`) loa
 | `spd-lang` | speedster-js | `.spd` | — | [docs](https://ajustor.github.io/speedster-js/) |
 | `json-lang` | JSON / JSONC | `.json`, `.jsonc`, `.json5`, `.geojson`, `.webmanifest` | — | [docs](https://www.json.org/json-en.html) |
 | `docker-lang` | Dockerfile, Docker Compose | `Dockerfile`, `Containerfile`, `Dockerfile.*`, `.dockerfile`, `compose.yaml`, `docker-compose.yml`, `compose.*.yml`, `docker-compose.*.yml` | — | [docs](https://docs.docker.com/reference/) |
+| `markdown-lang` | Markdown (CommonMark, GFM) | `.md`, `.markdown`, `.mdown`, `.mkd`, `.mkdn`, `.mdwn` | — | [docs](https://commonmark.org/help/) |
 
 Dockerfiles and Compose files are recognised by their name (`file_names`, Coding Unicorns
 0.10.6+). Compose files get their own `compose` language, with their own language server
@@ -36,6 +37,16 @@ the full table. The panel also lists the **running containers**, with *Logs* and
 *Restart*, *Remove*, *Shell*) and a logs page following the chosen container
 (`docker-lang/src/containers.rs`; the `log` view element needs Coding Unicorns 0.10.8+). The module returns JSON views from `ui_view_ffi` and handles clicks in
 `ui_event_ffi`, running the `docker` CLI on its own threads (`docker-lang/src/panel.rs`).
+
+`markdown-lang` highlights CommonMark and GitHub Flavored Markdown: headings, emphasis,
+code spans and blocks, links and images, reference definitions and footnotes, lists and task
+boxes, block quotes, tables, inline HTML and comments, and YAML/TOML front matter. Hovering a
+reference label shows its target URL, a footnote label its text. Its language server,
+[marksman](https://github.com/artempyanykh/marksman), is a single binary to put on the `PATH`
+(`winget install Artempyanykh.Marksman`, `brew install marksman`, `scoop install marksman` or
+the [releases](https://github.com/artempyanykh/marksman/releases)); it adds the outline, link
+and heading completion, go to definition, broken link diagnostics and rename. The rendered
+preview is built into Coding Unicorns (Ctrl+Shift+V).
 
 ## Debuggers
 
@@ -51,7 +62,7 @@ with the dependencies). The IDE README (*Créer une extension*) documents every 
 Without a launch configuration, F5 debugs the current file for TypeScript, JavaScript,
 Python, PowerShell, Go (its package) and HTML (in Chrome). C#, Rust and the component
 frameworks (React, Vue, Svelte) need a `.vscode/launch.json` entry giving the program or
-dev server URL. TOML, XML, JSON and Docker files are not programs, and speedster-js components run through Bun,
+dev server URL. TOML, XML, JSON, Markdown and Docker files are not programs, and speedster-js components run through Bun,
 whose debugger does not speak DAP: these modules have no debugger.
 
 ## Installation in the IDE
