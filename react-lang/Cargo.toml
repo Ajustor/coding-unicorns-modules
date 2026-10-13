@@ -1,6 +1,6 @@
 [package]
 name = "react-lang"
-version = "0.2.0"
+version = "0.2.1"
 edition = "2021"
 description = "React (JSX/TSX) language support module for Writing Unicorns IDE"
 
@@ -11,5 +11,6 @@ crate-type = ["rlib", "cdylib"]
 tree-sitter = "0.25"
 tree-sitter-highlight = "0.25"
 tree-sitter-typescript = "0.23"
+tree-sitter-javascript = "0.25"
 
 [dev-dependencies]
