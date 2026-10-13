@@ -1,7 +1,7 @@
 [extension]
 id = "unicorns.react-lang"
 name = "React"
-version = "0.2.0"
+version = "0.2.1"
 description = "React (JSX/TSX) language support — syntax highlighting, React hooks, typescript-language-server LSP, js-debug debugger"
 author = "Writing Unicorns"
 repository = ""

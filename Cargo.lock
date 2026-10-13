@@ -159,10 +159,11 @@ dependencies = [
 
 [[package]]
 name = "react-lang"
-version = "0.2.0"
+version = "0.2.1"
 dependencies = [
  "tree-sitter",
  "tree-sitter-highlight",
+ "tree-sitter-javascript",
  "tree-sitter-typescript",
 ]
 
@@ -441,10 +442,11 @@ dependencies = [
 
 [[package]]
 name = "typescript-lang"
-version = "0.3.0"
+version = "0.3.1"
 dependencies = [
  "tree-sitter",
  "tree-sitter-highlight",
+ "tree-sitter-javascript",
  "tree-sitter-typescript",
 ]
 

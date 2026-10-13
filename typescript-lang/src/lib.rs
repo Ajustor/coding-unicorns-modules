@@ -8,6 +8,7 @@ const HIGHLIGHT_NAMES: &[&str] = &[
     "label", "number", "operator", "property", "punctuation", "punctuation.bracket",
     "punctuation.delimiter", "string", "string.escape", "string.special",
     "type", "type.builtin", "variable", "variable.builtin", "variable.parameter",
+    "tag",
 ];
 
 fn capture_to_kind(idx: usize) -> &'static str {
@@ -20,6 +21,7 @@ fn capture_to_kind(idx: usize) -> &'static str {
         16 => "number",
         18 => "property",
         22 | 23 | 24 => "string",
+        30 => "keyword",
         _ => "normal",
     }
 }
@@ -27,15 +29,38 @@ fn capture_to_kind(idx: usize) -> &'static str {
 static CONFIG_TS: OnceLock<HighlightConfiguration> = OnceLock::new();
 static CONFIG_TSX: OnceLock<HighlightConfiguration> = OnceLock::new();
 
+/// The TypeScript queries only cover what TypeScript adds to JavaScript
+/// (types, `interface`, `declare`…): the grammar inherits the JavaScript
+/// ones, so both are joined. The later query wins on a node both capture,
+/// so JavaScript comes first and JSX (TSX only) last.
+fn highlights_query(tsx: bool) -> String {
+    let mut parts = vec![
+        tree_sitter_javascript::HIGHLIGHT_QUERY,
+        tree_sitter_typescript::HIGHLIGHTS_QUERY,
+    ];
+    if tsx {
+        parts.push(tree_sitter_javascript::JSX_HIGHLIGHT_QUERY);
+    }
+    parts.join("\n")
+}
+
+fn locals_query() -> String {
+    [
+        tree_sitter_typescript::LOCALS_QUERY,
+        tree_sitter_javascript::LOCALS_QUERY,
+    ]
+    .join("\n")
+}
+
 fn get_config(tsx: bool) -> &'static HighlightConfiguration {
     if tsx {
         CONFIG_TSX.get_or_init(|| {
             let mut cfg = HighlightConfiguration::new(
                 tree_sitter_typescript::LANGUAGE_TSX.into(),
                 "tsx",
-                tree_sitter_typescript::HIGHLIGHTS_QUERY,
+                &highlights_query(tsx),
                 "",
-                tree_sitter_typescript::LOCALS_QUERY,
+                &locals_query(),
             )
             .expect("tree-sitter-typescript TSX config");
             cfg.configure(HIGHLIGHT_NAMES);
@@ -46,9 +71,9 @@ fn get_config(tsx: bool) -> &'static HighlightConfiguration {
             let mut cfg = HighlightConfiguration::new(
                 tree_sitter_typescript::LANGUAGE_TYPESCRIPT.into(),
                 "typescript",
-                tree_sitter_typescript::HIGHLIGHTS_QUERY,
+                &highlights_query(tsx),
                 "",
-                tree_sitter_typescript::LOCALS_QUERY,
+                &locals_query(),
             )
             .expect("tree-sitter-typescript config");
             cfg.configure(HIGHLIGHT_NAMES);
@@ -263,5 +288,38 @@ pub unsafe extern "C" fn hover_info_ffi(
             .map(|c| c.into_raw())
             .unwrap_or(std::ptr::null_mut()),
         None => std::ptr::null_mut(),
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    /// Kind of the first token whose text is `text` in the JSON.
+    fn kind_of(json: &str, text: &str) -> Option<String> {
+        let needle = format!(r#"{{"text":{},"kind":""#, json_escape(text));
+        let start = json.find(&needle)? + needle.len();
+        let end = json[start..].find('"')? + start;
+        Some(json[start..end].to_string())
+    }
+
+    #[test]
+    fn javascript_syntax_is_highlighted_too() {
+        let src = "// note\nconst s: string = \"hi\";\nfunction f(x: number) { return x + 1; }\n";
+        let json = document_to_json(src, false);
+        assert_eq!(kind_of(&json, "// note").as_deref(), Some("comment"));
+        assert_eq!(kind_of(&json, "const").as_deref(), Some("keyword"));
+        assert_eq!(kind_of(&json, "\"hi\"").as_deref(), Some("string"));
+        assert_eq!(kind_of(&json, "f").as_deref(), Some("function"));
+        assert_eq!(kind_of(&json, "return").as_deref(), Some("keyword"));
+        assert_eq!(kind_of(&json, "1").as_deref(), Some("number"));
+        assert_eq!(kind_of(&json, "number").as_deref(), Some("type"));
+    }
+
+    #[test]
+    fn tsx_tags_are_highlighted() {
+        let json = document_to_json("const a = <div className=\"x\">hi</div>;\n", true);
+        assert_eq!(kind_of(&json, "div").as_deref(), Some("keyword"));
+        assert_eq!(kind_of(&json, "\"x\"").as_deref(), Some("string"));
     }
 }

@@ -10,6 +10,7 @@ const HIGHLIGHT_NAMES: &[&str] = &[
     "label", "number", "operator", "property", "punctuation", "punctuation.bracket",
     "punctuation.delimiter", "string", "string.escape", "string.special",
     "type", "type.builtin", "variable", "variable.builtin", "variable.parameter",
+    "tag",
 ];
 
 fn capture_to_kind(idx: usize) -> &'static str {
@@ -22,20 +23,41 @@ fn capture_to_kind(idx: usize) -> &'static str {
         16 => "number",
         18 => "property",
         22 | 23 | 24 => "string",
+        30 => "keyword",
         _ => "normal",
     }
 }
 
 static CONFIG: OnceLock<HighlightConfiguration> = OnceLock::new();
 
+/// The TypeScript queries only cover what TypeScript adds to JavaScript: the
+/// grammar inherits the JavaScript and JSX ones, so all are joined. The later
+/// query wins on a node several capture: JavaScript first, JSX last.
+fn highlights_query() -> String {
+    [
+        tree_sitter_javascript::HIGHLIGHT_QUERY,
+        tree_sitter_typescript::HIGHLIGHTS_QUERY,
+        tree_sitter_javascript::JSX_HIGHLIGHT_QUERY,
+    ]
+    .join("\n")
+}
+
+fn locals_query() -> String {
+    [
+        tree_sitter_typescript::LOCALS_QUERY,
+        tree_sitter_javascript::LOCALS_QUERY,
+    ]
+    .join("\n")
+}
+
 fn get_config() -> &'static HighlightConfiguration {
     CONFIG.get_or_init(|| {
         let mut cfg = HighlightConfiguration::new(
             tree_sitter_typescript::LANGUAGE_TSX.into(),
             "tsx",
-            tree_sitter_typescript::HIGHLIGHTS_QUERY,
+            &highlights_query(),
             "",
-            tree_sitter_typescript::LOCALS_QUERY,
+            &locals_query(),
         )
         .expect("tree-sitter-typescript TSX config");
         cfg.configure(HIGHLIGHT_NAMES);
@@ -229,5 +251,26 @@ pub unsafe extern "C" fn hover_info_ffi(
             .map(|c| c.into_raw())
             .unwrap_or(std::ptr::null_mut()),
         None => std::ptr::null_mut(),
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn javascript_and_jsx_syntax_are_highlighted() {
+        let json = document_to_json("// c\nconst a = <div className=\"x\">{f(1)}</div>;\n");
+        for (text, kind) in [
+            ("// c", "comment"),
+            ("const", "keyword"),
+            ("div", "keyword"),
+            ("\"x\"", "string"),
+            ("f", "function"),
+            ("1", "number"),
+        ] {
+            let needle = format!(r#"{{"text":{},"kind":"{kind}"}}"#, json_escape(text));
+            assert!(json.contains(&needle), "{text} as {kind} in {json}");
+        }
     }
 }

@@ -1,7 +1,7 @@
 [extension]
 id = "unicorns.typescript-lang"
 name = "TypeScript"
-version = "0.3.0"
+version = "0.3.1"
 description = "TypeScript language support — syntax highlighting, hover docs, typescript-language-server LSP, js-debug debugger"
 author = "Writing Unicorns"
 repository = ""
