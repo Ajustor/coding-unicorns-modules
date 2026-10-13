@@ -1,6 +1,6 @@
 [package]
 name = "vue-lang"
-version = "0.3.0"
+version = "0.4.0"
 edition = "2021"
 description = "Vue language support module for Writing Unicorns IDE"
 
@@ -8,5 +8,6 @@ description = "Vue language support module for Writing Unicorns IDE"
 crate-type = ["rlib", "cdylib"]
 
 [dependencies]
+unicorns-highlight = { path = "../shared/highlight" }
 
 [dev-dependencies]

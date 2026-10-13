@@ -188,6 +188,24 @@ pub extern "C" fn file_extensions() -> *const std::ffi::c_char {
     c"vue".as_ptr()
 }
 
+#[no_mangle]
+pub extern "C" fn reset_tokenizer() {}
+
+/// Highlight the whole component: markup as HTML, `<script>` as TypeScript,
+/// `<style>` as CSS, template expressions as TypeScript. Preferred by the IDE
+/// over [`tokenize_line_ffi`], kept for older versions.
+///
+/// # Safety
+/// `text_ptr` must be a valid, nul-terminated C string.
+#[no_mangle]
+pub unsafe extern "C" fn tokenize_document_ffi(
+    text_ptr: *const std::ffi::c_char,
+) -> *mut std::ffi::c_char {
+    let text = unsafe { std::ffi::CStr::from_ptr(text_ptr) }.to_str().unwrap_or("");
+    let json = unicorns_highlight::component(text, unicorns_highlight::Component::Vue);
+    std::ffi::CString::new(json).unwrap_or_default().into_raw()
+}
+
 /// # Safety
 /// `line_ptr` must be a valid, nul-terminated C string.
 #[no_mangle]

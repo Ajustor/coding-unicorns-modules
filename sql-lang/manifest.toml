@@ -1,0 +1,11 @@
+[extension]
+id = "unicorns.sql-lang"
+name = "SQL"
+version = "0.1.0"
+description = "SQL language support — syntax highlighting (PostgreSQL, MySQL, SQLite, SQL Server dialects)"
+author = "Writing Unicorns"
+repository = ""
+documentation = "https://www.postgresql.org/docs/current/sql.html"
+
+[capabilities]
+languages = ["sql"]
