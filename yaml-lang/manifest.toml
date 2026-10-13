@@ -1,0 +1,18 @@
+[extension]
+id = "unicorns.yaml-lang"
+name = "YAML"
+version = "0.1.0"
+description = "YAML language support — syntax highlighting, yaml-language-server LSP (validation, completion and hover from JSON schemas: GitHub Actions, Kubernetes, OpenAPI…)"
+author = "Writing Unicorns"
+repository = ""
+documentation = "https://yaml.org/spec/1.2.2/"
+
+[capabilities]
+languages = ["yml", "yaml"]
+lsp_server = "yaml-language-server"
+lsp_args = ["--stdio"]
+# LSP languageId of extensions whose id differs from the extension.
+language_ids = { yml = "yaml" }
+
+[dependencies]
+npm = ["yaml-language-server"]

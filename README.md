@@ -25,6 +25,8 @@ Each module compiles to a native dynamic library (`.so` / `.dll` / `.dylib`) loa
 | `docker-lang` | Dockerfile, Docker Compose | `Dockerfile`, `Containerfile`, `Dockerfile.*`, `.dockerfile`, `compose.yaml`, `docker-compose.yml`, `compose.*.yml`, `docker-compose.*.yml` | — | [docs](https://docs.docker.com/reference/) |
 | `markdown-lang` | Markdown (CommonMark, GFM) | `.md`, `.markdown`, `.mdown`, `.mkd`, `.mkdn`, `.mdwn` | — | [docs](https://commonmark.org/help/) |
 | `java-lang` | Java | `.java` | java-debug (in JDT LS) | [docs](https://dev.java/learn/) |
+| `yaml-lang` | YAML | `.yml`, `.yaml` | — | [docs](https://yaml.org/spec/1.2.2/) |
+| `sql-lang` | SQL | `.sql` | — | [docs](https://www.postgresql.org/docs/current/sql.html) |
 
 Dockerfiles and Compose files are recognised by their name (`file_names`, Coding Unicorns
 0.10.6+). Compose files get their own `compose` language, with their own language server
@@ -38,6 +40,17 @@ the full table. The panel also lists the **running containers**, with *Logs* and
 *Restart*, *Remove*, *Shell*) and a logs page following the chosen container
 (`docker-lang/src/containers.rs`; the `log` view element needs Coding Unicorns 0.10.8+). The module returns JSON views from `ui_view_ffi` and handles clicks in
 `ui_event_ffi`, running the `docker` CLI on its own threads (`docker-lang/src/panel.rs`).
+
+`shared/highlight` (`unicorns-highlight`, not a module) holds the tree-sitter highlighting the
+modules share: a grammar run over a document, and single-file components. `svelte-lang` and
+`vue-lang` highlight their markup as HTML, `<script>` as TypeScript, `<style>` as CSS, and template
+expressions (`{…}` and `{#if}` blocks in Svelte, `{{ … }}` and `v-…` / `:prop` / `@event`
+directives in Vue) as TypeScript.
+
+`yaml-lang` highlights YAML with tree-sitter; its language server,
+[yaml-language-server](https://github.com/redhat-developer/yaml-language-server) (installed with npm),
+validates and completes files from their JSON schema (GitHub Actions, Kubernetes, OpenAPI…). Compose
+files stay with `docker-lang`. `sql-lang` highlights SQL with tree-sitter (common dialects).
 
 `markdown-lang` highlights CommonMark and GitHub Flavored Markdown: headings, emphasis,
 code spans and blocks, links and images, reference definitions and footnotes, lists and task
