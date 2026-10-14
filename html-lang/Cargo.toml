@@ -13,3 +13,4 @@ tree-sitter-highlight = "0.25"
 tree-sitter-html = "0.23"
 
 [dev-dependencies]
+unicorns-highlight-test = { path = "../shared/highlight-test" }

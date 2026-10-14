@@ -1,0 +1,47 @@
+   1 | ---
+     = class "---"
+   2 | title: Sample
+     = property "title"  string " Sample"
+   3 | ---
+     = class "---"
+   4 | 
+   5 | # Heading 1
+     = keyword "# Heading 1"
+   6 | 
+   7 | Some *emphasis*, **strong**, `code` and a [link](https://example.org "title").
+     = type "*emphasis*"  function "**strong**"  string "`code`"  property "[link]"  number "(https://example.org \"title\")"
+   8 | 
+   9 | ## List
+     = keyword "## List"
+  10 | 
+  11 | - [x] done
+     = class "-"  keyword "[x]"
+  12 | - [ ] todo
+     = class "-"  keyword "[ ]"
+  13 |   1. nested
+     = class "1."
+  14 | 
+  15 | > A quote
+     = class ">"
+  16 | 
+  17 | ```rust
+     = class "```"  property "rust"
+  18 | fn main() {}
+     = string "fn main() {}"
+  19 | ```
+     = class "```"
+  20 | 
+  21 | | Col | Other |
+     = class "|"  class "|"  class "|"
+  22 | |-----|------:|
+     = class "|-----|------:|"
+  23 | | a   | 1     |
+     = class "|"  class "|"  class "|"
+  24 | 
+  25 | ![image](img.png) [^note]
+     = property "![image]"  number "(img.png)"  property "[^note]"
+  26 | 
+  27 | [^note]: A footnote.
+     = property "[^note]"
+  28 | <!-- comment -->
+     = comment "<!-- comment -->"

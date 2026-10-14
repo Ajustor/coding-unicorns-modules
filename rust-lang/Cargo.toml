@@ -13,3 +13,4 @@ tree-sitter-highlight = "0.25"
 tree-sitter-rust = "0.24"
 
 [dev-dependencies]
+unicorns-highlight-test = { path = "../shared/highlight-test" }

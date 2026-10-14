@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Sample &amp; test</title>
+  <style>
+    body { margin: 0; color: #333; }
+  </style>
+</head>
+<body>
+  <!-- comment -->
+  <main id="app" class="wide" data-count="3">
+    <a href="https://example.org" target="_blank">Link</a>
+    <input type="checkbox" checked>
+  </main>
+  <script>
+    const app = document.getElementById("app");
+    app.addEventListener("click", () => console.log(42));
+  </script>
+</body>
+</html>

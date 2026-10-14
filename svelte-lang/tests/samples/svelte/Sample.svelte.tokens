@@ -1,0 +1,39 @@
+   1 | <script lang="ts">
+     = keyword "script"  property "lang"  string "\"ts\""
+   2 |   export let items: string[] = [];
+     = keyword "export"  keyword "let"  type "string"
+   3 |   let count = 0;
+     = keyword "let"  number "0"
+   4 |   const add = () => (count += 1);
+     = keyword "const"  function "add"  number "1"
+   5 | </script>
+     = keyword "script"
+   6 | 
+   7 | <h1 class:big={count > 3}>Clicks: {count}</h1>
+     = keyword "h1"  macro "class"  property ":big"  number "3"  keyword "h1"
+   8 | {#if items.length}
+     = macro "{#if"  property "length"  macro "}"
+   9 |   {#each items as item, i (item)}
+     = macro "{#each"  keyword "as"  type "item"  function "i"  macro "}"
+  10 |     <p on:click={add}>{i}: {item.toUpperCase()}</p>
+     = keyword "p"  macro "on"  property ":click"  function "toUpperCase"  keyword "p"
+  11 |   {/each}
+     = macro "{/each}"
+  12 | {:else}
+     = macro "{:else}"
+  13 |   <p>None</p>
+     = keyword "p"  keyword "p"
+  14 | {/if}
+     = macro "{/if}"
+  15 | 
+  16 | <style>
+     = keyword "style"
+  17 |   h1 {
+     = keyword "h1"
+  18 |     color: rebeccapurple;
+     = property "color"
+  19 |     font-size: 2rem;
+     = property "font-size"  number "2"  type "rem"
+  20 |   }
+  21 | </style>
+     = keyword "style"

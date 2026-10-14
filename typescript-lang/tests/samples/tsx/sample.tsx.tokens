@@ -1,0 +1,25 @@
+   1 | import { useState } from "react";
+     = keyword "import"  keyword "from"  string "\"react\""
+   2 | 
+   3 | type Props = { label: string; start?: number };
+     = keyword "type"  type "Props"  property "label"  type "string"  property "start"  type "number"
+   4 | 
+   5 | export function Counter({ label, start = 0 }: Props) {
+     = keyword "export"  keyword "function"  type "Counter"  number "0"  type "Props"
+   6 |   const [count, setCount] = useState<number>(start);
+     = keyword "const"  function "useState"  type "number"
+   7 |   return (
+     = keyword "return"
+   8 |     <div className="counter">
+     = keyword "div"  macro "className"  string "\"counter\""
+   9 |       <span>{label}: {count}</span>
+     = keyword "span"  keyword "span"
+  10 |       <button onClick={() => setCount(count + 1)} disabled={count > 9}>
+     = keyword "button"  macro "onClick"  number "1"  macro "disabled"  number "9"
+  11 |         +1
+  12 |       </button>
+     = keyword "button"
+  13 |     </div>
+     = keyword "div"
+  14 |   );
+  15 | }

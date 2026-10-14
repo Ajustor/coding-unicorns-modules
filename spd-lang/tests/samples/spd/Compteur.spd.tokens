@@ -1,0 +1,38 @@
+   1 | <script lang="ts">
+     = keyword "script"  string "\"ts\""
+   2 |   let clics: number = 0
+     = keyword "let"  type "number"  number "0"
+   3 | 
+   4 |   const compter = () => {
+     = keyword "const"
+   5 |     clics += 1
+     = number "1"
+   6 |   }
+   7 | </script>
+     = keyword "script"
+   8 | 
+   9 | <!-- bouton -->
+     = comment "<!-- bouton -->"
+  10 | <button type="button" on:click={compter} bind:this={el}>
+     = keyword "button"  keyword "type"  string "\"button\""  macro "on:click"  macro "bind:this"
+  11 |   {#if clics > 3}
+     = macro "{#if"  number "3"
+  12 |     Beaucoup
+  13 |   {:else}
+     = macro "{:else"
+  14 |     {clics}
+  15 |   {/if}
+     = macro "{/if"
+  16 | </button>
+     = keyword "button"
+  17 | 
+  18 | <style>
+     = keyword "style"
+  19 |   button {
+  20 |     font-weight: 600;
+     = number "600"
+  21 |     color: var(--marque);
+     = keyword "var"
+  22 |   }
+  23 | </style>
+     = keyword "style"

@@ -71,18 +71,33 @@ plugin the server loads (downloaded with it): F5 asks the server for the open fi
 (or the launch configuration's `mainClass`), its classpath and the project's Java, then the server
 starts the session (`transport = "lsp"`, `[[debugger.lsp_resolve]]` in `java-lang/manifest.toml`).
 It also highlights the files around Java code with tree-sitter: Gradle scripts in Groovy
-(`*.gradle`, `.groovy`, [tree-sitter-groovy](https://github.com/amaanq/tree-sitter-groovy)) and
+(`*.gradle`, `.groovy`, [dekobon-tree-sitter-groovy](https://github.com/dekobon/tree-sitter-groovy),
+which parses Groovy's own syntax: slashy strings, `=~`, multiple assignment) and
 in Kotlin (`*.gradle.kts`, `.kts`, `.kt`,
 [tree-sitter-kotlin-ng](https://github.com/tree-sitter-grammars/tree-sitter-kotlin)), and
-`.properties` files (`gradle.properties`, `application.properties`, `MANIFEST.MF`). Neither
-grammar ships a highlight query, so `java-lang/queries/groovy.scm` and `kotlin.scm` are written
-for their node types. These files have no language server: JDT LS is declared for `java` alone
+`.properties` files (`gradle.properties`, `application.properties`, `MANIFEST.MF`). The Groovy
+grammar's query gets a few additions (`queries/groovy-extra.scm`); the Kotlin grammar ships
+none, so `queries/kotlin.scm` is written for its node types. These files have no language server: JDT LS is declared for `java` alone
 (`[capabilities.lsp_servers.java]`), as a second instance can't share its data folder.
 
 Language servers that are a single download are fetched into the module's folder when the
 first file of their languages is opened, if they are not on the `PATH` (`[capabilities.lsp_download]`,
 Coding Unicorns 0.15.0+): rust-analyzer (always the module's own copy, as rustup's
 `rust-analyzer` fails until its component is added), taplo, lemminx and marksman.
+
+## Highlighting tests
+
+Every module has samples in `tests/samples/<language>/` (`<language>` is a key of its
+`file_extensions()`) and, next to each, a `.tokens` snapshot of its highlighting.
+`tests/highlight.rs` highlights them through the module's FFI functions, in the order
+the IDE tries them (`shared/highlight-test`), and fails when:
+
+- the highlighting differs from the snapshot;
+- the tokens of a line don't give back the line, or a sample is left uncolored.
+
+CI runs them with `cargo test --workspace`. After an intended change, regenerate the
+snapshots and review their diff: `UPDATE_HIGHLIGHT=1 cargo test -p <module>`. When a
+file is highlighted wrong, add it as a sample, fix the module, and commit the new snapshot.
 
 ## Debuggers
 

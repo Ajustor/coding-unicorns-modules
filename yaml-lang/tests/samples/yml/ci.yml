@@ -1,0 +1,19 @@
+# CI
+name: CI
+on:
+  push:
+    branches: [master]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      RUST_LOG: "debug"
+      ENABLED: true
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build
+        run: |
+          cargo build --release
+          cargo test
+      - &cache { key: 'cache', path: ~ }

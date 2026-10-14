@@ -41,6 +41,11 @@ jobs:
       - name: Build all modules (release)
         run: cargo build --release --workspace
 
+      # Unit tests, and the highlighting snapshots of every module
+      # (`tests/samples/`, see shared/highlight-test).
+      - name: Test all modules
+        run: cargo test --workspace
+
       - name: Detect modules from workspace
         id: modules
         shell: bash

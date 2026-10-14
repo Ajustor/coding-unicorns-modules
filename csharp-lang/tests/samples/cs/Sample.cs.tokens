@@ -1,0 +1,42 @@
+   1 | using System;
+     = keyword "using"  type "System"
+   2 | using System.Collections.Generic;
+     = keyword "using"  type "Generic"
+   3 | 
+   4 | namespace Demo;
+     = keyword "namespace"
+   5 | 
+   6 | /// <summary>A shape.</summary>
+     = comment "/// <summary>A shape.</summary>"
+   7 | public record Shape(string Name, double Area);
+     = keyword "public"  keyword "record"  type "Shape"  type "string"  type "double"
+   8 | 
+   9 | [Serializable]
+     = macro "Serializable"
+  10 | public sealed class Program
+     = keyword "public"  keyword "sealed"  keyword "class"  type "Program"
+  11 | {
+  12 |     private static readonly List<Shape> Shapes = new();
+     = keyword "private"  keyword "static"  keyword "readonly"  type "List"  type "Shape"  keyword "new"
+  13 | 
+  14 |     public static async Task<int> Main(string[] args)
+     = keyword "public"  keyword "static"  keyword "async"  type "Task"  type "int"  function "Main"  type "string"
+  15 |     {
+  16 |         var total = 0.0;
+     = keyword "var"  number "0.0"
+  17 |         foreach (var s in Shapes)
+     = keyword "foreach"  keyword "var"  keyword "in"
+  18 |         {
+  19 |             total += s.Area;
+     = property "Area"
+  20 |         }
+  21 |         string name = args.Length > 0 ? args[0] : "none";
+     = type "string"  property "Length"  number "0"  number "0"  string "\"none\""
+  22 |         Console.WriteLine($"Total {total:F2} for {name}", 0x1F, 'c', null, true);
+     = function "WriteLine"  string "$"  string "\"Total "  string "F2"  string " for "  string "\""  number "0x1F"  string "'c'"  keyword "null"  keyword "true"
+  23 |         await Task.Delay(10);
+     = keyword "await"  function "Delay"  number "10"
+  24 |         return name is null ? 1 : 0;
+     = keyword "return"  keyword "is"  keyword "null"  number "1"  number "0"
+  25 |     }
+  26 | }

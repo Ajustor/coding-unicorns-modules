@@ -1,0 +1,12 @@
+{
+  "name": "demo",
+  "version": "1.0.0",
+  "private": true,
+  "count": 42,
+  "ratio": -1.5e3,
+  "nothing": null,
+  "scripts": {
+    "test": "node --test \"src/**\""
+  },
+  "keywords": ["a", "b"]
+}

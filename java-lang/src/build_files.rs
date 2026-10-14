@@ -13,10 +13,16 @@ pub const LANGUAGES: &[&str] = &["gradle", "groovy", "kts", "kt", "properties"];
 fn groovy() -> &'static HighlightConfiguration {
     static CONFIG: OnceLock<HighlightConfiguration> = OnceLock::new();
     CONFIG.get_or_init(|| {
+        let query = format!(
+            "{}
+{}",
+            dekobon_tree_sitter_groovy::HIGHLIGHTS_QUERY,
+            include_str!("../queries/groovy-extra.scm")
+        );
         unicorns_highlight::configure(
-            tree_sitter_groovy::LANGUAGE.into(),
+            dekobon_tree_sitter_groovy::LANGUAGE.into(),
             "groovy",
-            include_str!("../queries/groovy.scm"),
+            &query,
             "",
         )
     })
@@ -88,6 +94,7 @@ mod tests {
                 ("id", "function"),
                 ("'java'", "string"),
                 ("implementation", "function"),
+                ("testImplementation", "function"),
                 ("group", "property"),
                 ("def", "keyword"),
                 ("answer", "function"),

@@ -1,0 +1,35 @@
+   1 | -- Schema
+     = comment "-- Schema"
+   2 | CREATE TABLE users (
+     = keyword "CREATE"  keyword "TABLE"  type "users"
+   3 |     id SERIAL PRIMARY KEY,
+     = type "SERIAL"  keyword "PRIMARY"  keyword "KEY"
+   4 |     email VARCHAR(255) NOT NULL UNIQUE,
+     = type "VARCHAR"  number "255"  keyword "NOT"  type "NULL"  type "UNIQUE"
+   5 |     created_at TIMESTAMP DEFAULT now()
+     = type "TIMESTAMP"  property "DEFAULT"  function "now"
+   6 | );
+   7 | 
+   8 | /* Query */
+     = comment "/* Query */"
+   9 | SELECT u.id, count(o.id) AS orders
+     = keyword "SELECT"  type "u"  property "id"  function "count"  type "o"  property "id"  keyword "AS"
+  10 | FROM users u
+     = keyword "FROM"  type "users"
+  11 | LEFT JOIN orders o ON o.user_id = u.id
+     = keyword "LEFT"  keyword "JOIN"  type "orders"  keyword "ON"  type "o"  property "user_id"  type "u"  property "id"
+  12 | WHERE u.email LIKE '%@example.org' AND o.total > 10.5
+     = keyword "WHERE"  type "u"  property "email"  keyword "LIKE"  string "'%@example.org'"  keyword "AND"  type "o"  property "total"  number "10.5"
+  13 | GROUP BY u.id
+     = keyword "GROUP"  keyword "BY"  type "u"  property "id"
+  14 | HAVING count(o.id) >= 2
+     = keyword "HAVING"  function "count"  type "o"  property "id"  number "2"
+  15 | ORDER BY orders DESC
+     = keyword "ORDER"  keyword "BY"  property "orders"  property "DESC"
+  16 | LIMIT 10;
+     = keyword "LIMIT"  number "10"
+  17 | 
+  18 | INSERT INTO users (email) VALUES ('a@example.org') RETURNING id;
+     = keyword "INSERT"  keyword "INTO"  type "users"  keyword "VALUES"  string "'a@example.org'"  keyword "RETURNING"  property "id"
+  19 | UPDATE users SET email = NULL WHERE id = 3;
+     = keyword "UPDATE"  type "users"  keyword "SET"  property "email"  type "NULL"  keyword "WHERE"  property "id"  number "3"

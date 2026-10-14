@@ -1,0 +1,25 @@
+   1 | <?xml version="1.0" encoding="UTF-8"?>
+     = macro "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+   2 | <!-- Maven project -->
+     = comment "<!-- Maven project -->"
+   3 | <project xmlns="http://maven.apache.org/POM/4.0.0"
+     = keyword "<project"  property "xmlns"  string "\"http://maven.apache.org/POM/4.0.0\""
+   4 |          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+   5 |   <modelVersion>4.0.0</modelVersion>
+     = keyword "<modelVersion"  keyword ">"  keyword "</modelVersion"  keyword ">"
+   6 |   <groupId>org.example</groupId>
+     = keyword "<groupId"  keyword ">"  keyword "</groupId"  keyword ">"
+   7 |   <artifactId>demo</artifactId>
+     = keyword "<artifactId"  keyword ">"  keyword "</artifactId"  keyword ">"
+   8 |   <properties>
+     = keyword "<properties"  keyword ">"
+   9 |     <maven.compiler.release>21</maven.compiler.release>
+     = keyword "<maven.compiler.release"  keyword ">"  keyword "</maven.compiler.release"  keyword ">"
+  10 |   </properties>
+     = keyword "</properties"  keyword ">"
+  11 |   <description><![CDATA[Uses <tags> & entities &amp; more]]></description>
+     = keyword "<description"  keyword ">"  macro "<![CDATA[Uses <tags> & entities &amp; more]]>"  keyword "</description"  keyword ">"
+  12 |   <empty attr='single' />
+     = keyword "<empty"  property "attr"  string "'single'"  keyword "/>"
+  13 | </project>
+     = keyword "</project"  keyword ">"

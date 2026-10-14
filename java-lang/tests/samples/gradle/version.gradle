@@ -1,0 +1,28 @@
+// - sans tag (ou sans git), la version de développement de gradle.properties.
+def tagVersion = {
+    try {
+        def described = providers.exec {
+            commandLine 'git', 'describe', '--tags', '--long', '--match', 'v[0-9]*'
+            ignoreExitValue = true
+        }.standardOutput.asText.get().trim()
+        def m = described =~ /^v(\d+)\.(\d+)\.(\d+)(-[0-9A-Za-z.-]+)?-(\d+)-g[0-9a-f]+$/
+        if (!m.matches()) {
+            return null
+        }
+        def (major, minor, patch, pre, ahead) = [m.group(1), m.group(2), m.group(3), m.group(4) ?: '', m.group(5)]
+        if (ahead == '0') {
+            return "${major}.${minor}.${patch}${pre}"
+        }
+        return pre ? "${major}.${minor}.${patch}${pre}.dev.${ahead}"
+                   : "${major}.${minor}.${(patch as int) + 1}-dev.${ahead}"
+    } catch (Exception ignored) {
+        return null
+    }
+}
+def releaseVersion = (findProperty('releaseVersion') ?: '').toString().replaceFirst(/^v/, '')
+version = "${releaseVersion ?: tagVersion() ?: project.mod_version}+${project.minecraft_version}"
+group = project.maven_group
+
+base {
+    archivesName = project.archives_base_name
+}

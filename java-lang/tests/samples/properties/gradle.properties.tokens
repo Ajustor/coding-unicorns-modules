@@ -1,0 +1,16 @@
+   1 | # Gradle settings
+     = comment "# Gradle settings"
+   2 | org.gradle.jvmargs=-Xmx2g -Dfile.encoding=UTF-8
+     = property "org.gradle.jvmargs"  string "-Xmx2g -Dfile.encoding=UTF-8"
+   3 | org.gradle.parallel = true
+     = property "org.gradle.parallel"  string "true"
+   4 | kotlin.code.style: official
+     = property "kotlin.code.style"  string "official"
+   5 | ! old style comment
+     = comment "! old style comment"
+   6 | app.greeting=Hello ${user.name}
+     = property "app.greeting"  string "Hello ${"  keyword "user.name"  string "}"
+   7 | multi.line=first \
+     = property "multi.line"  string "first \\"
+   8 |     second
+     = string "    second"

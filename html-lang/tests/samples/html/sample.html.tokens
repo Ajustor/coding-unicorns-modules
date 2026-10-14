@@ -1,0 +1,28 @@
+   1 | <!DOCTYPE html>
+     = keyword "<!DOCTYPE html"
+   2 | <html lang="en">
+     = macro "lang"  string "en"
+   3 | <head>
+   4 |   <meta charset="utf-8">
+     = macro "charset"  string "utf-8"
+   5 |   <title>Sample &amp; test</title>
+   6 |   <style>
+   7 |     body { margin: 0; color: #333; }
+   8 |   </style>
+   9 | </head>
+  10 | <body>
+  11 |   <!-- comment -->
+     = comment "<!-- comment -->"
+  12 |   <main id="app" class="wide" data-count="3">
+     = macro "id"  string "app"  macro "class"  string "wide"  macro "data-count"  string "3"
+  13 |     <a href="https://example.org" target="_blank">Link</a>
+     = macro "href"  string "https://example.org"  macro "target"  string "_blank"
+  14 |     <input type="checkbox" checked>
+     = macro "type"  string "checkbox"  macro "checked"
+  15 |   </main>
+  16 |   <script>
+  17 |     const app = document.getElementById("app");
+  18 |     app.addEventListener("click", () => console.log(42));
+  19 |   </script>
+  20 | </body>
+  21 | </html>

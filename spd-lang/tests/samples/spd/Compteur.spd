@@ -1,0 +1,23 @@
+<script lang="ts">
+  let clics: number = 0
+
+  const compter = () => {
+    clics += 1
+  }
+</script>
+
+<!-- bouton -->
+<button type="button" on:click={compter} bind:this={el}>
+  {#if clics > 3}
+    Beaucoup
+  {:else}
+    {clics}
+  {/if}
+</button>
+
+<style>
+  button {
+    font-weight: 600;
+    color: var(--marque);
+  }
+</style>

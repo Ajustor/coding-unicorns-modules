@@ -13,3 +13,4 @@ tree-sitter-highlight = "0.25"
 tree-sitter-toml-ng = "0.7"
 
 [dev-dependencies]
+unicorns-highlight-test = { path = "../shared/highlight-test" }

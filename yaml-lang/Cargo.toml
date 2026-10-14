@@ -11,3 +11,6 @@ crate-type = ["rlib", "cdylib"]
 unicorns-highlight = { path = "../shared/highlight" }
 tree-sitter-highlight = "0.25"
 tree-sitter-yaml = "0.7"
+
+[dev-dependencies]
+unicorns-highlight-test = { path = "../shared/highlight-test" }

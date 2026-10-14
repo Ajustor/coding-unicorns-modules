@@ -1,0 +1,41 @@
+   1 | """Module docstring."""
+     = string "\"\"\"Module docstring.\"\"\""
+   2 | from dataclasses import dataclass, field
+     = keyword "from"  keyword "import"
+   3 | import re
+     = keyword "import"
+   4 | 
+   5 | 
+   6 | @dataclass
+     = function "@"  function "dataclass"
+   7 | class Item:
+     = keyword "class"  type "Item"
+   8 |     name: str
+     = type "str"
+   9 |     tags: list[str] = field(default_factory=list)
+     = type "str"  function "field"
+  10 | 
+  11 |     def matches(self, pattern: str) -> bool:
+     = keyword "def"  function "matches"  type "str"  type "bool"
+  12 |         """Whether the name matches."""
+     = string "\"\"\"Whether the name matches.\"\"\""
+  13 |         return re.search(pattern, self.name) is not None
+     = keyword "return"  property "search"  property "name"  keyword "None"
+  14 | 
+  15 | 
+  16 | async def main(*args, **kwargs) -> None:
+     = keyword "async"  keyword "def"  function "main"  keyword "None"
+  17 |     items = [Item("a"), Item(name="b", tags=["x"])]
+     = function "Item"  string "\"a\""  function "Item"  string "\"b\""  string "\"x\""
+  18 |     found = {i.name: len(i.tags) for i in items if i.matches(r"^\w$")}
+     = property "name"  function "len"  property "tags"  keyword "for"  keyword "if"  property "matches"  string "r\"^\\w$\""
+  19 |     print(f"found {found!r} in {len(items)} items", 0x1F, 3.14, None, True)
+     = function "print"  string "f\"found "  string "!r"  string " in "  function "len"  string "("  string ")"  string " items\""  number "0x1F"  number "3.14"  keyword "None"  keyword "True"
+  20 |     # comment
+     = comment "# comment"
+  21 |     with open("f.txt") as fh, lambda_ctx() as _:
+     = keyword "with"  function "open"  string "\"f.txt\""  keyword "as"  function "lambda_ctx"  keyword "as"
+  22 |         pass
+     = keyword "pass"
+  23 |     raise ValueError("bad") from None
+     = keyword "raise"  function "ValueError"  string "\"bad\""  keyword "from"  keyword "None"

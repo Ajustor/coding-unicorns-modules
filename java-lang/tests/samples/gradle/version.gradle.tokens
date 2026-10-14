@@ -1,0 +1,50 @@
+   1 | // - sans tag (ou sans git), la version de développement de gradle.properties.
+     = comment "// - sans tag (ou sans git), la version de développement de gradle.properties."
+   2 | def tagVersion = {
+     = keyword "def"
+   3 |     try {
+     = keyword "try"
+   4 |         def described = providers.exec {
+     = keyword "def"  property "exec"
+   5 |             commandLine 'git', 'describe', '--tags', '--long', '--match', 'v[0-9]*'
+     = function "commandLine"  string "'git'"  string "'describe'"  string "'--tags'"  string "'--long'"  string "'--match'"  string "'v[0-9]*'"
+   6 |             ignoreExitValue = true
+     = keyword "true"
+   7 |         }.standardOutput.asText.get().trim()
+     = property "standardOutput"  property "asText"  function "get"  function "trim"
+   8 |         def m = described =~ /^v(\d+)\.(\d+)\.(\d+)(-[0-9A-Za-z.-]+)?-(\d+)-g[0-9a-f]+$/
+     = keyword "def"  string "/^v(\\d+)\\.(\\d+)\\.(\\d+)(-[0-9A-Za-z.-]+)?-(\\d+)-g[0-9a-f]+$/"
+   9 |         if (!m.matches()) {
+     = keyword "if"  function "matches"
+  10 |             return null
+     = keyword "return"  keyword "null"
+  11 |         }
+  12 |         def (major, minor, patch, pre, ahead) = [m.group(1), m.group(2), m.group(3), m.group(4) ?: '', m.group(5)]
+     = keyword "def"  function "group"  number "1"  function "group"  number "2"  function "group"  number "3"  function "group"  number "4"  string "''"  function "group"  number "5"
+  13 |         if (ahead == '0') {
+     = keyword "if"  string "'0'"
+  14 |             return "${major}.${minor}.${patch}${pre}"
+     = keyword "return"  string "\""  string "."  string "."  string "\""
+  15 |         }
+  16 |         return pre ? "${major}.${minor}.${patch}${pre}.dev.${ahead}"
+     = keyword "return"  string "\""  string "."  string "."  string ".dev."  string "\""
+  17 |                    : "${major}.${minor}.${(patch as int) + 1}-dev.${ahead}"
+     = string "\""  string "."  string "."  keyword "as"  type "int"  number "1"  string "-dev."  string "\""
+  18 |     } catch (Exception ignored) {
+     = keyword "catch"  type "Exception"
+  19 |         return null
+     = keyword "return"  keyword "null"
+  20 |     }
+  21 | }
+  22 | def releaseVersion = (findProperty('releaseVersion') ?: '').toString().replaceFirst(/^v/, '')
+     = keyword "def"  function "findProperty"  string "'releaseVersion'"  string "''"  function "toString"  function "replaceFirst"  string "/^v/"  string "''"
+  23 | version = "${releaseVersion ?: tagVersion() ?: project.mod_version}+${project.minecraft_version}"
+     = string "\""  function "tagVersion"  property "mod_version"  string "+"  property "minecraft_version"  string "\""
+  24 | group = project.maven_group
+     = property "maven_group"
+  25 | 
+  26 | base {
+     = function "base"
+  27 |     archivesName = project.archives_base_name
+     = property "archives_base_name"
+  28 | }

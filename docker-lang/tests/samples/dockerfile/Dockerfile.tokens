@@ -1,0 +1,28 @@
+   1 | # syntax=docker/dockerfile:1
+     = macro "# syntax=docker/dockerfile:1"
+   2 | FROM rust:1.80-slim AS build
+     = keyword "FROM"  keyword "AS"
+   3 | ARG PROFILE=release
+     = keyword "ARG"
+   4 | WORKDIR /src
+     = keyword "WORKDIR"
+   5 | COPY . .
+     = keyword "COPY"
+   6 | RUN cargo build --profile ${PROFILE} \
+     = keyword "RUN"  type "--profile"  property "${PROFILE}"
+   7 |     && strip target/release/app
+   8 | 
+   9 | FROM debian:bookworm-slim
+     = keyword "FROM"
+  10 | ENV RUST_LOG=info PORT=8080
+     = keyword "ENV"
+  11 | COPY --from=build /src/target/release/app /usr/local/bin/app
+     = keyword "COPY"  type "--from="
+  12 | EXPOSE 8080
+     = keyword "EXPOSE"  number "8080"
+  13 | HEALTHCHECK CMD curl -f http://localhost:8080/health || exit 1
+     = keyword "HEALTHCHECK"  number "1"
+  14 | ENTRYPOINT ["/usr/local/bin/app"]
+     = keyword "ENTRYPOINT"  string "\"/usr/local/bin/app\""
+  15 | CMD ["--port", "8080"]
+     = keyword "CMD"  string "\"--port\""  string "\"8080\""

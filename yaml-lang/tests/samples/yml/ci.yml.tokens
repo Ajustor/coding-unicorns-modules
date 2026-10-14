@@ -1,0 +1,38 @@
+   1 | # CI
+     = comment "# CI"
+   2 | name: CI
+     = property "name"  string "CI"
+   3 | on:
+     = property "on"
+   4 |   push:
+     = property "push"
+   5 |     branches: [master]
+     = property "branches"  string "master"
+   6 | jobs:
+     = property "jobs"
+   7 |   build:
+     = property "build"
+   8 |     runs-on: ubuntu-latest
+     = property "runs-on"  string "ubuntu-latest"
+   9 |     timeout-minutes: 15
+     = property "timeout-minutes"  number "15"
+  10 |     env:
+     = property "env"
+  11 |       RUST_LOG: "debug"
+     = property "RUST_LOG"  string "\"debug\""
+  12 |       ENABLED: true
+     = property "ENABLED"  keyword "true"
+  13 |     steps:
+     = property "steps"
+  14 |       - uses: actions/checkout@v4
+     = property "uses"  string "actions/checkout@v4"
+  15 |       - name: Build
+     = property "name"  string "Build"
+  16 |         run: |
+     = property "run"
+  17 |           cargo build --release
+     = string "          cargo build --release"
+  18 |           cargo test
+     = string "          cargo test"
+  19 |       - &cache { key: 'cache', path: ~ }
+     = property "key"  string "'cache'"  property "path"  keyword "~"

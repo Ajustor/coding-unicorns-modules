@@ -13,3 +13,4 @@ tree-sitter-highlight = "0.25"
 tree-sitter-python = "0.25"
 
 [dev-dependencies]
+unicorns-highlight-test = { path = "../shared/highlight-test" }

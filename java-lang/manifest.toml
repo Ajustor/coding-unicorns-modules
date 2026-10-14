@@ -1,7 +1,7 @@
 [extension]
 id = "unicorns.java-lang"
 name = "Java"
-version = "0.3.0"
+version = "0.3.1"
 description = "Java language support — syntax highlighting, hover with Javadoc, Eclipse JDT LS (completion, diagnostics, navigation, refactoring, Maven and Gradle projects), downloaded on first use; highlighting for Gradle scripts (Groovy and Kotlin DSL), Kotlin and .properties files"
 author = "Writing Unicorns"
 repository = ""
