@@ -40,9 +40,7 @@ fn highlights_query() -> String {
         assert!(rest.contains(pattern), "tree-sitter-go query changed: {pattern}");
         rest = rest.replacen(pattern, "", 1);
     }
-    format!("{}
-{rest}", CATCH_ALL.join("
-"))
+    format!("{}\n{rest}", CATCH_ALL.join("\n"))
 }
 
 static CONFIG: OnceLock<HighlightConfiguration> = OnceLock::new();

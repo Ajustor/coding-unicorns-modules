@@ -59,9 +59,7 @@ fn get_config() -> &'static HighlightConfiguration {
         // The grammar's query paints numbers as `@constant.builtin`, like
         // `true`: ours, appended, wins (the last pattern for a node does).
         let query = format!(
-            "{}
-[(integer_literal) (float_literal)] @number
-",
+            "{}\n[(integer_literal) (float_literal)] @number\n",
             tree_sitter_rust::HIGHLIGHTS_QUERY
         );
         let mut cfg = HighlightConfiguration::new(

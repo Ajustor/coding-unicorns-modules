@@ -30,16 +30,12 @@ static CONFIG: OnceLock<HighlightConfiguration> = OnceLock::new();
 /// captures the whole `key = value` pair (the key's color ran over the
 /// spaces, and over `true` / `false`), and `@boolean` isn't one of our colors.
 fn highlights_query() -> String {
-    const WHOLE_PAIR: &str = "(pair
-  (bare_key)) @property";
+    const WHOLE_PAIR: &str = "(pair\n  (bare_key)) @property";
     let query = tree_sitter_toml_ng::HIGHLIGHTS_QUERY;
     assert!(query.contains(WHOLE_PAIR), "tree-sitter-toml-ng query changed");
     format!(
-        "{}
-(boolean) @constant.builtin
-",
-        query.replacen(WHOLE_PAIR, "(pair
-  (bare_key) @property)", 1)
+        "{}\n(boolean) @constant.builtin\n",
+        query.replacen(WHOLE_PAIR, "(pair\n  (bare_key) @property)", 1)
     )
 }
 

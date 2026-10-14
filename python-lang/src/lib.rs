@@ -40,11 +40,7 @@ fn highlights_query() -> String {
         assert!(rest.contains(pattern), "tree-sitter-python query changed: {pattern}");
         rest = rest.replacen(pattern, "", 1);
     }
-    format!("{}
-{rest}
-(interpolation) @variable
-", CATCH_ALL.join("
-"))
+    format!("{}\n{rest}\n(interpolation) @variable\n", CATCH_ALL.join("\n"))
 }
 
 fn get_config() -> &'static HighlightConfiguration {
