@@ -1,0 +1,13 @@
+[extension]
+id = "unicorns.batch-lang"
+name = "Batch"
+version = "0.1.0"
+description = "Windows batch file support (.bat, .cmd) — syntax highlighting"
+author = "Writing Unicorns"
+repository = ""
+documentation = "https://learn.microsoft.com/windows-server/administration/windows-commands/windows-commands"
+
+[capabilities]
+languages = ["bat", "cmd"]
+
+[dependencies]
