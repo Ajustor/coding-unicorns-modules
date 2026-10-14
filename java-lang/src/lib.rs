@@ -2,6 +2,8 @@
 //! declaration's signature and Javadoc, from the open file) for when the
 //! language server (Eclipse JDT LS) is not running yet.
 
+mod build_files;
+
 use std::ffi::{c_char, CStr, CString};
 use std::sync::OnceLock;
 use tree_sitter_highlight::{HighlightConfiguration, HighlightEvent, Highlighter};
@@ -320,7 +322,8 @@ pub extern "C" fn language_id() -> *const c_char {
 
 #[no_mangle]
 pub extern "C" fn file_extensions() -> *const c_char {
-    c"java".as_ptr()
+    // Java, then the build files of `build_files::LANGUAGES`.
+    c"java,gradle,groovy,kts,kt,properties".as_ptr()
 }
 
 #[no_mangle]
@@ -354,6 +357,52 @@ pub unsafe extern "C" fn hover_info_ffi(
         Some(doc) => into_c(doc),
         None => std::ptr::null_mut(),
     }
+}
+
+/// Token lines of a whole file in language `lang` (a key of
+/// `file_extensions`).
+///
+/// # Safety
+/// Both pointers must be null or valid NUL-terminated strings.
+#[no_mangle]
+pub unsafe extern "C" fn tokenize_document_lang_ffi(
+    lang_ptr: *const c_char,
+    text_ptr: *const c_char,
+) -> *mut c_char {
+    let (lang, text) = unsafe { (from_c(lang_ptr), from_c(text_ptr)) };
+    into_c(build_files::document_to_json(lang, text).unwrap_or_else(|| document_to_json(text)))
+}
+
+/// Tokens of one line. Only Java has a line tokenizer: the build files are
+/// highlighted a document at a time.
+///
+/// # Safety
+/// Both pointers must be null or valid NUL-terminated strings.
+#[no_mangle]
+pub unsafe extern "C" fn tokenize_line_lang_ffi(
+    lang_ptr: *const c_char,
+    line_ptr: *const c_char,
+) -> *mut c_char {
+    if unsafe { from_c(lang_ptr) } != "java" {
+        return std::ptr::null_mut();
+    }
+    unsafe { tokenize_line_ffi(line_ptr) }
+}
+
+/// Hover for Java only.
+///
+/// # Safety
+/// All pointers must be null or valid NUL-terminated strings.
+#[no_mangle]
+pub unsafe extern "C" fn hover_info_lang_ffi(
+    lang_ptr: *const c_char,
+    word_ptr: *const c_char,
+    file_content_ptr: *const c_char,
+) -> *mut c_char {
+    if unsafe { from_c(lang_ptr) } != "java" {
+        return std::ptr::null_mut();
+    }
+    unsafe { hover_info_ffi(word_ptr, file_content_ptr) }
 }
 
 /// # Safety
@@ -550,7 +599,10 @@ public class Circle implements Shape {}
             assert!(hover_info_ffi(word.as_ptr(), std::ptr::null()).is_null());
 
             assert_eq!(CStr::from_ptr(language_id()).to_str().unwrap(), "java");
-            assert_eq!(CStr::from_ptr(file_extensions()).to_str().unwrap(), "java");
+            assert_eq!(
+                CStr::from_ptr(file_extensions()).to_str().unwrap(),
+                "java,gradle,groovy,kts,kt,properties"
+            );
             free_string(std::ptr::null_mut());
         }
     }

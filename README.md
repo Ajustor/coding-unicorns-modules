@@ -24,7 +24,7 @@ Each module compiles to a native dynamic library (`.so` / `.dll` / `.dylib`) loa
 | `json-lang` | JSON / JSONC | `.json`, `.jsonc`, `.json5`, `.geojson`, `.webmanifest` | — | [docs](https://www.json.org/json-en.html) |
 | `docker-lang` | Dockerfile, Docker Compose | `Dockerfile`, `Containerfile`, `Dockerfile.*`, `.dockerfile`, `compose.yaml`, `docker-compose.yml`, `compose.*.yml`, `docker-compose.*.yml` | — | [docs](https://docs.docker.com/reference/) |
 | `markdown-lang` | Markdown (CommonMark, GFM) | `.md`, `.markdown`, `.mdown`, `.mkd`, `.mkdn`, `.mdwn` | — | [docs](https://commonmark.org/help/) |
-| `java-lang` | Java | `.java` | java-debug (in JDT LS) | [docs](https://dev.java/learn/) |
+| `java-lang` | Java, Gradle (Groovy / Kotlin DSL), Kotlin, properties | `.java`, `.gradle`, `.groovy`, `.gradle.kts`, `.kts`, `.kt`, `.properties`, `MANIFEST.MF` | java-debug (in JDT LS) | [docs](https://dev.java/learn/) |
 | `yaml-lang` | YAML | `.yml`, `.yaml` | — | [docs](https://yaml.org/spec/1.2.2/) |
 | `sql-lang` | SQL | `.sql` | — | [docs](https://www.postgresql.org/docs/current/sql.html) |
 
@@ -70,6 +70,14 @@ Debugging (Coding Unicorns 0.16.0+) uses [java-debug](https://github.com/microso
 plugin the server loads (downloaded with it): F5 asks the server for the open file's main class
 (or the launch configuration's `mainClass`), its classpath and the project's Java, then the server
 starts the session (`transport = "lsp"`, `[[debugger.lsp_resolve]]` in `java-lang/manifest.toml`).
+It also highlights the files around Java code with tree-sitter: Gradle scripts in Groovy
+(`*.gradle`, `.groovy`, [tree-sitter-groovy](https://github.com/amaanq/tree-sitter-groovy)) and
+in Kotlin (`*.gradle.kts`, `.kts`, `.kt`,
+[tree-sitter-kotlin-ng](https://github.com/tree-sitter-grammars/tree-sitter-kotlin)), and
+`.properties` files (`gradle.properties`, `application.properties`, `MANIFEST.MF`). Neither
+grammar ships a highlight query, so `java-lang/queries/groovy.scm` and `kotlin.scm` are written
+for their node types. These files have no language server: JDT LS is declared for `java` alone
+(`[capabilities.lsp_servers.java]`), as a second instance can't share its data folder.
 
 Language servers that are a single download are fetched into the module's folder when the
 first file of their languages is opened, if they are not on the `PATH` (`[capabilities.lsp_download]`,

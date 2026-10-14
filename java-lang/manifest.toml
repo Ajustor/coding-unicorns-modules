@@ -1,19 +1,28 @@
 [extension]
 id = "unicorns.java-lang"
 name = "Java"
-version = "0.2.0"
-description = "Java language support — syntax highlighting, hover with Javadoc, Eclipse JDT LS (completion, diagnostics, navigation, refactoring, Maven and Gradle projects), downloaded on first use"
+version = "0.3.0"
+description = "Java language support — syntax highlighting, hover with Javadoc, Eclipse JDT LS (completion, diagnostics, navigation, refactoring, Maven and Gradle projects), downloaded on first use; highlighting for Gradle scripts (Groovy and Kotlin DSL), Kotlin and .properties files"
 author = "Writing Unicorns"
 repository = ""
 documentation = "https://dev.java/learn/"
 
 [capabilities]
-languages = ["java"]
-# Eclipse JDT LS, run directly by Java 21+ (`java` on the PATH), as its own
-# `bin/jdtls` script does. Its files are downloaded into the module's folder
-# when the first .java file is opened (Coding Unicorns 0.15.0+).
-lsp_server = "java"
-lsp_args = [
+# Java, then the files around it: Gradle scripts in Groovy (`*.gradle`,
+# `.groovy`) and in Kotlin (`*.gradle.kts`, `.kts`, `.kt`), and `.properties`
+# files. `MANIFEST.MF` is read as a properties file.
+languages = ["java", "gradle", "groovy", "kts", "kt", "properties"]
+file_names = { "manifest.mf" = "properties" }
+
+# Eclipse JDT LS serves Java only (the build files have no language server),
+# so it is declared for `java` rather than as the module's `lsp_server`: one
+# server per workspace, as its data folder can't be shared. Run directly by
+# Java 21+ (`java` on the PATH), as its own `bin/jdtls` script does. Its files
+# are downloaded into the module's folder when the first .java file is opened
+# (Coding Unicorns 0.15.0+).
+[capabilities.lsp_servers.java]
+command = "java"
+args = [
     "-Declipse.application=org.eclipse.jdt.ls.core.id1",
     "-Dosgi.bundles.defaultStartLevel=4",
     "-Declipse.product=org.eclipse.jdt.ls.core.product",
@@ -36,9 +45,9 @@ lsp_args = [
 ]
 
 # java-debug, the debugger, is a plugin of the server (Coding Unicorns 0.16.0+).
-lsp_init_options = { bundles = ["${debuggerDir}/com.microsoft.java.debug.plugin.jar"] }
+init_options = { bundles = ["${debuggerDir}/com.microsoft.java.debug.plugin.jar"] }
 
-[capabilities.lsp_download]
+[capabilities.lsp_servers.java.download]
 binary = "bin/jdtls.py"
 urls = { "*" = "https://download.eclipse.org/jdtls/snapshots/jdt-language-server-latest.tar.gz" }
 
