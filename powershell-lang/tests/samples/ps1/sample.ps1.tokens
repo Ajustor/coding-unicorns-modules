@@ -36,4 +36,4 @@
   21 |    comment #>
      = comment "   comment #>"
   22 | foreach ($i in 1..3) { $env:COUNT = $i }
-     = keyword "foreach"  macro "$i"  function "1..3"  macro "$env:COUNT"  macro "$i"
+     = keyword "foreach"  macro "$i"  number "1..3"  macro "$env:COUNT"  macro "$i"
