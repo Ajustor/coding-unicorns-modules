@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
+  <Package Name="Coding Unicorns" Version="$(var.Version)"
+           Manufacturer="Writing Unicorns" UpgradeCode="PUT-GUID-HERE">
+    <MediaTemplate EmbedCab="yes" />
+    <!-- Install folder -->
+    <StandardDirectory Id="ProgramFiles64Folder" />
+  </Package>
+</Wix>

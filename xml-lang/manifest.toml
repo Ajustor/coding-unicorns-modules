@@ -1,18 +1,20 @@
 [extension]
 id = "unicorns.xml-lang"
 name = "XML"
-version = "0.2.2"
+version = "0.2.3"
 description = "XML language support — syntax highlighting, lemminx LSP"
 author = "Writing Unicorns"
 repository = ""
 documentation = "https://www.w3.org/XML/"
 
 [capabilities]
-languages = ["xml", "xsl", "xsd", "svg", "xhtml"]
+# XML formats too: WiX (.wxs, .wxi), property lists (.plist), MSBuild projects
+# (.csproj, .fsproj, .vbproj, .props, .targets), XAML, NuGet specs, .resx.
+languages = ["xml", "xsl", "xsd", "svg", "xhtml", "wxs", "wxi", "plist", "csproj", "fsproj", "vbproj", "props", "targets", "xaml", "nuspec", "resx"]
 lsp_server = "lemminx"
 lsp_args = []
 # LSP languageId of extensions whose id differs from the extension.
-language_ids = { xsl = "xml", xsd = "xml", svg = "xml", xhtml = "xml" }
+language_ids = { xsl = "xml", xsd = "xml", svg = "xml", xhtml = "xml", wxs = "xml", wxi = "xml", plist = "xml", csproj = "xml", fsproj = "xml", vbproj = "xml", props = "xml", targets = "xml", xaml = "xml", nuspec = "xml", resx = "xml" }
 
 # lemminx native binary (from the vscode-xml releases, named after the
 # platform), downloaded when lemminx is not on the PATH (Coding Unicorns 0.15.0+).
