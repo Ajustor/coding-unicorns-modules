@@ -26,12 +26,29 @@ fn capture_to_kind(idx: usize) -> &'static str {
 
 static CONFIG: OnceLock<HighlightConfiguration> = OnceLock::new();
 
+/// The grammar's highlight query, fixed: its `(pair (bare_key)) @property`
+/// captures the whole `key = value` pair (the key's color ran over the
+/// spaces, and over `true` / `false`), and `@boolean` isn't one of our colors.
+fn highlights_query() -> String {
+    const WHOLE_PAIR: &str = "(pair
+  (bare_key)) @property";
+    let query = tree_sitter_toml_ng::HIGHLIGHTS_QUERY;
+    assert!(query.contains(WHOLE_PAIR), "tree-sitter-toml-ng query changed");
+    format!(
+        "{}
+(boolean) @constant.builtin
+",
+        query.replacen(WHOLE_PAIR, "(pair
+  (bare_key) @property)", 1)
+    )
+}
+
 fn get_config() -> &'static HighlightConfiguration {
     CONFIG.get_or_init(|| {
         let mut cfg = HighlightConfiguration::new(
             tree_sitter_toml_ng::LANGUAGE.into(),
             "toml",
-            tree_sitter_toml_ng::HIGHLIGHTS_QUERY,
+            &highlights_query(),
             "",
             "",
         )

@@ -1,28 +1,42 @@
    1 | <!DOCTYPE html>
      = keyword "<!DOCTYPE html"
    2 | <html lang="en">
-     = macro "lang"  string "en"
+     = keyword "html"  property "lang"  string "\"en\""
    3 | <head>
+     = keyword "head"
    4 |   <meta charset="utf-8">
-     = macro "charset"  string "utf-8"
+     = keyword "meta"  property "charset"  string "\"utf-8\""
    5 |   <title>Sample &amp; test</title>
+     = keyword "title"  keyword "title"
    6 |   <style>
+     = keyword "style"
    7 |     body { margin: 0; color: #333; }
+     = keyword "body"  property "margin"  number "0"  property "color"  string "333"
    8 |   </style>
+     = keyword "style"
    9 | </head>
+     = keyword "head"
   10 | <body>
+     = keyword "body"
   11 |   <!-- comment -->
      = comment "<!-- comment -->"
   12 |   <main id="app" class="wide" data-count="3">
-     = macro "id"  string "app"  macro "class"  string "wide"  macro "data-count"  string "3"
+     = keyword "main"  property "id"  string "\"app\""  property "class"  string "\"wide\""  property "data-count"  string "\"3\""
   13 |     <a href="https://example.org" target="_blank">Link</a>
-     = macro "href"  string "https://example.org"  macro "target"  string "_blank"
+     = keyword "a"  property "href"  string "\"https://example.org\""  property "target"  string "\"_blank\""  keyword "a"
   14 |     <input type="checkbox" checked>
-     = macro "type"  string "checkbox"  macro "checked"
+     = keyword "input"  property "type"  string "\"checkbox\""  property "checked"
   15 |   </main>
+     = keyword "main"
   16 |   <script>
+     = keyword "script"
   17 |     const app = document.getElementById("app");
+     = keyword "const"  keyword "document"  function "getElementById"  string "\"app\""
   18 |     app.addEventListener("click", () => console.log(42));
+     = function "addEventListener"  string "\"click\""  keyword "console"  function "log"  number "42"
   19 |   </script>
+     = keyword "script"
   20 | </body>
+     = keyword "body"
   21 | </html>
+     = keyword "html"

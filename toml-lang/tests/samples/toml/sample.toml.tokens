@@ -3,35 +3,35 @@
    2 | [package]
      = type "package"
    3 | name = "demo"
-     = property "name "  string "\"demo\""
+     = property "name"  string "\"demo\""
    4 | version = "0.1.0"
-     = property "version "  string "\"0.1.0\""
+     = property "version"  string "\"0.1.0\""
    5 | edition = "2021"
-     = property "edition "  string "\"2021\""
+     = property "edition"  string "\"2021\""
    6 | authors = ["A <a@example.org>"]
-     = property "authors "  string "\"A <a@example.org>\""
+     = property "authors"  string "\"A <a@example.org>\""
    7 | publish = false
-     = property "publish "  property " false"
+     = property "publish"  keyword "false"
    8 | 
    9 | [dependencies]
      = type "dependencies"
   10 | serde = { version = "1", features = ["derive"] }
-     = property "serde "  property "version "  string "\"1\""  property "features "  string "\"derive\""
+     = property "serde"  property "version"  string "\"1\""  property "features"  string "\"derive\""
   11 | 
   12 | [[bin]]
      = type "bin"
   13 | name = 'tool'
-     = property "name "  string "'tool'"
+     = property "name"  string "'tool'"
   14 | path = """src/main.rs"""
-     = property "path "  string "\"\"\"src/main.rs\"\"\""
+     = property "path"  string "\"\"\"src/main.rs\"\"\""
   15 | 
   16 | [profile.release]
      = type "profile"  type "release"
   17 | opt-level = 3
-     = property "opt-level "  number "3"
+     = property "opt-level"  number "3"
   18 | lto = true
-     = property "lto "  property " true"
+     = property "lto"  keyword "true"
   19 | date = 1979-05-27T07:32:00Z
-     = property "date "  string "1979-05-27T07:32:00Z"
+     = property "date"  string "1979-05-27T07:32:00Z"
   20 | ratio = 0.5
-     = property "ratio "  number "0.5"
+     = property "ratio"  number "0.5"

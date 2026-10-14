@@ -6,6 +6,7 @@ use unicorns_highlight_test::{check_samples, Ffi};
 #[test]
 fn samples() {
     let ffi = Ffi {
+        tokenize_document: Some(xml_lang::tokenize_document_ffi),
         tokenize_line: Some(xml_lang::tokenize_line_ffi),
         ..Ffi::new(xml_lang::file_extensions, xml_lang::free_string)
     };

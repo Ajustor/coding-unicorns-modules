@@ -33,14 +33,14 @@
   20 |     for word in "a b a".split(' ') {
      = keyword "for"  keyword "in"  string "\"a b a\""  function "split"  string "' '"
   21 |         *seen.entry(word).or_insert(0) += 1;
-     = function "entry"  function "or_insert"  keyword "0"  keyword "1"
+     = function "entry"  function "or_insert"  number "0"  number "1"
   22 |     }
   23 |     let raw = r"C:\path";
      = keyword "let"  string "r\"C:\\path\""
   24 |     println!("{seen:?} {} {}", raw, 0x1F_u8 as char);
-     = macro "println"  macro "!"  string "\"{seen:?} {} {}\""  keyword "0x1F_u8"  keyword "as"  type "char"
+     = macro "println"  macro "!"  string "\"{seen:?} {} {}\""  number "0x1F_u8"  keyword "as"  type "char"
   25 |     /* block */
      = comment "/* block */"
   26 |     if let Some(n) = seen.get("a") { assert_eq!(*n, 2, "count"); }
-     = keyword "if"  keyword "let"  type "Some"  function "get"  string "\"a\""  macro "assert_eq"  macro "!"  keyword "2"  string "\"count\""
+     = keyword "if"  keyword "let"  type "Some"  function "get"  string "\"a\""  macro "assert_eq"  macro "!"  number "2"  string "\"count\""
   27 | }

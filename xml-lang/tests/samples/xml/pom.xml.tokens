@@ -5,6 +5,7 @@
    3 | <project xmlns="http://maven.apache.org/POM/4.0.0"
      = keyword "<project"  property "xmlns"  string "\"http://maven.apache.org/POM/4.0.0\""
    4 |          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+     = property "xmlns:xsi"  string "\"http://www.w3.org/2001/XMLSchema-instance\""  keyword ">"
    5 |   <modelVersion>4.0.0</modelVersion>
      = keyword "<modelVersion"  keyword ">"  keyword "</modelVersion"  keyword ">"
    6 |   <groupId>org.example</groupId>

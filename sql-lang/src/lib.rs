@@ -9,9 +9,17 @@ fn config() -> &'static HighlightConfiguration {
     CONFIG.get_or_init(|| {
         // The query is written for Neovim: `%d` (a Lua pattern) in its
         // regexes, and a second `@spell` capture that hides the comments.
+        // Its `@attribute` (ASC, DESC, DEFAULT…) and `@type.qualifier`
+        // (UNIQUE, CASCADE…) lists are keywords here, and so is NULL, which
+        // it lists with the types.
         let query = tree_sitter_sequel::HIGHLIGHTS_QUERY
             .replace("%d", "[0-9]")
-            .replace(" @spell", "");
+            .replace(" @spell", "")
+            .replace("] @attribute", "] @keyword")
+            .replace("] @type.qualifier", "] @keyword")
+            + "
+(keyword_null) @constant.builtin
+";
         unicorns_highlight::configure(tree_sitter_sequel::LANGUAGE.into(), "sql", &query, "")
     })
 }

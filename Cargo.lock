@@ -63,7 +63,7 @@ checksum = "5baebc0774151f905a1a2cc41989300b1e6fbb29aff0ceffa1064fdd3088d582"
 
 [[package]]
 name = "go-lang"
-version = "0.2.0"
+version = "0.2.1"
 dependencies = [
  "tree-sitter",
  "tree-sitter-go",
@@ -79,11 +79,12 @@ checksum = "4f467dd6dccf739c208452f8014c75c18bb8301b050ad1cfb27153803edb0f51"
 
 [[package]]
 name = "html-lang"
-version = "0.2.0"
+version = "0.2.1"
 dependencies = [
  "tree-sitter",
  "tree-sitter-highlight",
  "tree-sitter-html",
+ "unicorns-highlight",
  "unicorns-highlight-test",
 ]
 
@@ -149,7 +150,7 @@ checksum = "f8ca58f447f06ed17d5fc4043ce1b10dd205e060fb3ce5b979b8ed8e59ff3f79"
 
 [[package]]
 name = "powershell-lang"
-version = "0.2.0"
+version = "0.2.1"
 dependencies = [
  "tree-sitter",
  "tree-sitter-highlight",
@@ -168,7 +169,7 @@ dependencies = [
 
 [[package]]
 name = "python-lang"
-version = "0.3.0"
+version = "0.3.1"
 dependencies = [
  "tree-sitter",
  "tree-sitter-highlight",
@@ -227,7 +228,7 @@ checksum = "dc897dd8d9e8bd1ed8cdad82b5966c3e0ecae09fb1907d58efaa013543185d0a"
 
 [[package]]
 name = "rust-lang"
-version = "0.3.1"
+version = "0.3.2"
 dependencies = [
  "tree-sitter",
  "tree-sitter-highlight",
@@ -293,7 +294,7 @@ dependencies = [
 
 [[package]]
 name = "sql-lang"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "tree-sitter-highlight",
  "tree-sitter-sequel",
@@ -348,7 +349,7 @@ dependencies = [
 
 [[package]]
 name = "toml-lang"
-version = "0.1.1"
+version = "0.1.2"
 dependencies = [
  "tree-sitter",
  "tree-sitter-highlight",
@@ -584,7 +585,7 @@ dependencies = [
 
 [[package]]
 name = "xml-lang"
-version = "0.2.1"
+version = "0.2.2"
 dependencies = [
  "unicorns-highlight-test",
 ]

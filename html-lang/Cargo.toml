@@ -1,6 +1,6 @@
 [package]
 name = "html-lang"
-version = "0.2.0"
+version = "0.2.1"
 edition = "2021"
 description = "HTML language support module for Writing Unicorns IDE"
 
@@ -11,6 +11,7 @@ crate-type = ["rlib", "cdylib"]
 tree-sitter = "0.25"
 tree-sitter-highlight = "0.25"
 tree-sitter-html = "0.23"
+unicorns-highlight = { version = "0.1.0", path = "../shared/highlight" }
 
 [dev-dependencies]
 unicorns-highlight-test = { path = "../shared/highlight-test" }

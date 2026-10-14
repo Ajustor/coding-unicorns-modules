@@ -282,6 +282,44 @@ pub fn document(config: &HighlightConfiguration, source: &str) -> String {
     paint.to_json()
 }
 
+/// An HTML page: its markup as HTML, `<script>` as JavaScript (through the
+/// TypeScript grammar, which parses it) and `<style>` as CSS.
+pub fn page(source: &str) -> String {
+    let mut paint = Paint::new(source);
+    paint.highlight(html(), 0..source.len());
+    let mut parser = tree_sitter::Parser::new();
+    if parser
+        .set_language(&tree_sitter_html::LANGUAGE.into())
+        .is_err()
+    {
+        return paint.to_json();
+    }
+    if let Some(tree) = parser.parse(source, None) {
+        embedded_blocks(tree.root_node(), &mut paint);
+    }
+    paint.to_json()
+}
+
+/// Highlight the `<script>` and `<style>` blocks under `node`.
+fn embedded_blocks(node: tree_sitter::Node, paint: &mut Paint) {
+    if let kind @ ("script_element" | "style_element") = node.kind() {
+        let mut cursor = node.walk();
+        if let Some(raw) = node.children(&mut cursor).find(|c| c.kind() == "raw_text") {
+            let config = if kind == "script_element" {
+                typescript()
+            } else {
+                css()
+            };
+            paint.highlight(config, raw.byte_range());
+        }
+        return;
+    }
+    let mut cursor = node.walk();
+    for child in node.children(&mut cursor) {
+        embedded_blocks(child, paint);
+    }
+}
+
 /// Single-file component formats.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum Component {

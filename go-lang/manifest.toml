@@ -1,7 +1,7 @@
 [extension]
 id = "unicorns.go-lang"
 name = "Go"
-version = "0.2.0"
+version = "0.2.1"
 description = "Go language support — syntax highlighting, hover docs, gopls LSP, Delve debugger"
 author = "Writing Unicorns"
 repository = ""

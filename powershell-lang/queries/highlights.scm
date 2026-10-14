@@ -105,6 +105,12 @@
 (command
   command_name: (command_name) @function)
 
+; The grammar reads a range such as `1..3` in `foreach ($i in 1..3)` as a
+; command named `1..3`: it is numbers.
+(command
+  command_name: (command_name) @number
+  (#match? @number "^[0-9]"))
+
 (function_statement
   (function_name) @function)
 

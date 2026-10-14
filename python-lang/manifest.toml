@@ -1,7 +1,7 @@
 [extension]
 id = "unicorns.python-lang"
 name = "Python"
-version = "0.3.0"
+version = "0.3.1"
 description = "Python language support — syntax highlighting, decorators, hover docs, pylsp LSP, debugpy debugger"
 author = "Writing Unicorns"
 repository = ""

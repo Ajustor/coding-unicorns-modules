@@ -1,7 +1,7 @@
 [extension]
 id = "unicorns.powershell-lang"
 name = "PowerShell"
-version = "0.2.0"
+version = "0.2.1"
 description = "PowerShell language support — syntax highlighting, hover docs for functions, classes and enums, PowerShell Editor Services debugger"
 author = "Writing Unicorns"
 repository = ""
