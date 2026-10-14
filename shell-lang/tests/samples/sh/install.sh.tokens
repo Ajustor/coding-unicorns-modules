@@ -1,0 +1,56 @@
+   1 | #!/usr/bin/env bash
+     = comment "#!/usr/bin/env bash"
+   2 | # Install the CLI.
+     = comment "# Install the CLI."
+   3 | set -euo pipefail
+     = function "set"  keyword "-euo"
+   4 | 
+   5 | PREFIX="${PREFIX:-$HOME/.local}"
+     = property "PREFIX"  string "\"${"  property "PREFIX"  string ":-"  property "HOME"  string "/.local}\""
+   6 | readonly VERSION=1.2.3
+     = keyword "readonly"  property "VERSION"
+   7 | 
+   8 | usage() {
+     = function "usage"
+   9 |   echo "usage: $0 [--prefix DIR]" >&2
+     = function "echo"  string "\"usage: "  property "0"  string " [--prefix DIR]\""  number "2"
+  10 |   exit 1
+     = function "exit"  number "1"
+  11 | }
+  12 | 
+  13 | for arg in "$@"; do
+     = keyword "for"  property "arg"  keyword "in"  string "\""  string "@\""  keyword "do"
+  14 |   case "$arg" in
+     = keyword "case"  string "\""  property "arg"  string "\""  keyword "in"
+  15 |     --prefix=*) PREFIX="${arg#*=}" ;;
+     = property "PREFIX"  string "\"${"  property "arg"  string "#*=}\""
+  16 |     -h|--help) usage ;;
+     = function "usage"
+  17 |     *) echo "unknown: $arg"; usage ;;
+     = function "echo"  string "\"unknown: "  property "arg"  string "\""  function "usage"
+  18 |   esac
+     = keyword "esac"
+  19 | done
+     = keyword "done"
+  20 | 
+  21 | if [[ ! -d "$PREFIX/bin" ]]; then
+     = keyword "if"  string "\""  property "PREFIX"  string "/bin\""  keyword "then"
+  22 |   mkdir -p "$PREFIX/bin"
+     = function "mkdir"  keyword "-p"  string "\""  property "PREFIX"  string "/bin\""
+  23 | fi
+     = keyword "fi"
+  24 | count=$(ls "$PREFIX/bin" | wc -l)
+     = property "count"  function "ls"  string "\""  property "PREFIX"  string "/bin\""  function "wc"  keyword "-l"
+  25 | while read -r line; do
+     = keyword "while"  function "read"  keyword "-r"  keyword "do"
+  26 |   printf '%s\n' "$line"
+     = function "printf"  string "'%s\\n'"  string "\""  property "line"  string "\""
+  27 | done < <(grep -v '^#' config.txt)
+     = keyword "done"  function "grep"  keyword "-v"  string "'^#'"
+  28 | cat <<EOF > "$PREFIX/README"
+     = function "cat"  string "EOF"  string "\""  property "PREFIX"  string "/README\""
+  29 | Installed version $VERSION ($count files)
+     = string "Installed version "  property "VERSION"  string " ("  property "count"  string " files)"
+  30 | EOF
+  31 | export PATH="$PREFIX/bin:$PATH"
+     = keyword "export"  property "PATH"  string "\""  property "PREFIX"  string "/bin:"  property "PATH"  string "\""

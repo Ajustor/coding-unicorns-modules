@@ -20,5 +20,9 @@ members = [
     "java-lang",
     "yaml-lang",
     "sql-lang",
+    "shell-lang",
+    "css-lang",
+    "batch-lang",
+    "config-lang",
 ]
 resolver = "2"

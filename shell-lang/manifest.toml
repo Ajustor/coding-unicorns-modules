@@ -1,0 +1,20 @@
+[extension]
+id = "unicorns.shell-lang"
+name = "Shell"
+version = "0.1.0"
+description = "Shell script support (sh, Bash, Zsh) — syntax highlighting, bash-language-server LSP (completion, hover with man pages, diagnostics with ShellCheck when installed, navigation)"
+author = "Writing Unicorns"
+repository = ""
+documentation = "https://www.gnu.org/software/bash/manual/bash.html"
+
+[capabilities]
+languages = ["sh", "bash", "zsh"]
+# Scripts without an extension, known by their name (Coding Unicorns 0.10.6+).
+file_names = { "gradlew" = "sh", ".bashrc" = "bash", ".bash_profile" = "bash", ".bash_aliases" = "bash", ".bash_logout" = "bash", ".profile" = "sh", ".zshrc" = "zsh", ".zshenv" = "zsh", ".zprofile" = "zsh", "pkgbuild" = "bash" }
+lsp_server = "bash-language-server"
+lsp_args = ["start"]
+# LSP languageId of extensions whose id differs from the extension.
+language_ids = { sh = "shellscript", bash = "shellscript", zsh = "shellscript" }
+
+[dependencies]
+npm = ["bash-language-server"]

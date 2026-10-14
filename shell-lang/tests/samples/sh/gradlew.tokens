@@ -1,0 +1,20 @@
+   1 | #!/bin/sh
+     = comment "#!/bin/sh"
+   2 | # Gradle start up script for POSIX
+     = comment "# Gradle start up script for POSIX"
+   3 | APP_HOME=$(cd "${0%/*}" > /dev/null && pwd -P) || exit
+     = property "APP_HOME"  function "cd"  string "\"${"  property "0"  string "%/*}\""  function "pwd"  keyword "-P"  function "exit"
+   4 | CLASSPATH=$APP_HOME/gradle/wrapper/gradle-wrapper.jar
+     = property "CLASSPATH"  property "APP_HOME"
+   5 | if [ -n "$JAVA_HOME" ] ; then
+     = keyword "if"  string "\""  property "JAVA_HOME"  string "\""  keyword "then"
+   6 |     JAVACMD=$JAVA_HOME/bin/java
+     = property "JAVACMD"  property "JAVA_HOME"
+   7 | else
+     = keyword "else"
+   8 |     JAVACMD=java
+     = property "JAVACMD"
+   9 | fi
+     = keyword "fi"
+  10 | exec "$JAVACMD" -classpath "$CLASSPATH" org.gradle.wrapper.GradleWrapperMain "$@"
+     = function "exec"  string "\""  property "JAVACMD"  string "\""  keyword "-classpath"  string "\""  property "CLASSPATH"  string "\""  string "\""  string "@\""
