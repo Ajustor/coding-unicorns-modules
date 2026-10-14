@@ -24,10 +24,10 @@
   15 | }
   16 | 
   17 | func (r Rect) Area() float64 { return r.W * r.H }
-     = keyword "func"  type "Rect"  property "Area"  type "float64"  keyword "return"  property "W"  property "H"
+     = keyword "func"  type "Rect"  function "Area"  type "float64"  keyword "return"  property "W"  property "H"
   18 | 
   19 | func main() {
-     = keyword "func"
+     = keyword "func"  function "main"
   20 | 	shapes := []Shape{Rect{W: 2, H: 3}}
      = type "Shape"  type "Rect"  number "2"  number "3"
   21 | 	total := 0.0
@@ -35,14 +35,14 @@
   22 | 	for _, s := range shapes {
      = keyword "for"  keyword "range"
   23 | 		total += s.Area()
-     = property "Area"
+     = function "Area"
   24 | 	}
   25 | 	ch := make(chan int, 1)
-     = keyword "chan"  type "int"  number "1"
+     = function "make"  keyword "chan"  type "int"  number "1"
   26 | 	go func() { ch <- 42 }()
      = keyword "go"  keyword "func"  number "42"
   27 | 	defer close(ch)
-     = keyword "defer"
+     = keyword "defer"  function "close"
   28 | 	fmt.Println(strings.ToUpper("total"), total, <-ch, nil, true, 'x', 0x1F)
-     = property "Println"  property "ToUpper"  string "\"total\""  keyword "nil"  keyword "true"  string "'x'"  number "0x1F"
+     = function "Println"  function "ToUpper"  string "\"total\""  keyword "nil"  keyword "true"  string "'x'"  number "0x1F"
   29 | }

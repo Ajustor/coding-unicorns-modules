@@ -24,6 +24,27 @@ fn capture_to_kind(idx: usize) -> &'static str {
     }
 }
 
+/// Patterns of the grammar's query that match any name. They come after the
+/// specific ones (function names, method calls), and the last pattern
+/// matching a node wins: moved first, they no longer hide those.
+const CATCH_ALL: &[&str] = &[
+    "(type_identifier) @type",
+    "(field_identifier) @property",
+    "(identifier) @variable",
+];
+
+/// The grammar's highlight query, catch-all patterns first.
+fn highlights_query() -> String {
+    let mut rest = tree_sitter_go::HIGHLIGHTS_QUERY.to_string();
+    for pattern in CATCH_ALL {
+        assert!(rest.contains(pattern), "tree-sitter-go query changed: {pattern}");
+        rest = rest.replacen(pattern, "", 1);
+    }
+    format!("{}
+{rest}", CATCH_ALL.join("
+"))
+}
+
 static CONFIG: OnceLock<HighlightConfiguration> = OnceLock::new();
 
 fn get_config() -> &'static HighlightConfiguration {
@@ -31,7 +52,7 @@ fn get_config() -> &'static HighlightConfiguration {
         let mut cfg = HighlightConfiguration::new(
             tree_sitter_go::LANGUAGE.into(),
             "go",
-            tree_sitter_go::HIGHLIGHTS_QUERY,
+            &highlights_query(),
             "",
             "",
         )
