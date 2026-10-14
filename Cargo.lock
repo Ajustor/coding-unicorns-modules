@@ -79,11 +79,12 @@ checksum = "4f467dd6dccf739c208452f8014c75c18bb8301b050ad1cfb27153803edb0f51"
 
 [[package]]
 name = "html-lang"
-version = "0.2.0"
+version = "0.2.1"
 dependencies = [
  "tree-sitter",
  "tree-sitter-highlight",
  "tree-sitter-html",
+ "unicorns-highlight",
  "unicorns-highlight-test",
 ]
 
