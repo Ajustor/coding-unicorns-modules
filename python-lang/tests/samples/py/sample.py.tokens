@@ -20,7 +20,7 @@
   12 |         """Whether the name matches."""
      = string "\"\"\"Whether the name matches.\"\"\""
   13 |         return re.search(pattern, self.name) is not None
-     = keyword "return"  property "search"  property "name"  keyword "None"
+     = keyword "return"  function "search"  property "name"  keyword "None"
   14 | 
   15 | 
   16 | async def main(*args, **kwargs) -> None:
@@ -28,9 +28,9 @@
   17 |     items = [Item("a"), Item(name="b", tags=["x"])]
      = function "Item"  string "\"a\""  function "Item"  string "\"b\""  string "\"x\""
   18 |     found = {i.name: len(i.tags) for i in items if i.matches(r"^\w$")}
-     = property "name"  function "len"  property "tags"  keyword "for"  keyword "if"  property "matches"  string "r\"^\\w$\""
+     = property "name"  function "len"  property "tags"  keyword "for"  keyword "if"  function "matches"  string "r\"^\\w$\""
   19 |     print(f"found {found!r} in {len(items)} items", 0x1F, 3.14, None, True)
-     = function "print"  string "f\"found "  string "!r"  string " in "  function "len"  string "("  string ")"  string " items\""  number "0x1F"  number "3.14"  keyword "None"  keyword "True"
+     = function "print"  string "f\"found "  string " in "  function "len"  string " items\""  number "0x1F"  number "3.14"  keyword "None"  keyword "True"
   20 |     # comment
      = comment "# comment"
   21 |     with open("f.txt") as fh, lambda_ctx() as _:

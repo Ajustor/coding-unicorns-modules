@@ -26,12 +26,33 @@ fn capture_to_kind(idx: usize) -> &'static str {
 
 static CONFIG: OnceLock<HighlightConfiguration> = OnceLock::new();
 
+/// The grammar's highlight query, adjusted: the last pattern matching a
+/// node wins, so its catch-all patterns move first (the `attribute` one hid
+/// method calls), and the code inside an f-string's `{…}` is marked plain
+/// (the grammar's `@embedded` isn't a color, so it stayed string-colored).
+fn highlights_query() -> String {
+    const CATCH_ALL: &[&str] = &[
+        "(identifier) @variable",
+        "(attribute attribute: (identifier) @property)",
+    ];
+    let mut rest = tree_sitter_python::HIGHLIGHTS_QUERY.to_string();
+    for pattern in CATCH_ALL {
+        assert!(rest.contains(pattern), "tree-sitter-python query changed: {pattern}");
+        rest = rest.replacen(pattern, "", 1);
+    }
+    format!("{}
+{rest}
+(interpolation) @variable
+", CATCH_ALL.join("
+"))
+}
+
 fn get_config() -> &'static HighlightConfiguration {
     CONFIG.get_or_init(|| {
         let mut cfg = HighlightConfiguration::new(
             tree_sitter_python::LANGUAGE.into(),
             "python",
-            tree_sitter_python::HIGHLIGHTS_QUERY,
+            &highlights_query(),
             "",
             "",
         )
