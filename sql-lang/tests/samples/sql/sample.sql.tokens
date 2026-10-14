@@ -5,9 +5,9 @@
    3 |     id SERIAL PRIMARY KEY,
      = type "SERIAL"  keyword "PRIMARY"  keyword "KEY"
    4 |     email VARCHAR(255) NOT NULL UNIQUE,
-     = type "VARCHAR"  number "255"  keyword "NOT"  type "NULL"  type "UNIQUE"
+     = type "VARCHAR"  number "255"  keyword "NOT"  keyword "NULL"  keyword "UNIQUE"
    5 |     created_at TIMESTAMP DEFAULT now()
-     = type "TIMESTAMP"  property "DEFAULT"  function "now"
+     = type "TIMESTAMP"  keyword "DEFAULT"  function "now"
    6 | );
    7 | 
    8 | /* Query */
@@ -25,11 +25,11 @@
   14 | HAVING count(o.id) >= 2
      = keyword "HAVING"  function "count"  type "o"  property "id"  number "2"
   15 | ORDER BY orders DESC
-     = keyword "ORDER"  keyword "BY"  property "orders"  property "DESC"
+     = keyword "ORDER"  keyword "BY"  property "orders"  keyword "DESC"
   16 | LIMIT 10;
      = keyword "LIMIT"  number "10"
   17 | 
   18 | INSERT INTO users (email) VALUES ('a@example.org') RETURNING id;
      = keyword "INSERT"  keyword "INTO"  type "users"  keyword "VALUES"  string "'a@example.org'"  keyword "RETURNING"  property "id"
   19 | UPDATE users SET email = NULL WHERE id = 3;
-     = keyword "UPDATE"  type "users"  keyword "SET"  property "email"  type "NULL"  keyword "WHERE"  property "id"  number "3"
+     = keyword "UPDATE"  type "users"  keyword "SET"  property "email"  keyword "NULL"  keyword "WHERE"  property "id"  number "3"
