@@ -56,10 +56,18 @@ static CONFIG: OnceLock<HighlightConfiguration> = OnceLock::new();
 
 fn get_config() -> &'static HighlightConfiguration {
     CONFIG.get_or_init(|| {
+        // The grammar's query paints numbers as `@constant.builtin`, like
+        // `true`: ours, appended, wins (the last pattern for a node does).
+        let query = format!(
+            "{}
+[(integer_literal) (float_literal)] @number
+",
+            tree_sitter_rust::HIGHLIGHTS_QUERY
+        );
         let mut cfg = HighlightConfiguration::new(
             tree_sitter_rust::LANGUAGE.into(),
             "rust",
-            tree_sitter_rust::HIGHLIGHTS_QUERY,
+            &query,
             tree_sitter_rust::INJECTIONS_QUERY,
             "",
         )

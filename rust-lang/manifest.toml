@@ -1,7 +1,7 @@
 [extension]
 id = "unicorns.rust-lang"
 name = "Rust"
-version = "0.3.1"
+version = "0.3.2"
 description = "Rust language support — syntax highlighting, hover docs, rust-analyzer LSP, lldb-dap debugger"
 author = "Writing Unicorns"
 repository = ""
