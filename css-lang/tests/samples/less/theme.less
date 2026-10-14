@@ -1,0 +1,15 @@
+// Theme
+@import "base.less";
+
+@primary: #3b82f6;
+@radius: 4px;
+
+.rounded(@r: @radius) {
+  border-radius: @r;
+}
+
+.button {
+  .rounded(8px);
+  color: darken(@primary, 10%);
+  &:hover { color: @primary; }
+}

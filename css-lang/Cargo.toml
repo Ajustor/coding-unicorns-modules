@@ -1,0 +1,18 @@
+[package]
+name = "css-lang"
+version = "0.1.0"
+edition = "2021"
+description = "CSS, SCSS and Less language support module for Writing Unicorns IDE"
+
+[lib]
+crate-type = ["rlib", "cdylib"]
+
+[dependencies]
+unicorns-highlight = { path = "../shared/highlight" }
+tree-sitter-highlight = "0.25"
+tree-sitter-css = "0.25.0"
+tree-sitter-less = "1.0.0"
+cortexkit-tree-sitter-scss = "1.0.1"
+
+[dev-dependencies]
+unicorns-highlight-test = { path = "../shared/highlight-test" }

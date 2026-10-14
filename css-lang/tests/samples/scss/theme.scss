@@ -1,0 +1,22 @@
+// Theme
+@use "sass:math";
+
+$primary: #3b82f6;
+$radius: 4px !default;
+
+@mixin card($pad: 1rem) {
+  padding: $pad;
+  border-radius: $radius;
+}
+
+.button {
+  @include card(math.div(16px, 2));
+  color: darken($primary, 10%);
+
+  &:hover { color: $primary; }
+  .icon + & { margin-left: 0.5em; }
+
+  @each $size in sm, md, lg {
+    &--#{$size} { font-size: 1rem; }
+  }
+}
