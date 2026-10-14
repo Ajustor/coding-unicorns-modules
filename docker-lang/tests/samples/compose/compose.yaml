@@ -1,0 +1,15 @@
+# Compose file
+services:
+  web:
+    image: nginx:1.27
+    ports:
+      - "8080:80"
+    depends_on: [db]
+    restart: unless-stopped
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_PASSWORD: example
+      MAX_CONN: 100
+volumes:
+  data: {}

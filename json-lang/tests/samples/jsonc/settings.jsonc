@@ -1,0 +1,8 @@
+{
+  // Editor settings
+  "editor.tabSize": 2,
+  /* block comment */
+  "files.exclude": {
+    "**/target": true,
+  },
+}

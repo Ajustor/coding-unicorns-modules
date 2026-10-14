@@ -1,0 +1,21 @@
+   1 | {
+   2 |   "name": "demo",
+     = property "\"name\""  string "\"demo\""
+   3 |   "version": "1.0.0",
+     = property "\"version\""  string "\"1.0.0\""
+   4 |   "private": true,
+     = property "\"private\""  keyword "true"
+   5 |   "count": 42,
+     = property "\"count\""  number "42"
+   6 |   "ratio": -1.5e3,
+     = property "\"ratio\""  number "-1.5e3"
+   7 |   "nothing": null,
+     = property "\"nothing\""  keyword "null"
+   8 |   "scripts": {
+     = property "\"scripts\""
+   9 |     "test": "node --test \"src/**\""
+     = property "\"test\""  string "\"node --test \\\"src/**\\\"\""
+  10 |   },
+  11 |   "keywords": ["a", "b"]
+     = property "\"keywords\""  string "\"a\""  string "\"b\""
+  12 | }

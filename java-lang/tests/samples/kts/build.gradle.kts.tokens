@@ -1,0 +1,40 @@
+   1 | // Kotlin DSL
+     = comment "// Kotlin DSL"
+   2 | plugins {
+     = function "plugins"
+   3 |     kotlin("jvm") version "2.0.0"
+     = function "kotlin"  string "\"jvm\""  string "\"2.0.0\""
+   4 |     application
+   5 | }
+   6 | 
+   7 | val ktorVersion: String by project
+     = keyword "val"  type "String"  keyword "by"
+   8 | 
+   9 | repositories {
+     = function "repositories"
+  10 |     mavenCentral()
+     = function "mavenCentral"
+  11 | }
+  12 | 
+  13 | dependencies {
+     = function "dependencies"
+  14 |     implementation("io.ktor:ktor-server-core:$ktorVersion")
+     = function "implementation"  string "\"io.ktor:ktor-server-core:$ktorVersion\""
+  15 |     testImplementation(kotlin("test"))
+     = function "testImplementation"  function "kotlin"  string "\"test\""
+  16 | }
+  17 | 
+  18 | application {
+     = function "application"
+  19 |     mainClass.set("org.example.MainKt")
+     = function "set"  string "\"org.example.MainKt\""
+  20 | }
+  21 | 
+  22 | tasks.register("hello") {
+     = function "register"  string "\"hello\""
+  23 |     doLast { println("Hello ${project.name}") }
+     = function "doLast"  function "println"  string "\"Hello "  string "\""
+  24 | }
+  25 | 
+  26 | fun answer(x: Int): Int = x * 42
+     = keyword "fun"  function "answer"  type "Int"  type "Int"  number "42"

@@ -1,0 +1,30 @@
+   1 | # Compose file
+     = comment "# Compose file"
+   2 | services:
+     = property "services"
+   3 |   web:
+     = property "web"
+   4 |     image: nginx:1.27
+     = property "image"  string "nginx:1.27"
+   5 |     ports:
+     = property "ports"
+   6 |       - "8080:80"
+     = string "\"8080:80\""
+   7 |     depends_on: [db]
+     = property "depends_on"  string "db"
+   8 |     restart: unless-stopped
+     = property "restart"  string "unless-stopped"
+   9 |   db:
+     = property "db"
+  10 |     image: postgres:16
+     = property "image"  string "postgres:16"
+  11 |     environment:
+     = property "environment"
+  12 |       POSTGRES_PASSWORD: example
+     = property "POSTGRES_PASSWORD"  string "example"
+  13 |       MAX_CONN: 100
+     = property "MAX_CONN"  number "100"
+  14 | volumes:
+     = property "volumes"
+  15 |   data: {}
+     = property "data"

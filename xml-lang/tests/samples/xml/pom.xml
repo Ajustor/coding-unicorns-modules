@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Maven project -->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>org.example</groupId>
+  <artifactId>demo</artifactId>
+  <properties>
+    <maven.compiler.release>21</maven.compiler.release>
+  </properties>
+  <description><![CDATA[Uses <tags> & entities &amp; more]]></description>
+  <empty attr='single' />
+</project>

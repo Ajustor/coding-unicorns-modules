@@ -1,0 +1,41 @@
+   1 | // JavaScript
+     = comment "// JavaScript"
+   2 | import { join } from "node:path";
+     = keyword "import"  keyword "from"  string "\"node:path\""
+   3 | 
+   4 | export class Queue extends Array {
+     = keyword "export"  keyword "class"  type "Queue"  keyword "extends"  type "Array"
+   5 |   #size = 0;
+     = number "0"
+   6 |   static from(items) { return new Queue(...items); }
+     = keyword "static"  function "from"  keyword "return"  keyword "new"  type "Queue"
+   7 |   get size() { return this.#size; }
+     = keyword "get"  function "size"  keyword "return"  keyword "this"
+   8 | }
+   9 | 
+  10 | async function main(args = []) {
+     = keyword "async"  keyword "function"  function "main"
+  11 |   const { a, ...rest } = { a: 1, b: 2 };
+     = keyword "const"  property "a"  number "1"  property "b"  number "2"
+  12 |   for (const x of [1, 2.5, 0xff, 1e3, 10n]) {
+     = keyword "for"  keyword "const"  keyword "of"  number "1"  number "2.5"  number "0xff"  number "1e3"  number "10n"
+  13 |     if (x > 2 && x !== 255) continue;
+     = keyword "if"  number "2"  number "255"  keyword "continue"
+  14 |   }
+  15 |   try {
+     = keyword "try"
+  16 |     await fetch(`https://example.org/${join("a", "b")}`);
+     = keyword "await"  function "fetch"  string "`https://example.org/"  function "join"  string "\"a\""  string "\"b\""  string "`"
+  17 |   } catch (err) {
+     = keyword "catch"
+  18 |     throw new Error(err?.message ?? "failed");
+     = keyword "throw"  keyword "new"  type "Error"  property "message"  string "\"failed\""
+  19 |   } finally {
+     = keyword "finally"
+  20 |     console.log(rest, /\d+/.test("42"), null, undefined, true, this);
+     = keyword "console"  function "log"  string "\\d+"  function "test"  string "\"42\""  keyword "null"  keyword "undefined"  keyword "true"  keyword "this"
+  21 |   }
+  22 | }
+  23 | 
+  24 | module.exports = { main };
+     = keyword "module"  property "exports"

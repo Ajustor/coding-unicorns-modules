@@ -1,0 +1,29 @@
+   1 | import React, { useEffect } from "react";
+     = keyword "import"  type "React"  keyword "from"  string "\"react\""
+   2 | 
+   3 | // A list.
+     = comment "// A list."
+   4 | export default function List({ items = [], onPick }) {
+     = keyword "export"  keyword "default"  keyword "function"  type "List"
+   5 |   useEffect(() => {
+     = function "useEffect"
+   6 |     document.title = `${items.length} items`;
+     = keyword "document"  property "title"  string "`"  property "length"  string " items`"
+   7 |   }, [items]);
+   8 |   return (
+     = keyword "return"
+   9 |     <ul className="list">
+     = keyword "ul"  macro "className"  string "\"list\""
+  10 |       {items.map((item) => (
+     = function "map"
+  11 |         <li key={item.id} onClick={() => onPick(item)}>
+     = keyword "li"  macro "key"  property "id"  macro "onClick"  function "onPick"
+  12 |           {item.label} <strong>{item.count > 1 ? "many" : "one"}</strong>
+     = property "label"  keyword "strong"  property "count"  number "1"  string "\"many\""  string "\"one\""  keyword "strong"
+  13 |         </li>
+     = keyword "li"
+  14 |       ))}
+  15 |     </ul>
+     = keyword "ul"
+  16 |   );
+  17 | }

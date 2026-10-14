@@ -1,0 +1,39 @@
+   1 | # Script
+     = comment "# Script"
+   2 | param(
+     = keyword "param"
+   3 |     [string]$Path = ".",
+     = type "string"  macro "$Path"  string "\".\""
+   4 |     [switch]$Recurse
+     = type "switch"  macro "$Recurse"
+   5 | )
+   6 | 
+   7 | function Get-Size {
+     = keyword "function"  function "Get-Size"
+   8 |     [CmdletBinding()]
+     = type "CmdletBinding"
+   9 |     param([Parameter(Mandatory)][string]$Folder)
+     = keyword "param"  type "Parameter"  type "string"  macro "$Folder"
+  10 |     $files = Get-ChildItem -Path $Folder -File -Recurse:$Recurse
+     = macro "$files"  function "Get-ChildItem"  macro "$Folder"  macro "$Recurse"
+  11 |     return ($files | Measure-Object -Property Length -Sum).Sum
+     = keyword "return"  macro "$files"  function "Measure-Object"
+  12 | }
+  13 | 
+  14 | $total = Get-Size -Folder $Path
+     = macro "$total"  function "Get-Size"  macro "$Path"
+  15 | if ($total -gt 1MB) {
+     = keyword "if"  macro "$total"  number "1"
+  16 |     Write-Host "Big: $($total / 1MB) MB" -ForegroundColor Yellow
+     = function "Write-Host"  string "\"Big: $("  macro "$total"  number "1"  string "MB) MB\""
+  17 | } else {
+     = keyword "else"
+  18 |     Write-Output 'Small'
+     = function "Write-Output"  string "'Small'"
+  19 | }
+  20 | <# block
+     = comment "<# block"
+  21 |    comment #>
+     = comment "   comment #>"
+  22 | foreach ($i in 1..3) { $env:COUNT = $i }
+     = keyword "foreach"  macro "$i"  function "1..3"  macro "$env:COUNT"  macro "$i"

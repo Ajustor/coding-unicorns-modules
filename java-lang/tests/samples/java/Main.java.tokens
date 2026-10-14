@@ -1,0 +1,49 @@
+   1 | package org.example;
+     = keyword "package"
+   2 | 
+   3 | import java.util.List;
+     = keyword "import"
+   4 | import java.util.function.Function;
+     = keyword "import"
+   5 | 
+   6 | /**
+     = comment "/**"
+   7 |  * Entry point.
+     = comment " * Entry point."
+   8 |  * @author me
+     = comment " * @author me"
+   9 |  */
+     = comment " */"
+  10 | @SuppressWarnings("unchecked")
+     = macro "@SuppressWarnings"  string "\"unchecked\""
+  11 | public final class Main<T extends Comparable<T>> {
+     = keyword "public"  keyword "final"  keyword "class"  class "Main"  class "T"  keyword "extends"  class "Comparable"  class "T"
+  12 |     private static final int MAX = 0x7F;
+     = keyword "private"  keyword "static"  keyword "final"  type "int"  keyword "MAX"  number "0x7F"
+  13 | 
+  14 |     public record Pair(String key, int value) {}
+     = keyword "public"  keyword "record"  class "Pair"  class "String"  type "int"
+  15 | 
+  16 |     public static void main(String[] args) throws Exception {
+     = keyword "public"  keyword "static"  type "void"  function "main"  class "String"  keyword "throws"  class "Exception"
+  17 |         List<Pair> pairs = List.of(new Pair("a", 1));
+     = class "List"  class "Pair"  class "List"  function "of"  keyword "new"  class "Pair"  string "\"a\""  number "1"
+  18 |         Function<Integer, Integer> twice = n -> n * 2;
+     = class "Function"  class "Integer"  class "Integer"  number "2"
+  19 |         for (var p : pairs) {
+     = keyword "for"  keyword "var"
+  20 |             System.out.printf("%s=%d%n", p.key(), twice.apply(p.value()));
+     = class "System"  property "out"  function "printf"  string "\"%s=%d%n\""  function "key"  function "apply"  function "value"
+  21 |         }
+  22 |         String text = """
+     = class "String"  string "\"\"\""
+  23 |             Text block with "quotes"
+     = string "            Text block with \"quotes\""
+  24 |             """;
+     = string "            \"\"\""
+  25 |         char c = '\n';
+     = type "char"  string "'\\n'"
+  26 |         if (args.length == 0 && text != null) { throw new IllegalStateException("no args"); }
+     = keyword "if"  property "length"  number "0"  keyword "null"  keyword "throw"  keyword "new"  class "IllegalStateException"  string "\"no args\""
+  27 |     }
+  28 | }

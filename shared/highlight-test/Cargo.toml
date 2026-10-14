@@ -1,0 +1,9 @@
+[package]
+name = "unicorns-highlight-test"
+version = "0.1.0"
+edition = "2021"
+description = "Snapshot tests of the modules' highlighting, through their FFI as the IDE calls it"
+publish = false
+
+[dependencies]
+serde_json = "1"

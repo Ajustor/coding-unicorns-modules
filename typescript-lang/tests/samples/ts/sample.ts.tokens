@@ -1,0 +1,47 @@
+   1 | // TypeScript, including the JavaScript syntax it inherits.
+     = comment "// TypeScript, including the JavaScript syntax it inherits."
+   2 | import { readFile } from "node:fs/promises";
+     = keyword "import"  keyword "from"  string "\"node:fs/promises\""
+   3 | 
+   4 | export interface User {
+     = keyword "export"  keyword "interface"  type "User"
+   5 |   readonly id: number;
+     = keyword "readonly"  property "id"  type "number"
+   6 |   name?: string;
+     = property "name"  type "string"
+   7 | }
+   8 | 
+   9 | type Role = "admin" | "user";
+     = keyword "type"  type "Role"  string "\"admin\""  string "\"user\""
+  10 | 
+  11 | enum Level { Low = 1, High }
+     = keyword "enum"  type "Level"  property "Low"  number "1"  property "High"
+  12 | 
+  13 | export class Store<T extends User> implements Iterable<T> {
+     = keyword "export"  keyword "class"  type "Store"  type "T"  keyword "extends"  type "User"  keyword "implements"  type "Iterable"  type "T"
+  14 |   private items: T[] = [];
+     = keyword "private"  property "items"  type "T"
+  15 |   constructor(private readonly role: Role) {}
+     = function "constructor"  keyword "private"  keyword "readonly"  type "Role"
+  16 | 
+  17 |   async load(path: string): Promise<void> {
+     = keyword "async"  function "load"  type "string"  type "Promise"  keyword "void"
+  18 |     const text = await readFile(path, "utf8");
+     = keyword "const"  keyword "await"  function "readFile"  string "\"utf8\""
+  19 |     this.items = JSON.parse(text) as T[];
+     = keyword "this"  property "items"  type "JSON"  function "parse"  keyword "as"  type "T"
+  20 |   }
+  21 | 
+  22 |   *[Symbol.iterator]() {
+     = type "Symbol"  property "iterator"
+  23 |     yield* this.items;
+     = keyword "yield"  keyword "this"  property "items"
+  24 |   }
+  25 | }
+  26 | 
+  27 | const greet = (u: User): string => `Hello ${u.name ?? "you"}!`;
+     = keyword "const"  function "greet"  type "User"  type "string"  string "`Hello "  property "name"  string "\"you\""  string "!`"
+  28 | let pattern = /^[a-z]+$/gi;
+     = keyword "let"  string "^[a-z]+$"  string "gi"
+  29 | console.log(greet({ id: 1 }), Level.High, typeof pattern, null, undefined, true);
+     = keyword "console"  function "log"  function "greet"  property "id"  number "1"  type "Level"  property "High"  keyword "typeof"  keyword "null"  keyword "undefined"  keyword "true"

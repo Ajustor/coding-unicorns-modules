@@ -1,0 +1,13 @@
+   1 | {
+   2 |   // Editor settings
+     = comment "// Editor settings"
+   3 |   "editor.tabSize": 2,
+     = property "\"editor.tabSize\""  number "2"
+   4 |   /* block comment */
+     = comment "/* block comment */"
+   5 |   "files.exclude": {
+     = property "\"files.exclude\""
+   6 |     "**/target": true,
+     = property "\"**/target\""  keyword "true"
+   7 |   },
+   8 | }

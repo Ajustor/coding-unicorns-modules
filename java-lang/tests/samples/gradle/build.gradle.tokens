@@ -1,0 +1,45 @@
+   1 | // Groovy DSL
+     = comment "// Groovy DSL"
+   2 | plugins {
+     = function "plugins"
+   3 |     id 'java'
+     = function "id"  string "'java'"
+   4 |     id 'application'
+     = function "id"  string "'application'"
+   5 | }
+   6 | 
+   7 | group = 'org.example'
+     = string "'org.example'"
+   8 | version = "1.0.${buildNumber}"
+     = string "\"1.0."  string "\""
+   9 | 
+  10 | repositories {
+     = function "repositories"
+  11 |     mavenCentral()
+     = function "mavenCentral"
+  12 | }
+  13 | 
+  14 | dependencies {
+     = function "dependencies"
+  15 |     implementation 'com.google.guava:guava:33.0.0-jre'
+     = function "implementation"  string "'com.google.guava:guava:33.0.0-jre'"
+  16 |     testImplementation group: 'junit', name: 'junit', version: '4.13.2'
+     = function "testImplementation"  property "group"  string "'junit'"  property "name"  string "'junit'"  property "version"  string "'4.13.2'"
+  17 | }
+  18 | 
+  19 | application {
+     = function "application"
+  20 |     mainClass = 'org.example.Main'
+     = string "'org.example.Main'"
+  21 | }
+  22 | 
+  23 | tasks.named('test') {
+     = function "named"  string "'test'"
+  24 |     useJUnitPlatform()
+     = function "useJUnitPlatform"
+  25 |     maxParallelForks = 4
+     = number "4"
+  26 | }
+  27 | 
+  28 | def answer(int x) { return x * 42 }
+     = keyword "def"  function "answer"  type "int"  keyword "return"  number "42"

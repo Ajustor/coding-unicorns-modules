@@ -1,0 +1,43 @@
+   1 | <template>
+     = keyword "template"
+   2 |   <div :class="{ active: isOn }" @click="toggle">
+     = keyword "div"  macro ":class"  string "\""  property "active"  string "\""  macro "@click"  string "\""  string "\""
+   3 |     <p v-if="items.length">{{ items.length }} items for {{ user?.name }}</p>
+     = keyword "p"  macro "v-if"  string "\""  property "length"  string "\""  macro "{{"  property "length"  macro "}}"  macro "{{"  property "name"  macro "}}"  keyword "p"
+   4 |     <ItemRow v-for="item in items" :key="item.id" :item="item" />
+     = keyword "ItemRow"  macro "v-for"  string "\""  keyword "in"  string "\""  macro ":key"  string "\""  property "id"  string "\""  macro ":item"  string "\""  string "\""
+   5 |   </div>
+     = keyword "div"
+   6 | </template>
+     = keyword "template"
+   7 | 
+   8 | <script setup lang="ts">
+     = keyword "script"  property "setup"  property "lang"  string "\"ts\""
+   9 | import { ref, computed } from "vue";
+     = keyword "import"  keyword "from"  string "\"vue\""
+  10 | 
+  11 | const props = defineProps<{ start: number }>();
+     = keyword "const"  function "defineProps"  property "start"  type "number"
+  12 | const isOn = ref(false);
+     = keyword "const"  function "ref"  keyword "false"
+  13 | const items = computed(() => [{ id: props.start }]);
+     = keyword "const"  function "computed"  property "id"  property "start"
+  14 | function toggle(): void {
+     = keyword "function"  function "toggle"  keyword "void"
+  15 |   isOn.value = !isOn.value;
+     = property "value"  property "value"
+  16 | }
+  17 | </script>
+     = keyword "script"
+  18 | 
+  19 | <style scoped>
+     = keyword "style"  property "scoped"
+  20 | div.active > p {
+     = keyword "div"  property "active"  keyword "p"
+  21 |   color: #42b883;
+     = property "color"  string "42b883"
+  22 |   margin: 0 auto;
+     = property "margin"  number "0"
+  23 | }
+  24 | </style>
+     = keyword "style"

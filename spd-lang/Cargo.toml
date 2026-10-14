@@ -10,3 +10,4 @@ crate-type = ["rlib", "cdylib"]
 [dependencies]
 
 [dev-dependencies]
+unicorns-highlight-test = { path = "../shared/highlight-test" }
