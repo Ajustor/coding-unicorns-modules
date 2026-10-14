@@ -1,0 +1,8 @@
+   1 | [submodule "vendor/lib"]
+     = type "submodule \"vendor/lib\""
+   2 | 	path = vendor/lib
+     = property "path"  string " vendor/lib"
+   3 | 	url = https://github.com/example/lib.git
+     = property "url"  string " https://github.com/example/lib.git"
+   4 | 	branch = main
+     = property "branch"  string " main"

@@ -1,0 +1,18 @@
+   1 | <?xml version="1.0" encoding="UTF-8"?>
+     = macro "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+   2 | <Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
+     = keyword "<Wix"  property "xmlns"  string "\"http://wixtoolset.org/schemas/v4/wxs\""  keyword ">"
+   3 |   <Package Name="Coding Unicorns" Version="$(var.Version)"
+     = keyword "<Package"  property "Name"  string "\"Coding Unicorns\""  property "Version"  string "\"$(var.Version)\""
+   4 |            Manufacturer="Writing Unicorns" UpgradeCode="PUT-GUID-HERE">
+     = property "Manufacturer"  string "\"Writing Unicorns\""  property "UpgradeCode"  string "\"PUT-GUID-HERE\""  keyword ">"
+   5 |     <MediaTemplate EmbedCab="yes" />
+     = keyword "<MediaTemplate"  property "EmbedCab"  string "\"yes\""  keyword "/>"
+   6 |     <!-- Install folder -->
+     = comment "<!-- Install folder -->"
+   7 |     <StandardDirectory Id="ProgramFiles64Folder" />
+     = keyword "<StandardDirectory"  property "Id"  string "\"ProgramFiles64Folder\""  keyword "/>"
+   8 |   </Package>
+     = keyword "</Package"  keyword ">"
+   9 | </Wix>
+     = keyword "</Wix"  keyword ">"

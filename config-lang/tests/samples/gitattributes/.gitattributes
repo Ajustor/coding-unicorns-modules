@@ -1,0 +1,6 @@
+# Line endings
+* text=auto
+*.sh text eol=lf
+*.bat text eol=crlf
+*.png binary
+tests/samples/** -text linguist-generated

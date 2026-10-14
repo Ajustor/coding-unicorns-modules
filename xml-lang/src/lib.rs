@@ -207,7 +207,7 @@ pub fn tokenize_line_in(line: &str, mut state: State) -> (Vec<Token>, State) {
 pub extern "C" fn language_id() -> *const std::ffi::c_char { c"xml".as_ptr() }
 
 #[no_mangle]
-pub extern "C" fn file_extensions() -> *const std::ffi::c_char { c"xml,xsl,xsd,svg,xhtml".as_ptr() }
+pub extern "C" fn file_extensions() -> *const std::ffi::c_char { c"xml,xsl,xsd,svg,xhtml,wxs,wxi,plist,csproj,fsproj,vbproj,props,targets,xaml,nuspec,resx".as_ptr() }
 
 #[no_mangle]
 pub unsafe extern "C" fn tokenize_line_ffi(line_ptr: *const std::ffi::c_char) -> *mut std::ffi::c_char {
@@ -297,11 +297,7 @@ mod tests {
 
     #[test]
     fn spans_lines() {
-        let doc = tokenize_document("<project a=\"1\"
-  b='2'>
-<!-- one
-two -->
-<x/>");
+        let doc = tokenize_document("<project a=\"1\"\n  b='2'>\n<!-- one\ntwo -->\n<x/>");
         assert!(doc[1].iter().any(|t| t.text == "b" && t.kind == TokenKind::Property));
         assert!(doc[1].iter().any(|t| t.text == ">" && t.kind == TokenKind::Keyword));
         assert_eq!(doc[3][0].kind, TokenKind::Comment);

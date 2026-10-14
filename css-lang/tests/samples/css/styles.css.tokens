@@ -1,0 +1,35 @@
+   1 | /* Site styles */
+     = comment "/* Site styles */"
+   2 | @import url("fonts.css");
+     = keyword "@import"  function "url"  string "\"fonts.css\""
+   3 | 
+   4 | :root {
+     = property "root"
+   5 |   --brand: #7c3aed;
+     = property "--brand"  string "7c3aed"
+   6 |   --gap: 1.5rem;
+     = property "--gap"  number "1.5"  type "rem"
+   7 | }
+   8 | 
+   9 | body > main.wide,
+     = keyword "body"  keyword "main"  property "wide"
+  10 | a:hover::after {
+     = keyword "a"  property "hover"  property "after"
+  11 |   margin: 0 auto;
+     = property "margin"  number "0"
+  12 |   padding: calc(var(--gap) * 2) 4px;
+     = property "padding"  function "calc"  function "var"  number "2"  number "4"  type "px"
+  13 |   color: var(--brand);
+     = property "color"  function "var"
+  14 |   font: 600 1rem/1.4 "Inter", sans-serif !important;
+     = property "font"  number "600"  number "1"  string "\"Inter\""  keyword "!important"
+  15 | }
+  16 | 
+  17 | @media (max-width: 600px) {
+     = keyword "@media"  property "max-width"  number "600"  type "px"
+  18 |   #app [data-open="true"] { display: none; }
+     = property "app"  property "data-open"  string "\"true\""  property "display"
+  19 | }
+  20 | 
+  21 | @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+     = keyword "@keyframes"  keyword "from"  property "transform"  function "rotate"  number "0"  type "deg"  keyword "to"  property "transform"  function "rotate"  number "360"  type "deg"

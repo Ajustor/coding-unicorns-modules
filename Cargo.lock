@@ -12,6 +12,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "batch-lang"
+version = "0.1.0"
+dependencies = [
+ "tree-sitter-batch",
+ "tree-sitter-highlight",
+ "unicorns-highlight",
+ "unicorns-highlight-test",
+]
+
+[[package]]
 name = "cc"
 version = "1.2.60"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -22,12 +32,44 @@ dependencies = [
 ]
 
 [[package]]
+name = "config-lang"
+version = "0.1.0"
+dependencies = [
+ "tree-sitter-highlight",
+ "tree-sitter-ini",
+ "unicorns-highlight",
+ "unicorns-highlight-test",
+]
+
+[[package]]
+name = "cortexkit-tree-sitter-scss"
+version = "1.0.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "7e1ab239ee763e587b6213bde9320d0ffb7013808b827ef36c115bfd265799a1"
+dependencies = [
+ "cc",
+ "tree-sitter",
+]
+
+[[package]]
 name = "csharp-lang"
 version = "0.3.0"
 dependencies = [
  "tree-sitter",
  "tree-sitter-c-sharp",
  "tree-sitter-highlight",
+ "unicorns-highlight-test",
+]
+
+[[package]]
+name = "css-lang"
+version = "0.1.0"
+dependencies = [
+ "cortexkit-tree-sitter-scss",
+ "tree-sitter-css",
+ "tree-sitter-highlight",
+ "tree-sitter-less",
+ "unicorns-highlight",
  "unicorns-highlight-test",
 ]
 
@@ -280,6 +322,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "shell-lang"
+version = "0.1.0"
+dependencies = [
+ "tree-sitter-bash",
+ "tree-sitter-highlight",
+ "unicorns-highlight",
+ "unicorns-highlight-test",
+]
+
+[[package]]
 name = "shlex"
 version = "1.3.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -372,6 +424,26 @@ dependencies = [
 ]
 
 [[package]]
+name = "tree-sitter-bash"
+version = "0.25.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "9e5ec769279cc91b561d3df0d8a5deb26b0ad40d183127f409494d6d8fc53062"
+dependencies = [
+ "cc",
+ "tree-sitter-language",
+]
+
+[[package]]
+name = "tree-sitter-batch"
+version = "0.11.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "46fea9ee100103c3d5fc3c8243da6e8f95163657486040503b8514c9952b79da"
+dependencies = [
+ "cc",
+ "tree-sitter-language",
+]
+
+[[package]]
 name = "tree-sitter-c-sharp"
 version = "0.23.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -424,6 +496,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "tree-sitter-ini"
+version = "1.4.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "387f79682cd53b7c0a5777c96e601a02b9965a787984ef86dbb8952bdab2d62f"
+dependencies = [
+ "cc",
+ "tree-sitter-language",
+]
+
+[[package]]
 name = "tree-sitter-java"
 version = "0.23.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -458,6 +540,16 @@ name = "tree-sitter-language"
 version = "0.1.7"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "009994f150cc0cd50ff54917d5bc8bffe8cad10ca10d81c34da2ec421ae61782"
+
+[[package]]
+name = "tree-sitter-less"
+version = "1.0.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "66d4fd0af04a7338929f0e27ca078b4831de8e1ebf90ce8182e69012094a0ae0"
+dependencies = [
+ "cc",
+ "tree-sitter",
+]
 
 [[package]]
 name = "tree-sitter-powershell"
@@ -585,7 +677,7 @@ dependencies = [
 
 [[package]]
 name = "xml-lang"
-version = "0.2.2"
+version = "0.2.3"
 dependencies = [
  "unicorns-highlight-test",
 ]

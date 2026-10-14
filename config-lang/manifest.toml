@@ -1,0 +1,15 @@
+[extension]
+id = "unicorns.config-lang"
+name = "Config files"
+version = "0.1.0"
+description = "Configuration file highlighting — INI and its relatives (.ini, .cfg, .desktop, .editorconfig, .gitconfig, .gitmodules, .npmrc), ignore files (.gitignore, .dockerignore, .npmignore…), .gitattributes and .env files"
+author = "Writing Unicorns"
+repository = ""
+documentation = "https://editorconfig.org/"
+
+[capabilities]
+languages = ["ini", "cfg", "desktop", "editorconfig", "gitconfig", "gitignore", "gitattributes", "env"]
+# Dotfiles have no extension: they are known by their name (Coding Unicorns 0.10.6+).
+file_names = { ".editorconfig" = "editorconfig", ".gitconfig" = "gitconfig", ".gitmodules" = "gitconfig", ".npmrc" = "ini", ".gitignore" = "gitignore", ".dockerignore" = "gitignore", ".npmignore" = "gitignore", ".prettierignore" = "gitignore", ".eslintignore" = "gitignore", ".hgignore" = "gitignore", ".gitattributes" = "gitattributes", ".env" = "env", ".env.*" = "env" }
+
+[dependencies]

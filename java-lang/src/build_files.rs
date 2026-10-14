@@ -14,8 +14,7 @@ fn groovy() -> &'static HighlightConfiguration {
     static CONFIG: OnceLock<HighlightConfiguration> = OnceLock::new();
     CONFIG.get_or_init(|| {
         let query = format!(
-            "{}
-{}",
+            "{}\n{}",
             dekobon_tree_sitter_groovy::HIGHLIGHTS_QUERY,
             include_str!("../queries/groovy-extra.scm")
         );

@@ -16,7 +16,7 @@ Each module compiles to a native dynamic library (`.so` / `.dll` / `.dylib`) loa
 | `react-lang` | React (JSX/TSX) | `.jsx`, `.tsx` | vscode-js-debug | [docs](https://react.dev/learn) |
 | `svelte-lang` | Svelte | `.svelte` | vscode-js-debug | [docs](https://svelte.dev/docs) |
 | `toml-lang` | TOML | `.toml` | — | [docs](https://toml.io/en/latest) |
-| `xml-lang` | XML | `.xml`, `.svg` | — | [docs](https://www.w3.org/XML/) |
+| `xml-lang` | XML | `.xml`, `.svg`, `.xsl`, `.xsd`, `.xhtml`, `.wxs`, `.plist`, `.csproj`, `.props`, `.targets`, `.xaml`, `.nuspec`, `.resx` | — | [docs](https://www.w3.org/XML/) |
 | `html-lang` | HTML | `.html`, `.htm` | vscode-js-debug | [docs](https://developer.mozilla.org/docs/Web/HTML) |
 | `csharp-lang` | C# | `.cs` | netcoredbg | [docs](https://learn.microsoft.com/dotnet/csharp/) |
 | `powershell-lang` | PowerShell | `.ps1`, `.psm1`, `.psd1` | PowerShell Editor Services | [docs](https://learn.microsoft.com/powershell/) |
@@ -27,6 +27,10 @@ Each module compiles to a native dynamic library (`.so` / `.dll` / `.dylib`) loa
 | `java-lang` | Java, Gradle (Groovy / Kotlin DSL), Kotlin, properties | `.java`, `.gradle`, `.groovy`, `.gradle.kts`, `.kts`, `.kt`, `.properties`, `MANIFEST.MF` | java-debug (in JDT LS) | [docs](https://dev.java/learn/) |
 | `yaml-lang` | YAML | `.yml`, `.yaml` | — | [docs](https://yaml.org/spec/1.2.2/) |
 | `sql-lang` | SQL | `.sql` | — | [docs](https://www.postgresql.org/docs/current/sql.html) |
+| `shell-lang` | Shell (sh, Bash, Zsh) | `.sh`, `.bash`, `.zsh`, `gradlew`, `.bashrc`, `.zshrc`, `.profile` | — | [docs](https://www.gnu.org/software/bash/manual/bash.html) |
+| `css-lang` | CSS, SCSS, Less | `.css`, `.scss`, `.less` | — | [docs](https://developer.mozilla.org/docs/Web/CSS) |
+| `batch-lang` | Windows batch | `.bat`, `.cmd` | — | [docs](https://learn.microsoft.com/windows-server/administration/windows-commands/windows-commands) |
+| `config-lang` | INI, ignore files, `.gitattributes`, `.env` | `.ini`, `.cfg`, `.desktop`, `.editorconfig`, `.gitconfig`, `.gitmodules`, `.npmrc`, `.gitignore`, `.dockerignore`, `.gitattributes`, `.env` | — | [docs](https://editorconfig.org/) |
 
 Dockerfiles and Compose files are recognised by their name (`file_names`, Coding Unicorns
 0.10.6+). Compose files get their own `compose` language, with their own language server
@@ -46,6 +50,18 @@ modules share: a grammar run over a document, and single-file components. `svelt
 `vue-lang` highlight their markup as HTML, `<script>` as TypeScript, `<style>` as CSS, and template
 expressions (`{…}` and `{#if}` blocks in Svelte, `{{ … }}` and `v-…` / `:prop` / `@event`
 directives in Vue) as TypeScript.
+
+`shell-lang` highlights shell scripts with tree-sitter-bash (scripts without an extension such as
+`gradlew` or `.bashrc` are known by their name); its language server,
+[bash-language-server](https://github.com/bash-lsp/bash-language-server) (installed with npm), adds
+completion, hover with man pages, navigation and, when `shellcheck` is installed, its diagnostics.
+`css-lang` highlights CSS (the same configuration as in HTML, Vue and Svelte files), SCSS and Less;
+their grammars' queries only cover what each adds to CSS, so the CSS query comes first. Its
+language server is `vscode-css-language-server` (npm `vscode-langservers-extracted`, like HTML and
+JSON). `batch-lang` highlights `.bat` / `.cmd` files with tree-sitter-batch. `config-lang`
+highlights INI and its relatives with tree-sitter-ini, and ignore files, `.gitattributes` and `.env`
+files (no published grammar) by hand: patterns and their wildcards, attributes, keys, values and
+`$VAR` references.
 
 `yaml-lang` highlights YAML with tree-sitter; its language server,
 [yaml-language-server](https://github.com/redhat-developer/yaml-language-server) (installed with npm),

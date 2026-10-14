@@ -1,0 +1,21 @@
+/* Site styles */
+@import url("fonts.css");
+
+:root {
+  --brand: #7c3aed;
+  --gap: 1.5rem;
+}
+
+body > main.wide,
+a:hover::after {
+  margin: 0 auto;
+  padding: calc(var(--gap) * 2) 4px;
+  color: var(--brand);
+  font: 600 1rem/1.4 "Inter", sans-serif !important;
+}
+
+@media (max-width: 600px) {
+  #app [data-open="true"] { display: none; }
+}
+
+@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }

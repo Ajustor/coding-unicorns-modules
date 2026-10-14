@@ -1,0 +1,16 @@
+[package]
+name = "shell-lang"
+version = "0.1.0"
+edition = "2021"
+description = "Shell script language support module for Writing Unicorns IDE"
+
+[lib]
+crate-type = ["rlib", "cdylib"]
+
+[dependencies]
+unicorns-highlight = { path = "../shared/highlight" }
+tree-sitter-highlight = "0.25"
+tree-sitter-bash = "0.25.1"
+
+[dev-dependencies]
+unicorns-highlight-test = { path = "../shared/highlight-test" }

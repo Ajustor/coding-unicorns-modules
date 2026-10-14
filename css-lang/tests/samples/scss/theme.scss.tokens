@@ -1,0 +1,36 @@
+   1 | // Theme
+     = comment "// Theme"
+   2 | @use "sass:math";
+     = keyword "@use"  string "\"sass:math\""
+   3 | 
+   4 | $primary: #3b82f6;
+     = property "$primary"  string "3b82f6"
+   5 | $radius: 4px !default;
+     = property "$radius"  number "4"  type "px"
+   6 | 
+   7 | @mixin card($pad: 1rem) {
+     = keyword "@mixin"  property "$pad"  number "1"  type "rem"
+   8 |   padding: $pad;
+     = property "padding"  property "$pad"
+   9 |   border-radius: $radius;
+     = property "border-radius"  property "$radius"
+  10 | }
+  11 | 
+  12 | .button {
+     = property "button"
+  13 |   @include card(math.div(16px, 2));
+     = keyword "@include"  function "card"  function "math.div"  number "16"  type "px"  number "2"
+  14 |   color: darken($primary, 10%);
+     = property "color"  function "darken"  property "$primary"  number "10"  type "%"
+  15 | 
+  16 |   &:hover { color: $primary; }
+     = keyword "&"  property "hover"  property "color"  property "$primary"
+  17 |   .icon + & { margin-left: 0.5em; }
+     = property "icon"  keyword "&"  property "margin-left"  number "0.5"  type "em"
+  18 | 
+  19 |   @each $size in sm, md, lg {
+     = keyword "@each"  property "$size"  keyword "in"  string "sm"  keyword "lg"
+  20 |     &--#{$size} { font-size: 1rem; }
+     = keyword "&"  property "#{$size"  property "font-size"  number "1"  type "rem"
+  21 |   }
+  22 | }

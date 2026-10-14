@@ -1,0 +1,22 @@
+   1 | # EditorConfig
+     = comment "# EditorConfig"
+   2 | root = true
+     = property "root"  string " true"
+   3 | 
+   4 | [*]
+     = type "*"
+   5 | charset = utf-8
+     = property "charset"  string " utf-8"
+   6 | indent_style = space
+     = property "indent_style"  string " space"
+   7 | indent_size = 4
+     = property "indent_size"  string " 4"
+   8 | end_of_line = lf
+     = property "end_of_line"  string " lf"
+   9 | 
+  10 | [*.{md,yml}]
+     = type "*.{md,yml}"
+  11 | indent_size = 2
+     = property "indent_size"  string " 2"
+  12 | trim_trailing_whitespace = false
+     = property "trim_trailing_whitespace"  string " false"

@@ -1,0 +1,12 @@
+   1 | # Line endings
+     = comment "# Line endings"
+   2 | * text=auto
+     = keyword "*"  property "text"  string "auto"
+   3 | *.sh text eol=lf
+     = keyword "*"  string ".sh"  property "text"  property "eol"  string "lf"
+   4 | *.bat text eol=crlf
+     = keyword "*"  string ".bat"  property "text"  property "eol"  string "crlf"
+   5 | *.png binary
+     = keyword "*"  string ".png"  property "binary"
+   6 | tests/samples/** -text linguist-generated
+     = string "tests/samples/"  keyword "**"  keyword "-"  property "text"  property "linguist-generated"

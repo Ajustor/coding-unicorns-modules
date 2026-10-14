@@ -1,0 +1,14 @@
+   1 | [Desktop Entry]
+     = type "Desktop Entry"
+   2 | Name=Coding Unicorns
+     = property "Name"  string "Coding Unicorns"
+   3 | Comment=A lightweight IDE
+     = property "Comment"  string "A lightweight IDE"
+   4 | Exec=coding-unicorns %F
+     = property "Exec"  string "coding-unicorns %F"
+   5 | Icon=coding-unicorns
+     = property "Icon"  string "coding-unicorns"
+   6 | Terminal=false
+     = property "Terminal"  string "false"
+   7 | Categories=Development;IDE;
+     = property "Categories"  string "Development;IDE;"

@@ -1,0 +1,43 @@
+   1 | @echo off
+     = keyword "@echo off"
+   2 | REM Build the project
+     = comment "REM Build the project"
+   3 | setlocal EnableDelayedExpansion
+     = keyword "setlocal EnableDelayedExpansion"
+   4 | 
+   5 | set "ROOT=%~dp0"
+     = keyword "set"  property "ROOT"  property "%~dp0"
+   6 | set /a COUNT=0
+     = keyword "set"  keyword "/a"  string "COUNT=0"
+   7 | 
+   8 | if not exist "%ROOT%target" (
+     = keyword "if not exist "  string "\"%ROOT%target\""  keyword " ("
+   9 |     mkdir "%ROOT%target"
+     = function "mkdir"  string "\"%ROOT%target\""
+  10 | )
+     = keyword ")"
+  11 | 
+  12 | for %%f in (*.rs) do (
+     = keyword "for "  property "%%f"  keyword " in ("  string "*.rs"  keyword ") do ("
+  13 |     set /a COUNT+=1
+     = keyword "    set /a "  string "COUNT+=1"
+  14 |     echo Found %%f
+     = function "echo"  string "Found"  property "%%f"
+  15 | )
+     = keyword ")"
+  16 | 
+  17 | :: Run cargo
+     = comment ":: Run cargo"
+  18 | call cargo build --release || goto :error
+     = keyword "call "  function "cargo"  string "build"  string "--release"  function "goto"  string ":error"
+  19 | echo Built !COUNT! files > "%ROOT%build.log"
+     = function "echo"  string "Built"  property "!COUNT!"  string "files"  string "\"%ROOT%build.log\""
+  20 | goto :eof
+     = keyword "goto :eof"
+  21 | 
+  22 | :error
+     = function ":error"
+  23 | echo Build failed with %ERRORLEVEL%
+     = function "echo"  string "Build"  string "failed"  string "with"  property "%ERRORLEVEL%"
+  24 | exit /b 1
+     = keyword "exit /b "  number "1"

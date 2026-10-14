@@ -1,0 +1,16 @@
+[extension]
+id = "unicorns.css-lang"
+name = "CSS"
+version = "0.1.0"
+description = "CSS, SCSS and Less support — syntax highlighting, vscode-css-language-server LSP (completion, hover, color and validation diagnostics)"
+author = "Writing Unicorns"
+repository = ""
+documentation = "https://developer.mozilla.org/docs/Web/CSS"
+
+[capabilities]
+languages = ["css", "scss", "less"]
+lsp_server = "vscode-css-language-server"
+lsp_args = ["--stdio"]
+
+[dependencies]
+npm = ["vscode-langservers-extracted"]

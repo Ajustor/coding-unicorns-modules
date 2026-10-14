@@ -1,0 +1,25 @@
+   1 | // Theme
+     = comment "// Theme"
+   2 | @import "base.less";
+     = keyword "@import"  string "\"base.less\""
+   3 | 
+   4 | @primary: #3b82f6;
+     = property "@primary"  string "3b82f6"
+   5 | @radius: 4px;
+     = property "@radius"  number "4"  type "px"
+   6 | 
+   7 | .rounded(@r: @radius) {
+     = property "rounded"  property "@r"  property "@radius"
+   8 |   border-radius: @r;
+     = property "border-radius"  property "@r"
+   9 | }
+  10 | 
+  11 | .button {
+     = property "button"
+  12 |   .rounded(8px);
+     = property "rounded"  number "8"  type "px"
+  13 |   color: darken(@primary, 10%);
+     = property "color"  function "darken"  property "@primary"  number "10"  type "%"
+  14 |   &:hover { color: @primary; }
+     = keyword "&"  property "hover"  property "color"  property "@primary"
+  15 | }

@@ -17,9 +17,7 @@ fn config() -> &'static HighlightConfiguration {
             .replace(" @spell", "")
             .replace("] @attribute", "] @keyword")
             .replace("] @type.qualifier", "] @keyword")
-            + "
-(keyword_null) @constant.builtin
-";
+            + "\n(keyword_null) @constant.builtin\n";
         unicorns_highlight::configure(tree_sitter_sequel::LANGUAGE.into(), "sql", &query, "")
     })
 }
