@@ -1,7 +1,7 @@
 [extension]
 id = "unicorns.xml-lang"
 name = "XML"
-version = "0.2.1"
+version = "0.2.2"
 description = "XML language support — syntax highlighting, lemminx LSP"
 author = "Writing Unicorns"
 repository = ""

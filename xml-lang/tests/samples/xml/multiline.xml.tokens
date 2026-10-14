@@ -1,0 +1,12 @@
+   1 | <!-- A comment
+     = comment "<!-- A comment"
+   2 |      on two lines -->
+     = comment "     on two lines -->"
+   3 | <svg width="10"
+     = keyword "<svg"  property "width"  string "\"10\""
+   4 |      height="10">
+     = property "height"  string "\"10\""  keyword ">"
+   5 |   <rect x="1" />
+     = keyword "<rect"  property "x"  string "\"1\""  keyword "/>"
+   6 | </svg>
+     = keyword "</svg"  keyword ">"
