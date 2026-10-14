@@ -1,0 +1,4 @@
+[submodule "vendor/lib"]
+	path = vendor/lib
+	url = https://github.com/example/lib.git
+	branch = main

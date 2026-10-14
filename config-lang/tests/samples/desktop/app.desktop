@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=Coding Unicorns
+Comment=A lightweight IDE
+Exec=coding-unicorns %F
+Icon=coding-unicorns
+Terminal=false
+Categories=Development;IDE;

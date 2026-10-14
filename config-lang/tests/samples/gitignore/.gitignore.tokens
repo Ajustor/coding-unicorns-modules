@@ -1,0 +1,19 @@
+   1 | # Build output
+     = comment "# Build output"
+   2 | /target
+     = string "/target"
+   3 | *.log
+     = keyword "*"  string ".log"
+   4 | build/
+     = string "build/"
+   5 | 
+   6 | # But keep this one
+     = comment "# But keep this one"
+   7 | !build/keep.txt
+     = keyword "!"  string "build/keep.txt"
+   8 | **/node_modules/
+     = keyword "**"  string "/node_modules/"
+   9 | *.py[cod]
+     = keyword "*"  string ".py"  keyword "[cod]"
+  10 | \#notacomment
+     = string "\\#notacomment"

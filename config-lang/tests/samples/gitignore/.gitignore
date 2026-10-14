@@ -1,0 +1,10 @@
+# Build output
+/target
+*.log
+build/
+
+# But keep this one
+!build/keep.txt
+**/node_modules/
+*.py[cod]
+\#notacomment
