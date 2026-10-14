@@ -55,7 +55,9 @@ def module_entry(root: Path, crate: str, zips: Path, tag: str, repo: str) -> dic
         "author": ext.get("author", ""),
         "documentation": ext.get("documentation") or None,
         "languages": caps.get("languages", []),
-        "lsp_server": caps.get("lsp_server") or None,
+        # A module whose servers are all per language (java-lang) names the first.
+        "lsp_server": caps.get("lsp_server")
+        or next((s.get("command") for s in caps.get("lsp_servers", {}).values()), None),
         "dependencies": {k: v for k, v in manifest.get("dependencies", {}).items() if v},
         "assets": {},
     }

@@ -1,6 +1,6 @@
 [package]
 name = "java-lang"
-version = "0.2.0"
+version = "0.3.0"
 edition = "2021"
 description = "Java language support module for Writing Unicorns IDE"
 
@@ -9,7 +9,11 @@ crate-type = ["rlib", "cdylib"]
 
 [dependencies]
 tree-sitter = "0.25"
+tree-sitter-groovy = "0.1.2"
 tree-sitter-highlight = "0.25"
 tree-sitter-java = "0.23"
+tree-sitter-kotlin-ng = "1.1.0"
+tree-sitter-properties = "0.3.0"
+unicorns-highlight = { version = "0.1.0", path = "../shared/highlight" }
 
 [dev-dependencies]
