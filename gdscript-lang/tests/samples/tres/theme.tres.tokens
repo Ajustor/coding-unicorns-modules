@@ -1,0 +1,30 @@
+   1 | [gd_resource type="Theme" load_steps=3 format=3 uid="uid://d1x2y3z4a5b6c"]
+     = keyword "gd_resource"  property "type"  string "\"Theme\""  property "load_steps"  number "3"  property "format"  number "3"  property "uid"  string "\"uid://d1x2y3z4a5b6c\""
+   2 | 
+   3 | [ext_resource type="FontFile" path="res://fonts/main.ttf" id="1_font"]
+     = keyword "ext_resource"  property "type"  string "\"FontFile\""  property "path"  string "\"res://fonts/main.ttf\""  property "id"  string "\"1_font\""
+   4 | 
+   5 | [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1"]
+     = keyword "sub_resource"  property "type"  string "\"StyleBoxFlat\""  property "id"  string "\"StyleBoxFlat_1\""
+   6 | bg_color = Color(0.1, 0.1, 0.15, 1)
+     = property "bg_color"  type "Color"  number "0.1"  number "0.1"  number "0.15"  number "1"
+   7 | corner_radius_top_left = 6
+     = property "corner_radius_top_left"  number "6"
+   8 | border_width_left = 2
+     = property "border_width_left"  number "2"
+   9 | 
+  10 | [sub_resource type="Curve" id="Curve_1"]
+     = keyword "sub_resource"  property "type"  string "\"Curve\""  property "id"  string "\"Curve_1\""
+  11 | _data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(1, inf), 2.5, 0.0, 0, 0]
+     = property "_data"  type "Vector2"  number "0"  number "0"  number "0.0"  number "0.0"  number "0"  number "0"  type "Vector2"  number "1"  number "inf"  number "2.5"  number "0.0"  number "0"  number "0"
+  12 | point_count = 2
+     = property "point_count"  number "2"
+  13 | 
+  14 | [resource]
+     = keyword "resource"
+  15 | default_font = ExtResource("1_font")
+     = property "default_font"  type "ExtResource"  string "\"1_font\""
+  16 | default_font_size = 18
+     = property "default_font_size"  number "18"
+  17 | Button/styles/normal = SubResource("StyleBoxFlat_1")
+     = property "Button/styles/normal"  type "SubResource"  string "\"StyleBoxFlat_1\""

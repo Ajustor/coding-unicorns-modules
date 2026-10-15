@@ -1,0 +1,25 @@
+   1 | [configuration]
+     = keyword "configuration"
+   2 | 
+   3 | entry_symbol = "example_library_init"
+     = property "entry_symbol"  string "\"example_library_init\""
+   4 | compatibility_minimum = "4.1"
+     = property "compatibility_minimum"  string "\"4.1\""
+   5 | reloadable = true
+     = property "reloadable"  keyword "true"
+   6 | 
+   7 | [libraries]
+     = keyword "libraries"
+   8 | 
+   9 | macos.debug = "res://bin/libgdexample.macos.template_debug.framework"
+     = property "macos.debug"  string "\"res://bin/libgdexample.macos.template_debug.framework\""
+  10 | windows.debug.x86_64 = "res://bin/libgdexample.windows.template_debug.x86_64.dll"
+     = property "windows.debug.x86_64"  string "\"res://bin/libgdexample.windows.template_debug.x86_64.dll\""
+  11 | linux.release.x86_64 = "res://bin/libgdexample.linux.template_release.x86_64.so"
+     = property "linux.release.x86_64"  string "\"res://bin/libgdexample.linux.template_release.x86_64.so\""
+  12 | 
+  13 | [icons]
+     = keyword "icons"
+  14 | 
+  15 | GDExample = "res://icons/gd_example.svg"
+     = property "GDExample"  string "\"res://icons/gd_example.svg\""

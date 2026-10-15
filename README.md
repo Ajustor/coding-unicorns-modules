@@ -31,6 +31,7 @@ Each module compiles to a native dynamic library (`.so` / `.dll` / `.dylib`) loa
 | `css-lang` | CSS, SCSS, Less | `.css`, `.scss`, `.less` | — | [docs](https://developer.mozilla.org/docs/Web/CSS) |
 | `batch-lang` | Windows batch | `.bat`, `.cmd` | — | [docs](https://learn.microsoft.com/windows-server/administration/windows-commands/windows-commands) |
 | `config-lang` | INI, ignore files, `.gitattributes`, `.env` | `.ini`, `.cfg`, `.desktop`, `.editorconfig`, `.gitconfig`, `.gitmodules`, `.npmrc`, `.gitignore`, `.dockerignore`, `.gitattributes`, `.env` | — | [docs](https://editorconfig.org/) |
+| `gdscript-lang` | GDScript, Godot scenes, resources and shaders | `.gd`, `.tscn`, `.tres`, `project.godot`, `.import`, `.gdextension`, `.gdshader`, `.gdshaderinc` | Godot editor | [docs](https://docs.godotengine.org/en/stable/tutorials/scripting/gdscript/) |
 
 Dockerfiles and Compose files are recognised by their name (`file_names`, Coding Unicorns
 0.10.6+). Compose files get their own `compose` language, with their own language server
@@ -44,6 +45,15 @@ the full table. The panel also lists the **running containers**, with *Logs* and
 *Restart*, *Remove*, *Shell*) and a logs page following the chosen container
 (`docker-lang/src/containers.rs`; the `log` view element needs Coding Unicorns 0.10.8+). The module returns JSON views from `ui_view_ffi` and handles clicks in
 `ui_event_ffi`, running the `docker` CLI on its own threads (`docker-lang/src/panel.rs`).
+
+`gdscript-lang` ships no language server or debugger: the Godot editor runs both, on TCP
+ports 6005 (LSP) and 6006 (DAP). Its manifest declares them with `connect`, so the module
+needs Coding Unicorns 0.21.0+: older IDEs reject the manifest and cannot install it, even
+for highlighting. Completion, diagnostics and F5 work while the Godot 4 editor is open
+on the project, and the IDE connects as soon as it is. F5 without a launch configuration
+plays the main scene; a `launch.json` entry of type `godot` can set `scene` to `current`
+(the scene open in Godot) or a `res://` path. Scenes, resources and shaders are only
+highlighted.
 
 `shared/highlight` (`unicorns-highlight`, not a module) holds the tree-sitter highlighting the
 modules share: a grammar run over a document, and single-file components. `svelte-lang` and
@@ -124,10 +134,10 @@ VS Code launch configuration `types` it serves, the transport (stdio, or TCP on
 unpacked into the module's folder (`${debuggerDir}`) on first use. Examples:
 `csharp-lang` (downloaded binary), `typescript-lang` (downloaded script run by Node, over
 TCP), `powershell-lang` (downloaded module run by `pwsh`), `go-lang` (TCP, tool installed
-with the dependencies). The IDE README (*Créer une extension*) documents every field.
+with the dependencies), `gdscript-lang` (`connect`: the adapter already runs in the Godot editor). The IDE README (*Créer une extension*) documents every field.
 
 Without a launch configuration, F5 debugs the current file for TypeScript, JavaScript,
-Python, PowerShell, Go (its package), Java (the open file's main class) and HTML (in Chrome). C#, Rust and the component
+Python, PowerShell, Go (its package), Java (the open file's main class), GDScript (the main scene) and HTML (in Chrome). C#, Rust and the component
 frameworks (React, Vue, Svelte) need a `.vscode/launch.json` entry giving the program or
 dev server URL. TOML, XML, JSON, Markdown and Docker files are not programs, and speedster-js components run through Bun,
 whose debugger does not speak DAP: these modules have no debugger.

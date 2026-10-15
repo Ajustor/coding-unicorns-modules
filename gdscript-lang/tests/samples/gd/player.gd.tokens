@@ -1,0 +1,88 @@
+   1 | @tool
+     = property "@tool"
+   2 | class_name Player
+     = keyword "class_name"  type "Player"
+   3 | extends CharacterBody2D
+     = keyword "extends"  type "CharacterBody2D"
+   4 | ## The player: moves and jumps.
+     = comment "## The player: moves and jumps."
+   5 | 
+   6 | signal hit(damage: int)
+     = keyword "signal"  function "hit"  type "int"
+   7 | 
+   8 | enum State { IDLE, RUN }
+     = keyword "enum"  type "State"  keyword "IDLE"  keyword "RUN"
+   9 | 
+  10 | const SPEED := 300.0
+     = keyword "const"  keyword "SPEED"  number "300.0"
+  11 | @export var max_health: int = 3
+     = property "@export"  keyword "var"  type "int"  number "3"
+  12 | @onready var sprite: Sprite2D = $Sprite2D
+     = property "@onready"  keyword "var"  type "Sprite2D"  string "$Sprite2D"
+  13 | 
+  14 | var state := State.IDLE
+     = keyword "var"  type "State"  keyword "IDLE"
+  15 | 
+  16 | #region Movement
+     = comment "#region Movement"
+  17 | func _physics_process(delta: float) -> void:
+     = keyword "func"  function "_physics_process"  type "float"  type "void"
+  18 | 	var direction := Input.get_axis(&"move_left", &"move_right")
+     = keyword "var"  type "Input"  function "get_axis"  string "&\"move_left\""  string "&\"move_right\""
+  19 | 	velocity.x = direction * SPEED
+     = keyword "SPEED"
+  20 | 	if not is_on_floor():
+     = keyword "if"  keyword "not"  function "is_on_floor"
+  21 | 		velocity += get_gravity() * delta
+     = function "get_gravity"
+  22 | 	move_and_slide()
+     = function "move_and_slide"
+  23 | #endregion
+     = comment "#endregion"
+  24 | 
+  25 | func _init() -> void:
+     = keyword "func"  function "_init"  type "void"
+  26 | 	pass
+     = keyword "pass"
+  27 | 
+  28 | func take_damage(amount: int) -> void:
+     = keyword "func"  function "take_damage"  type "int"  type "void"
+  29 | 	max_health -= amount
+  30 | 	hit.emit(amount)
+     = function "emit"
+  31 | 	match state:
+     = keyword "match"
+  32 | 		State.IDLE:
+     = type "State"  keyword "IDLE"
+  33 | 			print("ouch\n")
+     = function "print"  string "\"ouch\\n\""
+  34 | 		_:
+  35 | 			pass
+     = keyword "pass"
+  36 | 	await get_tree().create_timer(0.5).timeout
+     = keyword "await"  function "get_tree"  function "create_timer"  number "0.5"
+  37 | 	var scene: PackedScene = preload("res://scenes/explosion.tscn")
+     = keyword "var"  type "PackedScene"  function "preload"  string "\"res://scenes/explosion.tscn\""
+  38 | 	add_child(scene.instantiate())
+     = function "add_child"  function "instantiate"
+  39 | 	super.take_damage(amount)
+     = keyword "super"  function "take_damage"
+  40 | 	print(self, null, true)
+     = function "print"  keyword "self"  keyword "null"  keyword "true"
+  41 | 	var path := ^"Sprite2D:modulate"
+     = keyword "var"  string "^\"Sprite2D:modulate\""
+  42 | 
+  43 | func extras(node: Node, values: Array[int]) -> void:
+     = keyword "func"  function "extras"  type "Node"  type "Array[int]"  type "void"
+  44 | 	var square := func double(x: int) -> int: return x * 2
+     = keyword "var"  keyword "func"  function "double"  type "int"  type "int"  keyword "return"  number "2"
+  45 | 	if node is Sprite2D:
+     = keyword "if"  keyword "is"  type "Sprite2D"
+  46 | 		var sprite_2d := node as Sprite2D
+     = keyword "var"  keyword "as"  type "Sprite2D"
+  47 | 	var idle := State.IDLE
+     = keyword "var"  type "State"  keyword "IDLE"
+  48 | 	var zero := Vector2.ZERO
+     = keyword "var"  type "Vector2"  keyword "ZERO"
+  49 | 	"""This block is a comment."""
+     = comment "\"\"\"This block is a comment.\"\"\""
