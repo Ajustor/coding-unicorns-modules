@@ -1,0 +1,24 @@
+[gd_scene load_steps=3 format=3 uid="uid://b6x3k2q1w0e8a"]
+
+[ext_resource type="Script" path="res://player.gd" id="1_abcde"]
+[ext_resource type="Texture2D" uid="uid://c7y4l3r2x1f9b" path="res://icon.svg" id="2_fghij"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_1"]
+size = Vector2(32, 48)
+
+[node name="Player" type="CharacterBody2D"]
+script = ExtResource("1_abcde")
+max_health = 5
+metadata/_edit_group_ = true
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_fghij")
+modulate = Color(1, 0.5, 0.5, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_1")
+
+[connection signal="hit" from="." to="." method="_on_hit"]
+
+[sub_resource type="InputEventAction" id="InputEventAction_1"]
+action = &"idle"

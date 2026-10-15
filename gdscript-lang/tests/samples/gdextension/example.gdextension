@@ -1,0 +1,15 @@
+[configuration]
+
+entry_symbol = "example_library_init"
+compatibility_minimum = "4.1"
+reloadable = true
+
+[libraries]
+
+macos.debug = "res://bin/libgdexample.macos.template_debug.framework"
+windows.debug.x86_64 = "res://bin/libgdexample.windows.template_debug.x86_64.dll"
+linux.release.x86_64 = "res://bin/libgdexample.linux.template_release.x86_64.so"
+
+[icons]
+
+GDExample = "res://icons/gd_example.svg"

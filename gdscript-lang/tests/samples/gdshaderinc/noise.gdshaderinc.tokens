@@ -1,0 +1,25 @@
+   1 | // Noise helpers.
+     = comment "// Noise helpers."
+   2 | #ifndef NOISE_INC
+     = keyword "#ifndef"  keyword "NOISE_INC"
+   3 | #define NOISE_INC
+     = keyword "#define"  keyword "NOISE_INC"
+   4 | #include "res://shaders/common.gdshaderinc"
+     = keyword "#include"  string "\"res://shaders/common.gdshaderinc\""
+   5 | 
+   6 | struct Light { vec3 color; float energy; };
+     = keyword "struct"  type "Light"  type "vec3"  type "float"
+   7 | 
+   8 | float hash(vec2 p) {
+     = type "float"  function "hash"  type "vec2"
+   9 | 	return fract(sin(dot(p, vec2(12.9898, 78.233))) * 43758.5453);
+     = keyword "return"  function "fract"  function "sin"  function "dot"  type "vec2"  number "12.9898"  number "78.233"  number "43758.5453"
+  10 | }
+  11 | 
+  12 | vec3 tint(vec3 c, Light l) {
+     = type "vec3"  function "tint"  type "vec3"  type "Light"
+  13 | 	return c * l.color * l.energy;
+     = keyword "return"  property "color"  property "energy"
+  14 | }
+  15 | #endif
+     = keyword "#endif"

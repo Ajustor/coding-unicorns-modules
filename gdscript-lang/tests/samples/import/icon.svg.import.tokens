@@ -1,0 +1,34 @@
+   1 | [remap]
+     = keyword "remap"
+   2 | 
+   3 | importer="texture"
+     = property "importer"  string "\"texture\""
+   4 | type="CompressedTexture2D"
+     = property "type"  string "\"CompressedTexture2D\""
+   5 | uid="uid://c7y4l3r2x1f9b"
+     = property "uid"  string "\"uid://c7y4l3r2x1f9b\""
+   6 | path="res://.godot/imported/icon.svg-218a8f2b3041327d8a5756f3a245f83b.ctex"
+     = property "path"  string "\"res://.godot/imported/icon.svg-218a8f2b3041327d8a5756f3a245f83b.ctex\""
+   7 | path.s3tc="res://.godot/imported/icon.svg-218a8f2b3041327d8a5756f3a245f83b.s3tc.ctex"
+     = property "path.s3tc"  string "\"res://.godot/imported/icon.svg-218a8f2b3041327d8a5756f3a245f83b.s3tc.ctex\""
+   8 | metadata={
+     = property "metadata"
+   9 | "vram_texture": false
+     = string "\"vram_texture\""  keyword "false"
+  10 | }
+  11 | 
+  12 | [deps]
+     = keyword "deps"
+  13 | 
+  14 | source_file="res://icon.svg"
+     = property "source_file"  string "\"res://icon.svg\""
+  15 | dest_files=["res://.godot/imported/icon.svg-218a8f2b3041327d8a5756f3a245f83b.ctex"]
+     = property "dest_files"  string "\"res://.godot/imported/icon.svg-218a8f2b3041327d8a5756f3a245f83b.ctex\""
+  16 | 
+  17 | [params]
+     = keyword "params"
+  18 | 
+  19 | compress/mode=0
+     = property "compress/mode"  number "0"
+  20 | compress/lossy_quality=0.7
+     = property "compress/lossy_quality"  number "0.7"

@@ -1,0 +1,41 @@
+   1 | [gd_scene load_steps=3 format=3 uid="uid://b6x3k2q1w0e8a"]
+     = keyword "gd_scene"  property "load_steps"  number "3"  property "format"  number "3"  property "uid"  string "\"uid://b6x3k2q1w0e8a\""
+   2 | 
+   3 | [ext_resource type="Script" path="res://player.gd" id="1_abcde"]
+     = keyword "ext_resource"  property "type"  string "\"Script\""  property "path"  string "\"res://player.gd\""  property "id"  string "\"1_abcde\""
+   4 | [ext_resource type="Texture2D" uid="uid://c7y4l3r2x1f9b" path="res://icon.svg" id="2_fghij"]
+     = keyword "ext_resource"  property "type"  string "\"Texture2D\""  property "uid"  string "\"uid://c7y4l3r2x1f9b\""  property "path"  string "\"res://icon.svg\""  property "id"  string "\"2_fghij\""
+   5 | 
+   6 | [sub_resource type="RectangleShape2D" id="RectangleShape2D_1"]
+     = keyword "sub_resource"  property "type"  string "\"RectangleShape2D\""  property "id"  string "\"RectangleShape2D_1\""
+   7 | size = Vector2(32, 48)
+     = property "size"  type "Vector2"  number "32"  number "48"
+   8 | 
+   9 | [node name="Player" type="CharacterBody2D"]
+     = keyword "node"  property "name"  string "\"Player\""  property "type"  string "\"CharacterBody2D\""
+  10 | script = ExtResource("1_abcde")
+     = property "script"  type "ExtResource"  string "\"1_abcde\""
+  11 | max_health = 5
+     = property "max_health"  number "5"
+  12 | metadata/_edit_group_ = true
+     = property "metadata/_edit_group_"  keyword "true"
+  13 | 
+  14 | [node name="Sprite2D" type="Sprite2D" parent="."]
+     = keyword "node"  property "name"  string "\"Sprite2D\""  property "type"  string "\"Sprite2D\""  property "parent"  string "\".\""
+  15 | texture = ExtResource("2_fghij")
+     = property "texture"  type "ExtResource"  string "\"2_fghij\""
+  16 | modulate = Color(1, 0.5, 0.5, 1)
+     = property "modulate"  type "Color"  number "1"  number "0.5"  number "0.5"  number "1"
+  17 | 
+  18 | [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+     = keyword "node"  property "name"  string "\"CollisionShape2D\""  property "type"  string "\"CollisionShape2D\""  property "parent"  string "\".\""
+  19 | shape = SubResource("RectangleShape2D_1")
+     = property "shape"  type "SubResource"  string "\"RectangleShape2D_1\""
+  20 | 
+  21 | [connection signal="hit" from="." to="." method="_on_hit"]
+     = keyword "connection"  property "signal"  string "\"hit\""  property "from"  string "\".\""  property "to"  string "\".\""  property "method"  string "\"_on_hit\""
+  22 | 
+  23 | [sub_resource type="InputEventAction" id="InputEventAction_1"]
+     = keyword "sub_resource"  property "type"  string "\"InputEventAction\""  property "id"  string "\"InputEventAction_1\""
+  24 | action = &"idle"
+     = property "action"  string "&\"idle\""

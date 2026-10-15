@@ -1,0 +1,18 @@
+[package]
+name = "gdscript-lang"
+version = "0.1.0"
+edition = "2021"
+description = "Godot support module for Writing Unicorns IDE: GDScript, scenes, resources and shaders"
+
+[lib]
+crate-type = ["rlib", "cdylib"]
+
+[dependencies]
+unicorns-highlight = { path = "../shared/highlight" }
+tree-sitter-highlight = "0.25"
+tree-sitter-gdscript = "6.1"
+tree-sitter-godot-resource = "0.7"
+tree-sitter-gdshader = "0.4"
+
+[dev-dependencies]
+unicorns-highlight-test = { path = "../shared/highlight-test" }

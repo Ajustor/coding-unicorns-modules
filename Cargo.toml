@@ -24,5 +24,6 @@ members = [
     "css-lang",
     "batch-lang",
     "config-lang",
+    "gdscript-lang",
 ]
 resolver = "2"

@@ -1,0 +1,31 @@
+   1 | shader_type canvas_item;
+     = keyword "shader_type"  keyword "canvas_item"
+   2 | render_mode blend_mix;
+     = keyword "render_mode"  property "blend_mix"
+   3 | 
+   4 | /** Speed of the waves. */
+     = comment "/** Speed of the waves. */"
+   5 | uniform float speed : hint_range(0.0, 10.0) = 1.0;
+     = keyword "uniform"  type "float"  property "hint_range"  number "0.0"  number "10.0"  number "1.0"
+   6 | uniform sampler2D noise : repeat_enable;
+     = keyword "uniform"  type "sampler2D"  property "repeat_enable"
+   7 | varying vec2 world_uv;
+     = keyword "varying"  type "vec2"
+   8 | 
+   9 | // Wobble the vertices.
+     = comment "// Wobble the vertices."
+  10 | void vertex() {
+     = type "void"  function "vertex"
+  11 | 	world_uv = VERTEX * 0.01;
+     = keyword "VERTEX"  number "0.01"
+  12 | }
+  13 | 
+  14 | void fragment() {
+     = type "void"  function "fragment"
+  15 | 	vec4 base = texture(TEXTURE, UV);
+     = type "vec4"  function "texture"  keyword "TEXTURE"  keyword "UV"
+  16 | 	float wave = sin(TIME * speed + world_uv.x * 6.28);
+     = type "float"  function "sin"  keyword "TIME"  property "x"  number "6.28"
+  17 | 	COLOR = vec4(base.rgb * (0.8 + 0.2 * wave), base.a);
+     = keyword "COLOR"  type "vec4"  property "rgb"  number "0.8"  number "0.2"  property "a"
+  18 | }

@@ -1,0 +1,31 @@
+[extension]
+id = "unicorns.gdscript-lang"
+name = "GDScript"
+version = "0.1.0"
+description = "Godot support — GDScript, scenes, resources and shaders highlighting; completion, diagnostics and debugging through the Godot editor (open on the project)"
+author = "Writing Unicorns"
+repository = ""
+documentation = "https://docs.godotengine.org/en/stable/tutorials/scripting/gdscript/"
+
+[capabilities]
+languages = ["gd", "tscn", "tres", "godot", "import", "gdextension", "gdshader", "gdshaderinc"]
+# LSP languageId of extensions whose id differs from the extension.
+language_ids = { gd = "gdscript" }
+
+# The Godot editor runs the language server (Editor Settings → Network →
+# Language Server, port 6005): the IDE connects to it (Coding Unicorns 0.21.0+).
+# Scenes, resources and shaders have none.
+[capabilities.lsp_servers.gd]
+connect = "127.0.0.1:6005"
+
+[dependencies]
+
+# The Godot editor also runs the debug adapter (Network → Debug Adapter, port
+# 6006). Without a launch configuration, F5 plays the main scene.
+[debugger]
+types = ["godot"]
+connect = "127.0.0.1:6006"
+install_hint = "open the project in the Godot editor (Editor Settings → Network → Debug Adapter, port 6006)"
+
+[debugger.default_launch]
+scene = "main"
