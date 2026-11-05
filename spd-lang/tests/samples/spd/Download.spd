@@ -1,0 +1,41 @@
+<script lang="ts">
+  import Section from '../../components/Section.spd'
+  import Window from '../../components/Window.spd'
+  import { PACKAGES, RELEASES_PAGE, directLink, mebibytes } from '../../data.ts'
+  import type { Platform, Release } from '../../data.ts'
+
+  export let platform: Platform | null
+  export let release: Release | null
+
+  const sizeOf = (file: string): string => {
+    const bytes = release?.sizes[file]
+    return bytes === undefined ? '' : ` · ${t.download.size({ n: mebibytes(bytes) })}`
+  }
+</script>
+
+<Section id="download" title={t.download.title}>
+  <Window title={t.download.which}>
+    <ul class="packages">
+      {#each PACKAGES as entry (entry.platform)}
+        <li>
+          <a
+            class="menu-item package"
+            class:recommended={entry.platform === platform}
+            class:menu-item-active={entry.platform === platform}
+            href={directLink(entry.file)}
+          >
+            <span class="package-name">
+              {entry.name}
+              {#if entry.platform === platform}<span class="badge">{t.download.yours}</span>{/if}
+            </span>
+            <span class="package-detail">{t.download[entry.platform]}</span>
+            <span class="package-file">{entry.file}{sizeOf(entry.file)}</span>
+          </a>
+        </li>
+      {/each}
+    </ul>
+  </Window>
+  <p class="note">
+    {t.download.note} <a href={RELEASES_PAGE}>{t.download.noteLink}</a>.
+  </p>
+</Section>

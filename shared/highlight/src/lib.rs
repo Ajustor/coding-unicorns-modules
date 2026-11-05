@@ -52,6 +52,8 @@ const NAMES: &[&str] = &[
     "constant",
     "constant.builtin",
     "constructor",
+    // `${…}` in a template string: its own colours, not the string's.
+    "embedded",
     "escape",
     "exception",
     "field",
@@ -193,6 +195,12 @@ impl<'a> Paint<'a> {
         let Some(text) = self.source.get(range.clone()) else {
             return;
         };
+        self.highlight_text(config, range, text);
+    }
+
+    /// Highlight `range` as if it held `text`, a stand-in of the same length
+    /// (see [`mask_svelte_expressions`]).
+    fn highlight_text(&mut self, config: &HighlightConfiguration, range: Range<usize>, text: &str) {
         self.fill(range.clone(), Kind::Normal);
         let events = HIGHLIGHTER.with(|h| {
             h.borrow_mut()
@@ -336,7 +344,13 @@ pub enum Component {
 /// `<style>` as CSS and its template expressions as TypeScript.
 pub fn component(source: &str, flavor: Component) -> String {
     let mut paint = Paint::new(source);
-    paint.highlight(html(), 0..source.len());
+    // The markup is parsed without the content of Svelte's `{…}`, painted
+    // afterwards as TypeScript.
+    let masked = match flavor {
+        Component::Svelte => mask_svelte_expressions(source),
+        Component::Vue => source.to_string(),
+    };
+    paint.highlight_text(html(), 0..source.len(), &masked);
     let mut parser = tree_sitter::Parser::new();
     if parser
         .set_language(&tree_sitter_html::LANGUAGE.into())
@@ -344,7 +358,7 @@ pub fn component(source: &str, flavor: Component) -> String {
     {
         return paint.to_json();
     }
-    let Some(tree) = parser.parse(source, None) else {
+    let Some(tree) = parser.parse(&masked, None) else {
         return paint.to_json();
     };
     let mut embedded = Vec::new();
@@ -355,6 +369,50 @@ pub fn component(source: &str, flavor: Component) -> String {
         Component::Vue => vue_interpolations(source, &mut paint, &embedded),
     }
     paint.to_json()
+}
+
+/// The source as the HTML grammar should see it: the content of each Svelte
+/// `{…}` in the markup replaced byte for byte by `x` (line breaks kept, so
+/// every offset stays). Otherwise `class:on={a === b}` ends its attribute value
+/// at the first space, and the `>` of `{#if a > b}` or of an arrow function
+/// closes the tag.
+fn mask_svelte_expressions(source: &str) -> String {
+    let mut bytes = source.as_bytes().to_vec();
+    let lower = source.to_ascii_lowercase();
+    let mut i = 0;
+    while i < bytes.len() {
+        // `<` is ASCII, so `i` is a character boundary here.
+        if bytes[i] == b'<' {
+            let rest = &lower[i..];
+            let skip_to = if rest.starts_with("<!--") {
+                Some("-->")
+            } else if rest.starts_with("<script") {
+                Some("</script")
+            } else if rest.starts_with("<style") {
+                Some("</style")
+            } else {
+                None
+            };
+            if let Some(end) = skip_to {
+                i = rest.find(end).map_or(bytes.len(), |at| i + at + end.len());
+                continue;
+            }
+        }
+        if bytes[i] == b'{' {
+            if let Some(close) = closing_brace(source.as_bytes(), i) {
+                for b in &mut bytes[i + 1..close] {
+                    if !matches!(*b, b'\n' | b'\r') {
+                        *b = b'x';
+                    }
+                }
+                i = close + 1;
+                continue;
+            }
+        }
+        i += 1;
+    }
+    // Only ASCII went in, over whole characters: still UTF-8.
+    String::from_utf8(bytes).unwrap_or_else(|_| source.to_string())
 }
 
 /// Highlight the script and style blocks and the directive attributes;
@@ -796,6 +854,36 @@ mod tests {
                 ("0", "number"),
             ],
         );
+    }
+
+    #[test]
+    fn svelte_attribute_expressions_with_spaces() {
+        // The HTML grammar ends an unquoted value at a space: the attributes
+        // after `{a === b}` and the `>` of an arrow function used to be lost.
+        let src = "<a
+  class:on={a === b}
+  class:off={() => c > 1}
+  href={lien(x)}
+>{n} · {t.x}</a>
+<script>
+  const s = `n ${f({ n: 1 })}`
+</script>
+";
+        let json = component(src, Component::Svelte);
+        assert_kinds(
+            &json,
+            &[
+                ("class", "macro"),
+                (":off", "property"),
+                ("href", "property"),
+                ("lien", "function"),
+                ("a", "keyword"),
+                // `${…}` is not painted as the template string around it.
+                ("`n ", "string"),
+                ("n", "property"),
+            ],
+        );
+        assert!(!json.contains(r#"{"text":": ","kind":"string"}"#), "{json}");
     }
 
     #[test]
