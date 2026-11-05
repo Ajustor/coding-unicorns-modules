@@ -1,7 +1,7 @@
 [extension]
 id = "unicorns.vue-lang"
 name = "Vue"
-version = "0.4.1"
+version = "0.4.2"
 description = "Vue SFC language support — syntax highlighting, hover docs, volar LSP, js-debug debugger"
 author = "Writing Unicorns"
 repository = ""

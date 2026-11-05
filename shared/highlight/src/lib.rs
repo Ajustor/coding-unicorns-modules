@@ -22,6 +22,10 @@ pub enum Kind {
     Function,
     Macro,
     Property,
+    /// A type named by the code (`Section`, `Platform`, `string`) in a
+    /// component, teal as VS Code shows it; [`Kind::Type`] stays for builtins
+    /// of other languages.
+    Class,
 }
 
 impl Kind {
@@ -36,6 +40,7 @@ impl Kind {
             Self::Function => "function",
             Self::Macro => "macro",
             Self::Property => "property",
+            Self::Class => "class",
         }
     }
 }
@@ -69,6 +74,7 @@ const NAMES: &[&str] = &[
     "operator",
     "property",
     "punctuation",
+    "punctuation.special",
     "repeat",
     "storageclass",
     "string",
@@ -79,8 +85,21 @@ const NAMES: &[&str] = &[
     "variable.parameter",
 ];
 
-fn kind_of_capture(index: usize) -> Kind {
-    match NAMES.get(index).copied().unwrap_or("") {
+fn kind_of_capture(index: usize, web: bool) -> Kind {
+    let name = NAMES.get(index).copied().unwrap_or("");
+    if web {
+        // Components (Svelte, Vue, speedster-js) in VS Code's Dark+ colours,
+        // which their authors read every day: variables and parameters light
+        // blue, `null` / `true` / `this` / tags / `${…}` blue, types teal.
+        match name {
+            "variable" | "variable.parameter" | "constant" => return Kind::Property,
+            "constant.builtin" | "boolean" | "variable.builtin" | "tag"
+            | "punctuation.special" => return Kind::Type,
+            "type" | "constructor" | "module" | "namespace" => return Kind::Class,
+            _ => {}
+        }
+    }
+    match name {
         "comment" => Kind::Comment,
         "string" | "escape" | "character" => Kind::String,
         "number" | "float" => Kind::Number,
@@ -168,6 +187,8 @@ thread_local! {
 pub struct Paint<'a> {
     source: &'a str,
     kinds: Vec<Kind>,
+    /// Colours of a web component (see [`kind_of_capture`]).
+    web: bool,
 }
 
 impl<'a> Paint<'a> {
@@ -175,6 +196,7 @@ impl<'a> Paint<'a> {
         Self {
             source,
             kinds: vec![Kind::Normal; source.len()],
+            web: false,
         }
     }
 
@@ -211,7 +233,7 @@ impl<'a> Paint<'a> {
         let mut stack: Vec<Kind> = Vec::new();
         for event in events {
             match event {
-                HighlightEvent::HighlightStart(h) => stack.push(kind_of_capture(h.0)),
+                HighlightEvent::HighlightStart(h) => stack.push(kind_of_capture(h.0, self.web)),
                 HighlightEvent::HighlightEnd => {
                     stack.pop();
                 }
@@ -344,6 +366,7 @@ pub enum Component {
 /// `<style>` as CSS and its template expressions as TypeScript.
 pub fn component(source: &str, flavor: Component) -> String {
     let mut paint = Paint::new(source);
+    paint.web = true;
     // The markup is parsed without the content of Svelte's `{…}`, painted
     // afterwards as TypeScript.
     let masked = match flavor {
@@ -441,7 +464,7 @@ fn walk(
         "attribute" => directive(node, source, flavor, paint),
         // `<Fenetre>`: a capitalized tag is a component, as both compilers decide.
         "tag_name" if source[node.byte_range()].starts_with(|c: char| c.is_ascii_uppercase()) => {
-            paint.fill(node.byte_range(), Kind::Type);
+            paint.fill(node.byte_range(), Kind::Class);
         }
         _ => {}
     }
@@ -655,7 +678,9 @@ fn block_tag(source: &str, paint: &mut Paint, open: usize, close: usize) {
             Some(at) => {
                 expression(source, paint, head..at);
                 paint.fill(at..at + 2, Kind::Keyword);
-                if let Some(key) = parenthesized(source, at + 2..close) {
+                let key = parenthesized(source, at + 2..close);
+                bindings(source, paint, at + 2..key.as_ref().map_or(close, |k| k.start));
+                if let Some(key) = key {
                     expression(source, paint, key.start + 1..key.end - 1);
                 }
             }
@@ -670,12 +695,13 @@ fn block_tag(source: &str, paint: &mut Paint, open: usize, close: usize) {
                 Some((at, len)) => {
                     expression(source, paint, head..at);
                     paint.fill(at..at + len, Kind::Keyword);
+                    bindings(source, paint, at + len..close);
                 }
                 None => expression(source, paint, body),
             }
         }
         // `{:then value}`, `{:catch error}`: a binding.
-        "then" | "catch" => {}
+        "then" | "catch" => bindings(source, paint, body),
         // `{#snippet ligne(item: Item, i: number)}`
         "snippet" => snippet_head(source, paint, body),
         _ => expression(source, paint, body),
@@ -716,7 +742,9 @@ fn snippet_head(source: &str, paint: &mut Paint, range: Range<usize>) {
 fn parameter(source: &str, paint: &mut Paint, range: Range<usize>) {
     let value = find_top_level(source, range.clone(), b'=');
     let typed_end = value.unwrap_or(range.end);
-    if let Some(colon) = find_top_level(source, range.start..typed_end, b':') {
+    let colon = find_top_level(source, range.start..typed_end, b':');
+    bindings(source, paint, range.start..colon.unwrap_or(typed_end));
+    if let Some(colon) = colon {
         let bytes = source.as_bytes();
         let mut i = colon + 1;
         while i < typed_end {
@@ -725,7 +753,7 @@ fn parameter(source: &str, paint: &mut Paint, range: Range<usize>) {
                 while i < typed_end && is_ident_byte(bytes[i]) {
                     i += 1;
                 }
-                paint.fill(start..i, Kind::Type);
+                paint.fill(start..i, Kind::Class);
             } else {
                 i += 1;
             }
@@ -733,6 +761,37 @@ fn parameter(source: &str, paint: &mut Paint, range: Range<usize>) {
     }
     if let Some(eq) = value {
         expression(source, paint, eq + 1..range.end);
+    }
+}
+
+/// Names bound by a block (`item, i`, `{ id, nom }`, a snippet parameter):
+/// variables, light blue as in the script. A default value (`{ a = 1 }`) is
+/// left as it is.
+fn bindings(source: &str, paint: &mut Paint, range: Range<usize>) {
+    if !paint.web {
+        return;
+    }
+    let bytes = source.as_bytes();
+    let mut i = range.start;
+    let mut after_default = false;
+    while i < range.end {
+        let b = bytes[i];
+        if is_ident_byte(b) && !b.is_ascii_digit() {
+            let start = i;
+            while i < range.end && is_ident_byte(bytes[i]) {
+                i += 1;
+            }
+            if !after_default {
+                paint.fill(start..i, Kind::Property);
+            }
+            continue;
+        }
+        match b {
+            b'=' => after_default = true,
+            b',' | b'}' | b']' => after_default = false,
+            _ => {}
+        }
+        i += 1;
     }
 }
 
@@ -814,13 +873,15 @@ mod tests {
         assert_kinds(
             &json,
             &[
-                ("script", "keyword"),
+                ("script", "type"),
                 ("let", "keyword"),
-                ("number", "type"),
+                ("count", "property"),
+                ("number", "class"),
                 ("0", "number"),
                 ("  line */", "comment"),
                 ("<!-- don't -->", "comment"),
-                (">Don't {count} if</", "normal"),
+                (">Don't {", "normal"),
+                ("} if</", "normal"),
                 ("{#if", "macro"),
                 ("1", "number"),
                 ("on", "macro"),
@@ -838,19 +899,23 @@ mod tests {
         assert_kinds(
             &json,
             &[
-                (" { API_URL } ", "normal"),
+                // Variables light blue, constants included, as in VS Code.
+                ("API_URL", "property"),
                 ("{#each", "macro"),
                 ("as", "keyword"),
                 // The binding is not an expression: `i (item.id)` is no call.
-                (" item, i (item.", "normal"),
+                ("item", "property"),
+                (", ", "normal"),
+                ("i", "property"),
                 ("id", "property"),
-                ("Ligne", "type"),
+                ("Ligne", "class"),
                 ("{:else if", "macro"),
                 ("charger", "function"),
                 ("then", "keyword"),
+                ("donnees", "property"),
                 ("ligne", "function"),
-                ("Item", "type"),
-                ("number", "type"),
+                ("Item", "class"),
+                ("number", "class"),
                 ("0", "number"),
             ],
         );
@@ -877,9 +942,10 @@ mod tests {
                 (":off", "property"),
                 ("href", "property"),
                 ("lien", "function"),
-                ("a", "keyword"),
+                ("a", "type"),
                 // `${…}` is not painted as the template string around it.
                 ("`n ", "string"),
+                ("${", "type"),
                 ("n", "property"),
             ],
         );
@@ -893,7 +959,7 @@ mod tests {
         assert_kinds(
             &json,
             &[
-                ("template", "keyword"),
+                ("template", "type"),
                 ("v-if", "macro"),
                 (":class", "macro"),
                 ("@click", "macro"),

@@ -61,7 +61,8 @@ modules share: a grammar run over a document, and single-file components. `svelt
 expressions (`{…}` and `{#if}` blocks in Svelte, `{{ … }}` and `v-…` / `:prop` / `@event`
 directives in Vue) as TypeScript. A capitalized tag is a component, coloured as a type; in
 `{#each items as item, i (item.id)}` only `items` and the key are expressions, and the
-parameters of `{#snippet name(item: Item)}` get their types coloured.
+parameters of `{#snippet name(item: Item)}` get their types coloured. Components are painted in VS Code's Dark+ colours: variables, parameters and block bindings
+light blue, types and components teal, tags, `null` / `true` / `this` and `${…}` blue.
 
 `spd-lang` also shows translations in place of the keys reading them (`{t.panier.titre}`), as
 the speedster VS Code extension and i18n-ally do: the key comes back while the cursor is on its
