@@ -8,6 +8,7 @@
 //! (`tokenize_document_ffi`).
 
 pub mod messages;
+pub mod types;
 
 #[derive(Debug, Clone, PartialEq)]
 pub enum TokenKind {

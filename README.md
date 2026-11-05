@@ -67,7 +67,7 @@ parameters of `{#snippet name(item: Item)}` get their types coloured.
 the speedster VS Code extension and i18n-ally do: the key comes back while the cursor is on its
 line, and Ctrl+click (or F12) on either opens the translation file at that key. A key chosen at run
 time (`{t.statuts[commande.statut]}`) shows every message of the group:
-`selon commande.statut : brouillon → « Brouillon » · payee → « Payée »`. IDEs before 0.26.0 draw
+`selon commande.statut : brouillon → « Brouillon » · payee → « Payée »`. When the expression's type is a union of strings — declared in the component or in a `.ts` file it imports by a relative path, reached through `{#each}`, `{#snippet}` parameters and interface fields — only those messages are listed, a missing one marked `— absente`. IDEs before 0.26.0 draw
 the translation after the key (before 0.25.0 at the end of the line). `inline_hints_ffi` finds the
 closest `src/lang` above the component and reads `fr.json` (else the first locale). IDEs without
 inline hints ignore the export; the *Inline hints* setting turns them off.
