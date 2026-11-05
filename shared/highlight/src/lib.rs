@@ -115,6 +115,9 @@ pub fn typescript() -> &'static HighlightConfiguration {
         let highlights = [
             tree_sitter_javascript::HIGHLIGHT_QUERY,
             tree_sitter_typescript::HIGHLIGHTS_QUERY,
+            // `API_URL` is a constant, not the type both queries make of a
+            // capitalized identifier (the last matching pattern wins).
+            r#"((identifier) @variable (#match? @variable "^[A-Z_][A-Z\\d_]+$"))"#,
         ]
         .join("\n");
         let locals = [
@@ -378,6 +381,10 @@ fn walk(
             return;
         }
         "attribute" => directive(node, source, flavor, paint),
+        // `<Fenetre>`: a capitalized tag is a component, as both compilers decide.
+        "tag_name" if source[node.byte_range()].starts_with(|c: char| c.is_ascii_uppercase()) => {
+            paint.fill(node.byte_range(), Kind::Type);
+        }
         _ => {}
     }
     let mut cursor = node.walk();
@@ -478,24 +485,212 @@ fn svelte_expressions(source: &str, paint: &mut Paint, embedded: &[Range<usize>]
         let Some(close) = closing_brace(bytes, i) else {
             break;
         };
-        let mut expr = i + 1;
-        if matches!(bytes.get(expr), Some(b'#' | b'/' | b':' | b'@')) {
-            // The block's sigil and keyword: `{#each`, `{:else`, `{/if`.
-            expr += 1;
-            while expr < close && (bytes[expr].is_ascii_alphanumeric() || bytes[expr] == b'_') {
-                expr += 1;
-            }
-            paint.fill(i..expr, Kind::Macro);
-            paint.fill(close..close + 1, Kind::Macro);
+        if matches!(bytes.get(i + 1), Some(b'#' | b'/' | b':' | b'@')) {
+            block_tag(source, paint, i, close);
         } else {
             paint.fill(i..i + 1, Kind::Normal);
             paint.fill(close..close + 1, Kind::Normal);
-        }
-        if expr < close {
-            paint.highlight(typescript(), expr..close);
+            if i + 1 < close {
+                paint.highlight(typescript(), i + 1..close);
+            }
         }
         i = close + 1;
     }
+}
+
+fn is_ident_byte(b: u8) -> bool {
+    b.is_ascii_alphanumeric() || b == b'_' || b == b'$'
+}
+
+/// `range` as a TypeScript expression, when there is one.
+fn expression(source: &str, paint: &mut Paint, range: Range<usize>) {
+    if source[range.clone()].trim().is_empty() {
+        return;
+    }
+    paint.highlight(typescript(), range);
+}
+
+/// Where `word` stands alone in `range`, outside brackets and strings.
+fn find_word(source: &str, range: Range<usize>, word: &str) -> Option<usize> {
+    let bytes = source.as_bytes();
+    let mut depth = 0usize;
+    let mut quote: Option<u8> = None;
+    let mut i = range.start;
+    while i < range.end {
+        let b = bytes[i];
+        if let Some(q) = quote {
+            if b == b'\\' {
+                i += 1;
+            } else if b == q {
+                quote = None;
+            }
+        } else {
+            match b {
+                b'"' | b'\'' | b'`' => quote = Some(b),
+                b'(' | b'[' | b'{' => depth += 1,
+                b')' | b']' | b'}' => depth = depth.saturating_sub(1),
+                _ if depth == 0
+                    && source[i..range.end].starts_with(word)
+                    && (i == range.start || !is_ident_byte(bytes[i - 1]))
+                    && !bytes.get(i + word.len()).is_some_and(|&b| is_ident_byte(b)) =>
+                {
+                    return Some(i);
+                }
+                _ => {}
+            }
+        }
+        i += 1;
+    }
+    None
+}
+
+/// The first `(` outside brackets in `range`, and the `)` closing it.
+fn parenthesized(source: &str, range: Range<usize>) -> Option<Range<usize>> {
+    let bytes = source.as_bytes();
+    let mut depth = 0usize;
+    let mut open = None;
+    for i in range {
+        match bytes[i] {
+            b'(' if depth == 0 && open.is_none() => {
+                open = Some(i);
+                depth += 1;
+            }
+            b'(' | b'[' | b'{' => depth += 1,
+            b')' | b']' | b'}' => {
+                depth = depth.saturating_sub(1);
+                if depth == 0 && bytes[i] == b')' {
+                    if let Some(open) = open {
+                        return Some(open..i + 1);
+                    }
+                }
+            }
+            _ => {}
+        }
+    }
+    None
+}
+
+/// A block tag: its sigil and keyword in macro colour (`{:else if` as one),
+/// then what follows by keyword. Only expressions go through the TypeScript
+/// grammar: the `item, i` binding of `{#each}` alone would read as a comma
+/// expression, and its `(item.id)` key as a call.
+fn block_tag(source: &str, paint: &mut Paint, open: usize, close: usize) {
+    let bytes = source.as_bytes();
+    let mut head = open + 2;
+    while head < close && is_ident_byte(bytes[head]) {
+        head += 1;
+    }
+    let keyword = &source[open + 2..head];
+    if keyword == "else" {
+        if let Some(at) = find_word(source, head..close, "if") {
+            if source[head..at].trim().is_empty() {
+                head = at + 2;
+            }
+        }
+    }
+    paint.fill(open..head, Kind::Macro);
+    paint.fill(close..close + 1, Kind::Macro);
+    let body = head..close;
+    match keyword {
+        // `{#each items as item, i (item.id)}`
+        "each" => match find_word(source, body.clone(), "as") {
+            Some(at) => {
+                expression(source, paint, head..at);
+                paint.fill(at..at + 2, Kind::Keyword);
+                if let Some(key) = parenthesized(source, at + 2..close) {
+                    expression(source, paint, key.start + 1..key.end - 1);
+                }
+            }
+            None => expression(source, paint, body),
+        },
+        // `{#await promise then value}`, `{#await promise catch error}`
+        "await" => {
+            let at = find_word(source, body.clone(), "then")
+                .map(|at| (at, 4))
+                .or_else(|| find_word(source, body.clone(), "catch").map(|at| (at, 5)));
+            match at {
+                Some((at, len)) => {
+                    expression(source, paint, head..at);
+                    paint.fill(at..at + len, Kind::Keyword);
+                }
+                None => expression(source, paint, body),
+            }
+        }
+        // `{:then value}`, `{:catch error}`: a binding.
+        "then" | "catch" => {}
+        // `{#snippet ligne(item: Item, i: number)}`
+        "snippet" => snippet_head(source, paint, body),
+        _ => expression(source, paint, body),
+    }
+}
+
+/// The name of a snippet as a function, the types of its parameters as types
+/// and their default values as expressions.
+fn snippet_head(source: &str, paint: &mut Paint, range: Range<usize>) {
+    let bytes = source.as_bytes();
+    let Some(params) = parenthesized(source, range.clone()) else {
+        return;
+    };
+    let name = source[range.start..params.start].trim();
+    if !name.is_empty() {
+        let start = range.start + source[range.start..params.start].find(name).unwrap_or(0);
+        paint.fill(start..start + name.len(), Kind::Function);
+    }
+    // Split the parameters on the commas outside brackets.
+    let mut depth = 0usize;
+    let mut start = params.start + 1;
+    let end = params.end - 1;
+    for (i, &b) in bytes.iter().enumerate().take(end).skip(params.start + 1) {
+        match b {
+            b'(' | b'[' | b'{' | b'<' => depth += 1,
+            b')' | b']' | b'}' | b'>' => depth = depth.saturating_sub(1),
+            b',' if depth == 0 => {
+                parameter(source, paint, start..i);
+                start = i + 1;
+            }
+            _ => {}
+        }
+    }
+    parameter(source, paint, start..end);
+}
+
+/// `name: Type = value`: the type's words as types, the value as an expression.
+fn parameter(source: &str, paint: &mut Paint, range: Range<usize>) {
+    let value = find_top_level(source, range.clone(), b'=');
+    let typed_end = value.unwrap_or(range.end);
+    if let Some(colon) = find_top_level(source, range.start..typed_end, b':') {
+        let bytes = source.as_bytes();
+        let mut i = colon + 1;
+        while i < typed_end {
+            if is_ident_byte(bytes[i]) {
+                let start = i;
+                while i < typed_end && is_ident_byte(bytes[i]) {
+                    i += 1;
+                }
+                paint.fill(start..i, Kind::Type);
+            } else {
+                i += 1;
+            }
+        }
+    }
+    if let Some(eq) = value {
+        expression(source, paint, eq + 1..range.end);
+    }
+}
+
+/// The first `byte` outside brackets in `range`.
+fn find_top_level(source: &str, range: Range<usize>, byte: u8) -> Option<usize> {
+    let bytes = source.as_bytes();
+    let mut depth = 0usize;
+    for i in range {
+        match bytes[i] {
+            b if b == byte && depth == 0 => return Some(i),
+            b'(' | b'[' | b'{' | b'<' => depth += 1,
+            b')' | b']' | b'}' | b'>' => depth = depth.saturating_sub(1),
+            _ => {}
+        }
+    }
+    None
 }
 
 /// Vue `{{ expression }}` interpolations in the markup.
@@ -574,6 +769,31 @@ mod tests {
                 ("{:else}", "macro"),
                 ("{/if}", "macro"),
                 ("color", "property"),
+            ],
+        );
+    }
+
+    #[test]
+    fn svelte_block_tags_and_components() {
+        let src = "<script>\n  import { API_URL } from './a'\n</script>\n{#each items as item, i (item.id)}\n  <Ligne>{i}</Ligne>\n{:else if vide}\n{/each}\n{#await charger() then donnees}{/await}\n{#snippet ligne(item: Item, n: number = 0)}{/snippet}\n";
+        let json = component(src, Component::Svelte);
+        assert_kinds(
+            &json,
+            &[
+                (" { API_URL } ", "normal"),
+                ("{#each", "macro"),
+                ("as", "keyword"),
+                // The binding is not an expression: `i (item.id)` is no call.
+                (" item, i (item.", "normal"),
+                ("id", "property"),
+                ("Ligne", "type"),
+                ("{:else if", "macro"),
+                ("charger", "function"),
+                ("then", "keyword"),
+                ("ligne", "function"),
+                ("Item", "type"),
+                ("number", "type"),
+                ("0", "number"),
             ],
         );
     }

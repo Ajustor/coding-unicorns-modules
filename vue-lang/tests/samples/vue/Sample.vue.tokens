@@ -5,7 +5,7 @@
    3 |     <p v-if="items.length">{{ items.length }} items for {{ user?.name }}</p>
      = keyword "p"  macro "v-if"  string "\""  property "length"  string "\""  macro "{{"  property "length"  macro "}}"  macro "{{"  property "name"  macro "}}"  keyword "p"
    4 |     <ItemRow v-for="item in items" :key="item.id" :item="item" />
-     = keyword "ItemRow"  macro "v-for"  string "\""  keyword "in"  string "\""  macro ":key"  string "\""  property "id"  string "\""  macro ":item"  string "\""  string "\""
+     = type "ItemRow"  macro "v-for"  string "\""  keyword "in"  string "\""  macro ":key"  string "\""  property "id"  string "\""  macro ":item"  string "\""  string "\""
    5 |   </div>
      = keyword "div"
    6 | </template>

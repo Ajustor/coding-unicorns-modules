@@ -1,0 +1,56 @@
+<script lang="ts">
+  import { effect } from '@ajustor/speedster'
+  import Fenetre from './components/Fenetre.spd'
+  import { API_DERNIERE, detecterSysteme } from './donnees.ts'
+  import type { Element, Systeme } from './donnees.ts'
+
+  interface Version {
+    nom: string
+    tailles: Record<string, number>
+  }
+
+  // Rien n'est connu au build : la page part avec les liens directs.
+  let systeme: Systeme | null = null
+  let version: Version | null = null
+
+  effect(() => {
+    if (typeof window === 'undefined') return
+    systeme = detecterSysteme(navigator.userAgent)
+    const controleur = new AbortController()
+    void fetch(API_DERNIERE, { signal: controleur.signal })
+      .then((reponse) => (reponse.ok ? reponse.json() : null))
+      .catch(() => {})
+    return () => controleur.abort()
+  })
+</script>
+
+<main id="accueil">
+  <a class="bouton-or" href={lienPrincipal} on:click|preventDefault={ouvrir}>{libellePrincipal}</a>
+  <p class="version">
+    {#if nomVersion !== ''}
+      Version <strong>{nomVersion}</strong> · publiée le {dateVersion}
+    {:else if systeme === null}
+      Dernière version publiée sur GitHub
+    {:else}
+      Il n'y a rien
+    {/if}
+  </p>
+  <Fenetre>
+    {#each elements as element, i (element.id)}
+      <span class:actif={i === 0}>{element.nom}</span>
+    {/each}
+  </Fenetre>
+  {#await charger() then donnees}
+    {donnees.length}
+  {/await}
+  {#snippet ligne(item: Element, rang: number = 0)}
+    <li>{rang} {@html item.html}</li>
+  {/snippet}
+  {@render ligne(premier)}
+</main>
+
+<style>
+  .version {
+    transition: opacity 0.2s;
+  }
+</style>

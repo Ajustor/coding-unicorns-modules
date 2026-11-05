@@ -1,6 +1,6 @@
 [package]
 name = "spd-lang"
-version = "0.1.0"
+version = "0.2.0"
 edition = "2021"
 description = "speedster-js (.spd) language support module for Writing Unicorns IDE"
 
@@ -8,6 +8,8 @@ description = "speedster-js (.spd) language support module for Writing Unicorns 
 crate-type = ["rlib", "cdylib"]
 
 [dependencies]
+unicorns-highlight = { path = "../shared/highlight" }
+serde_json = "1"
 
 [dev-dependencies]
 unicorns-highlight-test = { path = "../shared/highlight-test" }

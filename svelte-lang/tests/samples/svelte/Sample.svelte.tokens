@@ -14,7 +14,7 @@
    8 | {#if items.length}
      = macro "{#if"  property "length"  macro "}"
    9 |   {#each items as item, i (item)}
-     = macro "{#each"  keyword "as"  type "item"  function "i"  macro "}"
+     = macro "{#each"  keyword "as"  macro "}"
   10 |     <p on:click={add}>{i}: {item.toUpperCase()}</p>
      = keyword "p"  macro "on"  property ":click"  function "toUpperCase"  keyword "p"
   11 |   {/each}

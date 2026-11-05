@@ -56,10 +56,17 @@ plays the main scene; a `launch.json` entry of type `godot` can set `scene` to `
 highlighted.
 
 `shared/highlight` (`unicorns-highlight`, not a module) holds the tree-sitter highlighting the
-modules share: a grammar run over a document, and single-file components. `svelte-lang` and
-`vue-lang` highlight their markup as HTML, `<script>` as TypeScript, `<style>` as CSS, and template
+modules share: a grammar run over a document, and single-file components. `svelte-lang`,
+`spd-lang` (speedster-js uses Svelte's template syntax) and `vue-lang` highlight their markup as HTML, `<script>` as TypeScript, `<style>` as CSS, and template
 expressions (`{…}` and `{#if}` blocks in Svelte, `{{ … }}` and `v-…` / `:prop` / `@event`
-directives in Vue) as TypeScript.
+directives in Vue) as TypeScript. A capitalized tag is a component, coloured as a type; in
+`{#each items as item, i (item.id)}` only `items` and the key are expressions, and the
+parameters of `{#snippet name(item: Item)}` get their types coloured.
+
+`spd-lang` also shows translations at the end of the lines reading them (`{t.panier.titre}`), as
+the speedster VS Code extension and i18n-ally do: `inline_hints_ffi` finds the closest `src/lang`
+above the component and reads `fr.json` (else the first locale). IDEs without inline hints ignore
+the export; the *Inline hints* setting turns them off.
 
 `shell-lang` highlights shell scripts with tree-sitter-bash (scripts without an extension such as
 `gradlew` or `.bashrc` are known by their name); its language server,
