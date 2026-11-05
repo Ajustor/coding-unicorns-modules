@@ -63,10 +63,14 @@ directives in Vue) as TypeScript. A capitalized tag is a component, coloured as 
 `{#each items as item, i (item.id)}` only `items` and the key are expressions, and the
 parameters of `{#snippet name(item: Item)}` get their types coloured.
 
-`spd-lang` also shows translations right after the keys reading them (`{t.panier.titre}`), as
-the speedster VS Code extension and i18n-ally do (at the end of the line in IDEs before 0.25.0): `inline_hints_ffi` finds the closest `src/lang`
-above the component and reads `fr.json` (else the first locale). IDEs without inline hints ignore
-the export; the *Inline hints* setting turns them off.
+`spd-lang` also shows translations in place of the keys reading them (`{t.panier.titre}`), as
+the speedster VS Code extension and i18n-ally do: the key comes back while the cursor is on its
+line, and Ctrl+click (or F12) on either opens the translation file at that key. A key chosen at run
+time (`{t.statuts[commande.statut]}`) shows every message of the group:
+`selon commande.statut : brouillon → « Brouillon » · payee → « Payée »`. IDEs before 0.26.0 draw
+the translation after the key (before 0.25.0 at the end of the line). `inline_hints_ffi` finds the
+closest `src/lang` above the component and reads `fr.json` (else the first locale). IDEs without
+inline hints ignore the export; the *Inline hints* setting turns them off.
 
 `shell-lang` highlights shell scripts with tree-sitter-bash (scripts without an extension such as
 `gradlew` or `.bashrc` are known by their name); its language server,
