@@ -1,7 +1,7 @@
 [extension]
 id = "unicorns.spd-lang"
 name = "speedster-js"
-version = "0.2.4"
+version = "0.2.5"
 description = "speedster-js component support (.spd) — syntax highlighting, inline translations, hover docs, speedster-language-server LSP"
 author = "Writing Unicorns"
 repository = "https://github.com/Ajustor/speedster-js"

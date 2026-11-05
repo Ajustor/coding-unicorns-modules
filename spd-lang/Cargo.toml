@@ -1,6 +1,6 @@
 [package]
 name = "spd-lang"
-version = "0.2.4"
+version = "0.2.5"
 edition = "2021"
 description = "speedster-js (.spd) language support module for Writing Unicorns IDE"
 

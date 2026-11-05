@@ -1,7 +1,7 @@
 [extension]
 id = "unicorns.svelte-lang"
 name = "Svelte"
-version = "0.3.2"
+version = "0.3.3"
 description = "Svelte language support — syntax highlighting, runes, svelte-language-server LSP, js-debug debugger"
 author = "Writing Unicorns"
 repository = ""

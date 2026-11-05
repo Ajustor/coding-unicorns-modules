@@ -1,61 +1,61 @@
    1 | <script lang="ts">
-     = keyword "script"  property "lang"  string "\"ts\""
+     = type "script"  property "lang"  string "\"ts\""
    2 |   import { effect } from '@ajustor/speedster'
-     = keyword "import"  keyword "from"  string "'@ajustor/speedster'"
+     = keyword "import"  property "effect"  keyword "from"  string "'@ajustor/speedster'"
    3 |   import Fenetre from './components/Fenetre.spd'
-     = keyword "import"  type "Fenetre"  keyword "from"  string "'./components/Fenetre.spd'"
+     = keyword "import"  class "Fenetre"  keyword "from"  string "'./components/Fenetre.spd'"
    4 |   import { API_DERNIERE, detecterSysteme } from './donnees.ts'
-     = keyword "import"  keyword "from"  string "'./donnees.ts'"
+     = keyword "import"  property "API_DERNIERE"  property "detecterSysteme"  keyword "from"  string "'./donnees.ts'"
    5 |   import type { Element, Systeme } from './donnees.ts'
-     = keyword "import"  keyword "type"  type "Element"  type "Systeme"  keyword "from"  string "'./donnees.ts'"
+     = keyword "import"  keyword "type"  class "Element"  class "Systeme"  keyword "from"  string "'./donnees.ts'"
    6 | 
    7 |   interface Version {
-     = keyword "interface"  type "Version"
+     = keyword "interface"  class "Version"
    8 |     nom: string
-     = property "nom"  type "string"
+     = property "nom"  class "string"
    9 |     tailles: Record<string, number>
-     = property "tailles"  type "Record"  type "string"  type "number"
+     = property "tailles"  class "Record"  class "string"  class "number"
   10 |   }
   11 | 
   12 |   // Rien n'est connu au build : la page part avec les liens directs.
      = comment "// Rien n'est connu au build : la page part avec les liens directs."
   13 |   let systeme: Systeme | null = null
-     = keyword "let"  type "Systeme"  keyword "null"  keyword "null"
+     = keyword "let"  property "systeme"  class "Systeme"  type "null"  type "null"
   14 |   let version: Version | null = null
-     = keyword "let"  type "Version"  keyword "null"  keyword "null"
+     = keyword "let"  property "version"  class "Version"  type "null"  type "null"
   15 | 
   16 |   effect(() => {
      = function "effect"
   17 |     if (typeof window === 'undefined') return
-     = keyword "if"  keyword "typeof"  keyword "window"  string "'undefined'"  keyword "return"
+     = keyword "if"  keyword "typeof"  type "window"  string "'undefined'"  keyword "return"
   18 |     systeme = detecterSysteme(navigator.userAgent)
-     = function "detecterSysteme"  property "userAgent"
+     = property "systeme"  function "detecterSysteme"  property "navigator"  property "userAgent"
   19 |     const controleur = new AbortController()
-     = keyword "const"  keyword "new"  type "AbortController"
+     = keyword "const"  property "controleur"  keyword "new"  class "AbortController"
   20 |     void fetch(API_DERNIERE, { signal: controleur.signal })
-     = keyword "void"  function "fetch"  property "signal"  property "signal"
+     = keyword "void"  function "fetch"  property "API_DERNIERE"  property "signal"  property "controleur"  property "signal"
   21 |       .then((reponse) => (reponse.ok ? reponse.json() : null))
-     = function "then"  property "ok"  function "json"  keyword "null"
+     = function "then"  property "reponse"  property "reponse"  property "ok"  property "reponse"  function "json"  type "null"
   22 |       .catch(() => {})
      = function "catch"
   23 |     return () => controleur.abort()
-     = keyword "return"  function "abort"
+     = keyword "return"  property "controleur"  function "abort"
   24 |   })
   25 | </script>
-     = keyword "script"
+     = type "script"
   26 | 
   27 | <main id="accueil">
-     = keyword "main"  property "id"  string "\"accueil\""
+     = type "main"  property "id"  string "\"accueil\""
   28 |   <a class="bouton-or" href={lienPrincipal} on:click|preventDefault={ouvrir}>{libellePrincipal}</a>
-     = keyword "a"  property "class"  string "\"bouton-or\""  property "href"  macro "on"  property ":click|preventDefault"  keyword "a"
+     = type "a"  property "class"  string "\"bouton-or\""  property "href"  property "lienPrincipal"  macro "on"  property ":click|preventDefault"  property "ouvrir"  property "libellePrincipal"  type "a"
   29 |   <p class="version">
-     = keyword "p"  property "class"  string "\"version\""
+     = type "p"  property "class"  string "\"version\""
   30 |     {#if nomVersion !== ''}
-     = macro "{#if"  string "''"  macro "}"
+     = macro "{#if"  property "nomVersion"  string "''"  macro "}"
   31 |       Version <strong>{nomVersion}</strong> · publiée le {dateVersion}
-     = keyword "strong"  keyword "strong"
+     = type "strong"  property "nomVersion"  type "strong"  property "dateVersion"
   32 |     {:else if systeme === null}
-     = macro "{:else if"  keyword "null"  macro "}"
+     = macro "{:else if"  property "systeme"  type "null"  macro "}"
   33 |       Dernière version publiée sur GitHub
   34 |     {:else}
      = macro "{:else}"
@@ -63,40 +63,40 @@
   36 |     {/if}
      = macro "{/if}"
   37 |   </p>
-     = keyword "p"
+     = type "p"
   38 |   <Fenetre>
-     = type "Fenetre"
+     = class "Fenetre"
   39 |     {#each elements as element, i (element.id)}
-     = macro "{#each"  keyword "as"  property "id"  macro "}"
+     = macro "{#each"  property "elements"  keyword "as"  property "element"  property "i"  property "element"  property "id"  macro "}"
   40 |       <span class:actif={i === 0}>{element.nom}</span>
-     = keyword "span"  macro "class"  property ":actif"  number "0"  property "nom"  keyword "span"
+     = type "span"  macro "class"  property ":actif"  property "i"  number "0"  property "element"  property "nom"  type "span"
   41 |     {/each}
      = macro "{/each}"
   42 |   </Fenetre>
-     = type "Fenetre"
+     = class "Fenetre"
   43 |   {#await charger() then donnees}
-     = macro "{#await"  function "charger"  keyword "then"  macro "}"
+     = macro "{#await"  function "charger"  keyword "then"  property "donnees"  macro "}"
   44 |     {donnees.length}
-     = property "length"
+     = property "donnees"  property "length"
   45 |   {/await}
      = macro "{/await}"
   46 |   {#snippet ligne(item: Element, rang: number = 0)}
-     = macro "{#snippet"  function "ligne"  type "Element"  type "number"  number "0"  macro "}"
+     = macro "{#snippet"  function "ligne"  property "item"  class "Element"  property "rang"  class "number"  number "0"  macro "}"
   47 |     <li>{rang} {@html item.html}</li>
-     = keyword "li"  macro "{@html"  property "html"  macro "}"  keyword "li"
+     = type "li"  property "rang"  macro "{@html"  property "item"  property "html"  macro "}"  type "li"
   48 |   {/snippet}
      = macro "{/snippet}"
   49 |   {@render ligne(premier)}
-     = macro "{@render"  function "ligne"  macro "}"
+     = macro "{@render"  function "ligne"  property "premier"  macro "}"
   50 | </main>
-     = keyword "main"
+     = type "main"
   51 | 
   52 | <style>
-     = keyword "style"
+     = type "style"
   53 |   .version {
      = property "version"
   54 |     transition: opacity 0.2s;
-     = property "transition"  number "0.2"  type "s"
+     = property "transition"  number "0.2"  class "s"
   55 |   }
   56 | </style>
-     = keyword "style"
+     = type "style"
