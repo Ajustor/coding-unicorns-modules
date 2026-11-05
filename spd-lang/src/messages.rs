@@ -39,11 +39,29 @@ pub fn inline_hints(path: &str, text: &str) -> String {
         return "[]".to_string();
     };
     let target_path = catalogue.path.to_string_lossy();
+    // The types of the component, read only when a key is chosen at run time.
+    let scope = found
+        .iter()
+        .any(|read| read.index.is_some())
+        .then(|| crate::types::Scope::of_component(Path::new(path), text));
+    let line_starts: Vec<usize> = std::iter::once(0)
+        .chain(text.match_indices('\n').map(|(at, _)| at + 1))
+        .collect();
     let hints: Vec<serde_json::Value> = found
         .into_iter()
         .map(|read| {
-            let text = match (&read.index, catalogue.messages.get(&read.key)) {
-                (Some(index), _) => catalogue.choices(&read.key, index),
+            let hint = match (&read.index, catalogue.messages.get(&read.key)) {
+                (Some(index), _) => {
+                    let allowed = scope.as_ref().and_then(|scope| {
+                        let start = line_starts.get(read.line).copied().unwrap_or(0);
+                        let at = text[start..]
+                            .char_indices()
+                            .nth(read.start)
+                            .map_or(text.len(), |(i, _)| start + i);
+                        scope.strings_of(text, at, index)
+                    });
+                    catalogue.choices(&read.key, index, allowed.as_deref())
+                }
                 (None, Some(value)) => short(value),
                 (None, None) => "— clé absente".to_string(),
             };
@@ -51,7 +69,7 @@ pub fn inline_hints(path: &str, text: &str) -> String {
                 "line": read.line,
                 "col": read.end,
                 "from": read.start,
-                "text": text,
+                "text": hint,
                 "target": { "path": target_path, "line": catalogue.line_of(&read.key) },
             })
         })
@@ -72,26 +90,40 @@ impl Catalogue {
     /// What `t.group[index]` can show: each message of `group` with its key,
     /// in the order of the file, after the expression choosing among them —
     /// `selon statut : brouillon → « Brouillon » · payee → « Payée »`.
-    fn choices(&self, group: &str, index: &str) -> String {
+    /// `allowed`: the strings the expression's type allows, when known; only
+    /// their messages are shown, those missing from the group last.
+    fn choices(&self, group: &str, index: &str, allowed: Option<&[String]>) -> String {
         let prefix = format!("{group}.");
-        let mut options: Vec<(&str, &String)> = self
-            .messages
-            .iter()
-            .filter_map(|(key, value)| {
-                let name = key.strip_prefix(&prefix)?;
-                (!name.contains('.')).then_some((name, value))
-            })
-            .collect();
+        let mut options: Vec<(&str, Option<&String>)> = match allowed {
+            Some(allowed) => allowed
+                .iter()
+                .map(|name| (name.as_str(), self.messages.get(&format!("{prefix}{name}"))))
+                .collect(),
+            None => self
+                .messages
+                .iter()
+                .filter_map(|(key, value)| {
+                    let name = key.strip_prefix(&prefix)?;
+                    (!name.contains('.')).then_some((name, Some(value)))
+                })
+                .collect(),
+        };
         if options.is_empty() {
             return "— aucune valeur pour cette clé".to_string();
         }
-        options.sort_by_key(|(name, _)| (self.line_of(&format!("{prefix}{name}")), *name));
+        options.sort_by_key(|(name, value)| {
+            let line = value.map(|_| self.line_of(&format!("{prefix}{name}")));
+            (line.is_none(), line, *name)
+        });
         let mut text = format!("selon {} :", short_to(index, MAX_INDEX_CHARS));
         for (shown, (name, value)) in options.iter().enumerate() {
             let option = format!(
-                " {}{name} → « {} »",
+                " {}{name} → {}",
                 if shown == 0 { "" } else { "· " },
-                short_to(value, MAX_CHOICE_CHARS)
+                match value {
+                    Some(value) => format!("« {} »", short_to(value, MAX_CHOICE_CHARS)),
+                    None => "— absente".to_string(),
+                }
             );
             if text.chars().count() + option.chars().count() > MAX_CHOICES_CHARS {
                 text.push_str(&format!(" · … (+{})", options.len() - shown));
@@ -407,12 +439,18 @@ mod tests {
             ]),
         };
         assert_eq!(
-            catalogue.choices("statuts", "c.statut"),
+            catalogue.choices("statuts", "c.statut", None),
             "selon c.statut : payee → « Payée » · brouillon → « Brouillon »"
         );
         assert_eq!(
-            catalogue.choices("rien", "x"),
+            catalogue.choices("rien", "x", None),
             "— aucune valeur pour cette clé"
+        );
+        // Only what the type allows, the missing ones last.
+        let allowed = ["oubli".to_string(), "brouillon".to_string()];
+        assert_eq!(
+            catalogue.choices("statuts", "c.statut", Some(&allowed)),
+            "selon c.statut : brouillon → « Brouillon » · oubli → — absente"
         );
         let many: HashMap<String, String> = (0..20)
             .map(|i| (format!("g.k{i:02}"), "Une valeur".to_string()))
@@ -421,7 +459,7 @@ mod tests {
             messages: many,
             ..catalogue
         };
-        let text = catalogue.choices("g", "i");
+        let text = catalogue.choices("g", "i", None);
         assert!(text.chars().count() <= MAX_CHOICES_CHARS + 12, "{text}");
         assert!(text.ends_with(" · … (+16)"), "{text}");
     }
