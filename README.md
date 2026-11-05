@@ -63,8 +63,8 @@ directives in Vue) as TypeScript. A capitalized tag is a component, coloured as 
 `{#each items as item, i (item.id)}` only `items` and the key are expressions, and the
 parameters of `{#snippet name(item: Item)}` get their types coloured.
 
-`spd-lang` also shows translations at the end of the lines reading them (`{t.panier.titre}`), as
-the speedster VS Code extension and i18n-ally do: `inline_hints_ffi` finds the closest `src/lang`
+`spd-lang` also shows translations right after the keys reading them (`{t.panier.titre}`), as
+the speedster VS Code extension and i18n-ally do (at the end of the line in IDEs before 0.25.0): `inline_hints_ffi` finds the closest `src/lang`
 above the component and reads `fr.json` (else the first locale). IDEs without inline hints ignore
 the export; the *Inline hints* setting turns them off.
 
