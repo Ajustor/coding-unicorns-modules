@@ -351,8 +351,10 @@ checksum = "0fda2ff0d084019ba4d7c6f371c95d8fd75ce3524c3cb8fb653a3023f6323e64"
 
 [[package]]
 name = "spd-lang"
-version = "0.1.0"
+version = "0.2.0"
 dependencies = [
+ "serde_json",
+ "unicorns-highlight",
  "unicorns-highlight-test",
 ]
 
@@ -374,7 +376,7 @@ checksum = "2b2231b7c3057d5e4ad0156fb3dc807d900806020c5ffa3ee6ff2c8c76fb8520"
 
 [[package]]
 name = "svelte-lang"
-version = "0.3.0"
+version = "0.3.1"
 dependencies = [
  "unicorns-highlight",
  "unicorns-highlight-test",

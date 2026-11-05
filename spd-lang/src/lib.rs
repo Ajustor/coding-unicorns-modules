@@ -3,7 +3,11 @@
 //! A `.spd` file is a single-file component: a `<script>` in TypeScript, markup with
 //! `{#if}` / `{#each}` / `{#key}` / `{#snippet}` blocks and `on:` / `bind:` … directives,
 //! and a `<style>` in CSS. The IDE tokenizes line by line without state, so the three
-//! sections share one lexer whose rules don't contradict each other.
+//! sections share one lexer whose rules don't contradict each other. It is the
+//! fallback of older IDEs: newer ones highlight the whole document with tree-sitter
+//! (`tokenize_document_ffi`).
+
+pub mod messages;
 
 #[derive(Debug, Clone, PartialEq)]
 pub enum TokenKind {
@@ -253,6 +257,43 @@ pub extern "C" fn language_id() -> *const std::ffi::c_char {
 #[no_mangle]
 pub extern "C" fn file_extensions() -> *const std::ffi::c_char {
     c"spd".as_ptr()
+}
+
+#[no_mangle]
+pub extern "C" fn reset_tokenizer() {}
+
+/// Highlight the whole component with tree-sitter: markup as HTML, `<script>` as
+/// TypeScript, `<style>` as CSS and the `{…}` expressions and block tags as
+/// TypeScript. The template syntax is Svelte's, so it shares that highlighting.
+/// Preferred by the IDE over [`tokenize_line_ffi`], kept for older versions.
+///
+/// # Safety
+/// `text_ptr` must be a valid, nul-terminated C string.
+#[no_mangle]
+pub unsafe extern "C" fn tokenize_document_ffi(
+    text_ptr: *const std::ffi::c_char,
+) -> *mut std::ffi::c_char {
+    let text = unsafe { std::ffi::CStr::from_ptr(text_ptr) }.to_str().unwrap_or("");
+    let json = unicorns_highlight::component(text, unicorns_highlight::Component::Svelte);
+    std::ffi::CString::new(json).unwrap_or_default().into_raw()
+}
+
+/// The translations read by the component, shown at the end of their lines
+/// (see [`messages`]).
+///
+/// # Safety
+/// All three pointers must be valid, nul-terminated C strings.
+#[no_mangle]
+pub unsafe extern "C" fn inline_hints_ffi(
+    _lang_ptr: *const std::ffi::c_char,
+    path_ptr: *const std::ffi::c_char,
+    text_ptr: *const std::ffi::c_char,
+) -> *mut std::ffi::c_char {
+    let path = unsafe { std::ffi::CStr::from_ptr(path_ptr) }.to_str().unwrap_or("");
+    let text = unsafe { std::ffi::CStr::from_ptr(text_ptr) }.to_str().unwrap_or("");
+    std::ffi::CString::new(messages::inline_hints(path, text))
+        .unwrap_or_default()
+        .into_raw()
 }
 
 /// # Safety
