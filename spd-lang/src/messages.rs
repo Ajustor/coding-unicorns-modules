@@ -19,7 +19,8 @@ const DEFAULT_LOCALE: &str = "fr";
 const MAX_CHARS: usize = 60;
 
 /// The hints of `text`, the content of the component at `path`, as the IDE's
-/// JSON `[{"line","text"}]`.
+/// JSON `[{"line","col","text"}]`: each one right after its key, as i18n-ally
+/// shows them (IDEs without inlays put them at the end of the line).
 pub fn inline_hints(path: &str, text: &str) -> String {
     let found = reads(text);
     let messages = if found.is_empty() {
@@ -32,12 +33,12 @@ pub fn inline_hints(path: &str, text: &str) -> String {
     };
     let hints: Vec<serde_json::Value> = found
         .into_iter()
-        .map(|(line, key)| {
+        .map(|(line, col, key)| {
             let text = match messages.get(&key) {
                 Some(value) => short(value),
                 None => "— clé absente".to_string(),
             };
-            serde_json::json!({ "line": line, "text": text })
+            serde_json::json!({ "line": line, "col": col, "text": text })
         })
         .collect();
     serde_json::Value::Array(hints).to_string()
@@ -100,10 +101,11 @@ fn is_ident(c: char) -> bool {
     c.is_alphanumeric() || c == '_' || c == '$'
 }
 
-/// Every read of `t` — `t.panier.titre` — with its line (0-based) and key.
+/// Every read of `t` — `t.panier.titre` — with its line, the column just after
+/// it (both 0-based, the column in characters) and its key.
 /// What precedes the `t` is neither a word character nor a dot, so neither
 /// `objet.t.court` nor `format.t` reads the catalogue.
-pub fn reads(text: &str) -> Vec<(usize, String)> {
+pub fn reads(text: &str) -> Vec<(usize, usize, String)> {
     let mut found = Vec::new();
     for (line_index, line) in text.lines().enumerate() {
         let chars: Vec<char> = line.chars().collect();
@@ -129,7 +131,7 @@ pub fn reads(text: &str) -> Vec<(usize, String)> {
                 end = j;
             }
             if end > i + 1 {
-                found.push((line_index, chars[i + 2..end].iter().collect()));
+                found.push((line_index, end, chars[i + 2..end].iter().collect()));
                 i = end;
             } else {
                 i += 1;
@@ -159,7 +161,10 @@ mod tests {
         let text = "<h1>{t.app.titre}</h1>\n<p>{t.app.clics({ n })} {objet.t.court} {format.t}</p>\nconst t2 = t";
         assert_eq!(
             reads(text),
-            vec![(0, "app.titre".to_string()), (1, "app.clics".to_string())]
+            vec![
+                (0, 16, "app.titre".to_string()),
+                (1, 15, "app.clics".to_string())
+            ]
         );
     }
 
@@ -195,7 +200,7 @@ mod tests {
         // Without the default locale, the first one.
         assert_eq!(
             inline_hints(page.to_str().unwrap(), text),
-            r#"[{"line":0,"text":"Home"},{"line":2,"text":"— clé absente"}]"#
+            r#"[{"col":16,"line":0,"text":"Home"},{"col":16,"line":2,"text":"— clé absente"}]"#
         );
         std::fs::write(lang.join("fr.json"), r#"{"app":{"titre":"Accueil"}}"#).unwrap();
         assert!(inline_hints(page.to_str().unwrap(), text).contains(r#""text":"Accueil""#));
