@@ -6,7 +6,7 @@
      = function "set"  keyword "-euo"
    4 | 
    5 | PREFIX="${PREFIX:-$HOME/.local}"
-     = property "PREFIX"  string "\"${"  property "PREFIX"  string ":-"  property "HOME"  string "/.local}\""
+     = property "PREFIX"  string "\""  property "PREFIX"  property "HOME"  string "\""
    6 | readonly VERSION=1.2.3
      = keyword "readonly"  property "VERSION"
    7 | 
@@ -23,7 +23,7 @@
   14 |   case "$arg" in
      = keyword "case"  string "\""  property "arg"  string "\""  keyword "in"
   15 |     --prefix=*) PREFIX="${arg#*=}" ;;
-     = property "PREFIX"  string "\"${"  property "arg"  string "#*=}\""
+     = property "PREFIX"  string "\""  property "arg"  string "\""
   16 |     -h|--help) usage ;;
      = function "usage"
   17 |     *) echo "unknown: $arg"; usage ;;

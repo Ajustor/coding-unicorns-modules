@@ -1,7 +1,7 @@
 [extension]
 id = "unicorns.shell-lang"
 name = "Shell"
-version = "0.1.0"
+version = "0.1.1"
 description = "Shell script support (sh, Bash, Zsh) — syntax highlighting, bash-language-server LSP (completion, hover with man pages, diagnostics with ShellCheck when installed, navigation)"
 author = "Writing Unicorns"
 repository = ""

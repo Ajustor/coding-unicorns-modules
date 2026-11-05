@@ -1,0 +1,77 @@
+   1 | <script lang="ts">
+     = keyword "script"  property "lang"  string "\"ts\""
+   2 |   import Section from '../../components/Section.spd'
+     = keyword "import"  type "Section"  keyword "from"  string "'../../components/Section.spd'"
+   3 |   import Window from '../../components/Window.spd'
+     = keyword "import"  type "Window"  keyword "from"  string "'../../components/Window.spd'"
+   4 |   import { PACKAGES, RELEASES_PAGE, directLink, mebibytes } from '../../data.ts'
+     = keyword "import"  keyword "from"  string "'../../data.ts'"
+   5 |   import type { Platform, Release } from '../../data.ts'
+     = keyword "import"  keyword "type"  type "Platform"  type "Release"  keyword "from"  string "'../../data.ts'"
+   6 | 
+   7 |   export let platform: Platform | null
+     = keyword "export"  keyword "let"  type "Platform"  keyword "null"
+   8 |   export let release: Release | null
+     = keyword "export"  keyword "let"  type "Release"  keyword "null"
+   9 | 
+  10 |   const sizeOf = (file: string): string => {
+     = keyword "const"  function "sizeOf"  type "string"  type "string"
+  11 |     const bytes = release?.sizes[file]
+     = keyword "const"  property "sizes"
+  12 |     return bytes === undefined ? '' : ` · ${t.download.size({ n: mebibytes(bytes) })}`
+     = keyword "return"  keyword "undefined"  string "''"  string "` · "  property "download"  function "size"  property "n"  function "mebibytes"  string "`"
+  13 |   }
+  14 | </script>
+     = keyword "script"
+  15 | 
+  16 | <Section id="download" title={t.download.title}>
+     = type "Section"  property "id"  string "\"download\""  property "title"  property "download"  property "title"
+  17 |   <Window title={t.download.which}>
+     = type "Window"  property "title"  property "download"  property "which"
+  18 |     <ul class="packages">
+     = keyword "ul"  property "class"  string "\"packages\""
+  19 |       {#each PACKAGES as entry (entry.platform)}
+     = macro "{#each"  keyword "as"  property "platform"  macro "}"
+  20 |         <li>
+     = keyword "li"
+  21 |           <a
+     = keyword "a"
+  22 |             class="menu-item package"
+     = property "class"  string "\"menu-item package\""
+  23 |             class:recommended={entry.platform === platform}
+     = macro "class"  property ":recommended"  property "platform"
+  24 |             class:menu-item-active={entry.platform === platform}
+     = macro "class"  property ":menu-item-active"  property "platform"
+  25 |             href={directLink(entry.file)}
+     = property "href"  function "directLink"  property "file"
+  26 |           >
+  27 |             <span class="package-name">
+     = keyword "span"  property "class"  string "\"package-name\""
+  28 |               {entry.name}
+     = property "name"
+  29 |               {#if entry.platform === platform}<span class="badge">{t.download.yours}</span>{/if}
+     = macro "{#if"  property "platform"  macro "}"  keyword "span"  property "class"  string "\"badge\""  property "download"  property "yours"  keyword "span"  macro "{/if}"
+  30 |             </span>
+     = keyword "span"
+  31 |             <span class="package-detail">{t.download[entry.platform]}</span>
+     = keyword "span"  property "class"  string "\"package-detail\""  property "download"  property "platform"  keyword "span"
+  32 |             <span class="package-file">{entry.file}{sizeOf(entry.file)}</span>
+     = keyword "span"  property "class"  string "\"package-file\""  property "file"  function "sizeOf"  property "file"  keyword "span"
+  33 |           </a>
+     = keyword "a"
+  34 |         </li>
+     = keyword "li"
+  35 |       {/each}
+     = macro "{/each}"
+  36 |     </ul>
+     = keyword "ul"
+  37 |   </Window>
+     = type "Window"
+  38 |   <p class="note">
+     = keyword "p"  property "class"  string "\"note\""
+  39 |     {t.download.note} <a href={RELEASES_PAGE}>{t.download.noteLink}</a>.
+     = property "download"  property "note"  keyword "a"  property "href"  property "download"  property "noteLink"  keyword "a"
+  40 |   </p>
+     = keyword "p"
+  41 | </Section>
+     = type "Section"
